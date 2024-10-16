@@ -4,12 +4,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const handlebars = require('express-handlebars');
+const layoutMiddleware = require('./middlewares/layout.middleware');
+const systemConfig = require('./config/system');
 
-// const indexRouter = require('./routes/index');
-// const usersRouter = require('./routes/users');
-
-const adminRouter = require('./routes/admin');
-const clientRouter = require('./routes/client');
+const adminRouter = require('./routes/admin/index.route');
+const clientRouter = require('./routes/client/index.route');
 
 const app = express();
 
@@ -17,8 +16,7 @@ const app = express();
 app.engine(
     'hbs',
     handlebars.engine({
-        extname: '.hbs',
-        defaultLayout: 'client'
+        extname: '.hbs'
     }),
 );
 app.set('views', path.join(__dirname, 'views'));
@@ -30,18 +28,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Middleware
-app.use((req, res, next) => {
-    if (req.path === '/admin') {
-        res.locals.layout = 'admin'; // Layout admin.hbs
-    } else {
-        res.locals.layout = 'client'; // Layout client.hbs cho các trang khác
-    }
-    next();
-});
+// Middleware set layout
+layoutMiddleware(app);
 
-app.use('/admin', adminRouter);
-app.use('/', clientRouter);
+// Set routes
+adminRouter(app);
+clientRouter(app);
+
+// locals variables
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,11 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{pageTitle}}</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- OWL Car -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/owl.theme.default.min.css">
+    <!-- Showmore css -->
+    <link rel="stylesheet" href="css/showMoreItems-theme.min.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Theme CSS -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
-{{{ body }}}
+    {{> admin/sidebar}}
+    {{> admin/header}}
+    {{{ body }}}
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/popper.js"></script>
+    <!-- OWL Car -->
+    <script src="js/owl.carousel.min.js"></script>
+    <!-- Show More js -->
+    <script src="js/showMoreItems.min.js"></script>
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <!-- Theme js -->
+    <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>
