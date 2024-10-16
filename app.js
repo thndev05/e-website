@@ -1,3 +1,4 @@
+require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -6,11 +7,13 @@ const logger = require('morgan');
 const handlebars = require('express-handlebars');
 const layoutMiddleware = require('./middlewares/layout.middleware');
 const systemConfig = require('./config/system');
+const database = require('./config/database');
 
 const adminRouter = require('./routes/admin/index.route');
 const clientRouter = require('./routes/client/index.route');
 
 const app = express();
+database.connect();
 
 // view engine setup
 app.engine(
