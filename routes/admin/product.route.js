@@ -5,4 +5,7 @@ const controller = require('../../controllers/admin/product.controller');
 
 router.get('/', controller.index);
 
+router.get('/create', controller.create);
+
+
 module.exports = router;

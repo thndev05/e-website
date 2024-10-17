@@ -19,3 +19,8 @@ module.exports.index = async (req, res) => {
     products: products
   });
 }
+
+// [GET] /admin/products/create
+module.exports.create = async (req, res) => {
+  res.send('ok');
+}

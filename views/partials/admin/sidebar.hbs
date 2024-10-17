@@ -23,5 +23,12 @@
                 <i class="fa fa-database text-light fa-lg mr-3"></i>Product
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{prefixAdmin}}/products/create"
+               class="nav-link text-light p-3 mb-2 sidebar-link
+                {{#ifEqual currentPage "createProduct"}}current{{/ifEqual}}">
+                <i class="fa fa-database text-light fa-lg mr-3"></i>Add product
+            </a>
+        </li>
     </ul>
 </div>
