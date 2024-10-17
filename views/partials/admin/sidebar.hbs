@@ -10,12 +10,16 @@
 
     <ul class="navbar-nav flex-column mt-5">
         <li class="nav-item">
-            <a href="{{prefixAdmin}}" class="nav-link text-light p-3 mb-2 sidebar-link current">
+            <a href="{{prefixAdmin}}"
+               class="nav-link text-light p-3 mb-2 sidebar-link
+                {{#ifEqual currentPage "dashboard"}}current{{/ifEqual}}">
                 <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
             </a>
         </li>
         <li class="nav-item">
-            <a href='{{prefixAdmin}}/products' class="nav-link text-light p-3 mb-2 sidebar-link">
+            <a href="{{prefixAdmin}}/products"
+               class="nav-link text-light p-3 mb-2 sidebar-link
+                {{#ifEqual currentPage "products"}}current{{/ifEqual}}">
                 <i class="fa fa-database text-light fa-lg mr-3"></i>Product
             </a>
         </li>

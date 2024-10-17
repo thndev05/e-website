@@ -1,4 +1,7 @@
 const mongoose = require('mongoose');
+const slug = require('mongoose-slug-updater');
+
+mongoose.plugin(slug);
 
 const variantSchema = new mongoose.Schema({
     size: { type: String },
@@ -11,12 +14,18 @@ const variantSchema = new mongoose.Schema({
 
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
-    description: { type: String, required: true },
-    category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    description: String,
+    // category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     images: [{ type: String }],
+    thumbnail: String,
+    status: String,
+    deleted: {
+        type: Boolean,
+        default: false,
+    },
     variants: [variantSchema],
 }, {
     timestamps: true,
 });
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Product', productSchema, 'products');

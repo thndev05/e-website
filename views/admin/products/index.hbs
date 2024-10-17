@@ -1,0 +1,54 @@
+<!-- Table Start -->
+<section>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <!-- First Table -->
+                    <div class="col-12 mb-4 mb-xl-0">
+                        <h4 class="text-muted text-center mb-3">Products</h4>
+                        <table class="table bg-light table-striped  text-center" id="allproduct">
+                            <thead>
+                                <tr class="text-muted">
+                                    <th>#SL</th>
+                                    <th>Product Image</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+<!--                                <tr>-->
+<!--                                    <th class="align-middle">1</th>-->
+<!--                                    <td class="align-middle"><img src="./img/product/product-1.jpg" width="70px"-->
+<!--                                                                  alt="product-1"></td>-->
+<!--                                    <td class="align-middle">Black Shoe</td>-->
+<!--                                    <td class="align-middle">$99</td>-->
+<!--                                    <td class="align-middle"><span-->
+<!--                                            class="badge badge-success w-60 py-2">Available</span></td>-->
+<!--                                </tr>-->
+                                {{#each products}}
+                                    <tr>
+                                        <th class="align-middle">{{@index}}</th>
+                                        <td class="align-middle">
+                                            <img src="{{this.thumbnail}}" width="70px" alt="{{this.name}}">
+                                        </td>
+                                        <td class="align-middle">{{this.name}}</td>
+                                        <td class="align-middle">$</td>
+                                        <td class="align-middle">
+                                            <span class="badge badge-success">Active</span>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Table End -->
+
