@@ -9,12 +9,16 @@ const handlebarsHelpers = require('./helpers/handlebars');
 const layoutMiddleware = require('./middlewares/layout.middleware');
 const systemConfig = require('./config/system');
 const database = require('./config/database');
+const methodOverride = require('method-override');
 
 const adminRouter = require('./routes/admin/index.route');
 const clientRouter = require('./routes/client/index.route');
 
 const app = express();
 database.connect();
+
+// Method-override
+app.use(methodOverride('_method'));
 
 // view engine setup
 app.engine(

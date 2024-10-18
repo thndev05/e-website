@@ -27,6 +27,7 @@
                             </thead>
                             <tbody>
                                 {{#each products}}
+
                                     <tr>
                                         <th class="align-middle">{{#add @index 1}}{{/add}}</th>
                                         <td class="align-middle">
@@ -48,7 +49,9 @@
                                         <td class="align-middle">
                                             <a href="#" class="btn btn-sm btn-outline-secondary">Detail</a>
                                             <a href="#" class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                    data-id="{{this._id}}"
+                                                    button-delete>Delete</button>
                                         </td>
                                     </tr>
                                 {{/each}}
@@ -64,3 +67,7 @@
 </section>
 <!-- Table End -->
 
+<form action="" method="POST" id="form-delete-item" data-path="{{prefixAdmin}}/products/delete">
+</form>
+
+<script src="js/product.js"></script>
