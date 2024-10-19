@@ -39,11 +39,11 @@
                                             {{#ifEqual this.status 'active'}}
                                                 <a  href="javascript:;"
                                                     class="badge badge-success"
-                                                    button-change-status>Active</a>
+                                                    button-change-status>Active {{this.status}}</a>
                                             {{else}}
                                                 <a  href="javascript:;"
                                                     class="badge badge-danger"
-                                                    button-change-status>Inactive</a>
+                                                    button-change-status>Inactive  {{this.status}}</a>
                                             {{/ifEqual}}
                                         </td>
                                         <td class="align-middle">

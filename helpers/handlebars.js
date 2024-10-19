@@ -1,4 +1,4 @@
-const ifEqual = (a, b, options) => {
+const ifEqual = function (a, b, options) {
   if (a === b) {
     return options.fn(this);
   } else {
@@ -6,11 +6,11 @@ const ifEqual = (a, b, options) => {
   }
 };
 
-const add = (a, b) => {
+const add = function (a, b) {
   return a + b;
 };
 
-const setVar = (value) => {
+const setVar = function (value) {
   return value;
 };
 
