@@ -1,4 +1,5 @@
-
+{{> admin/sidebar}}
+{{> admin/header}}
 
 <!-- Table Start -->
 <section>
@@ -6,13 +7,22 @@
         <div class="row ">
             <div class="col-lg-10 col-md-8 ml-auto">
                 <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
-                    <div class="col-10 mb-4 mb-xl-0"></div>
+                    <div class="col-5 mb-4 mb-xl-0"></div>
+                    <div class="col-5 mb-4 mb-xl-0">
+                        <form id="form-search" class="form-inline d-none d-lg-block">
+                            <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
+                                   name="keyword" value="{{searchKeyword}}">
+                            <button class="btn btn-light btn-outline-secondary" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
                     <div class="col-2 mb-4 mb-xl-0">
                         <a href="{{prefixAdmin}}/products/create" class="btn btn-outline-success text-center">
                             <i class="fa fa-plus-circle fa-lg mr-1"></i>Create new</a>
                     </div>
                     <!-- First Table -->
-                    <div class="col-12 mb-4 mb-xl-0">
+                    <div class="col-12 mb-4 mb-xl-0 mt-5">
                         <h4 class="text-muted text-center mb-3">Products</h4>
                         <table class="table bg-light table-striped  text-center" id="allproduct">
                             <thead>
@@ -39,11 +49,15 @@
                                             {{#ifEqual this.status 'active'}}
                                                 <a  href="javascript:;"
                                                     class="badge badge-success"
-                                                    button-change-status>Active {{this.status}}</a>
+                                                    data-id="{{this._id}}"
+                                                    data-status="{{this.status}}"
+                                                    button-change-status>Active </a>
                                             {{else}}
                                                 <a  href="javascript:;"
                                                     class="badge badge-danger"
-                                                    button-change-status>Inactive  {{this.status}}</a>
+                                                    data-id="{{this._id}}"
+                                                    data-status="{{this.status}}"
+                                                    button-change-status>Inactive</a>
                                             {{/ifEqual}}
                                         </td>
                                         <td class="align-middle">
@@ -68,6 +82,9 @@
 <!-- Table End -->
 
 <form action="" method="POST" id="form-delete-item" data-path="{{prefixAdmin}}/products/delete">
+</form>
+
+<form action="" method="POST" id="form-change-status" data-path="{{prefixAdmin}}/products/change-status">
 </form>
 
 <script src="js/product.js"></script>
