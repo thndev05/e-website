@@ -1,0 +1,79 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-5 mb-4 mb-xl-0"></div>
+                    <div class="col-5 mb-4 mb-xl-0">
+                        <form id="form-search" class="form-inline d-none d-lg-block">
+                            <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
+                                   name="keyword" value="{{searchKeyword}}">
+                            <button class="btn btn-light btn-outline-secondary" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-2 mb-4 mb-xl-0">
+                        <a href="{{prefixAdmin}}/categories/create" class="btn btn-outline-success text-center">
+                            <i class="fa fa-plus-circle fa-lg mr-1"></i>Create new</a>
+                    </div>
+                    <div class="col-12 mb-4 mb-xl-0 mt-5">
+                        <h4 class="text-muted text-center mb-3">Categories</h4>
+                        <table class="table bg-light table-striped  text-center" id="categories">
+                            <thead>
+                                <tr class="text-muted">
+                                    <th>#No</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each categories}}
+                                    <tr>
+                                        <th class="align-middle">{{#add @index 1}}{{/add}}</th>
+                                        <td class="align-middle">{{this.name}}</td>
+                                        <td class="align-middle">{{this.description}}</td>
+                                        <td class="align-middle">
+                                            {{#ifEqual this.status 'active'}}
+                                                <a  href="javascript:;"
+                                                    class="badge badge-success"
+                                                    data-id="{{this._id}}"
+                                                    data-status="{{this.status}}"
+                                                    button-change-status>Active</a>
+                                            {{else}}
+                                                {{#ifEqual this.status 'inactive'}}
+                                                    <a  href="javascript:;"
+                                                        class="badge badge-danger"
+                                                        data-id="{{this._id}}"
+                                                        data-status="{{this.status}}"
+                                                        button-change-status>Inactive</a>
+                                                {{else}}
+                                                    <a  href="javascript:;"
+                                                        class="badge badge-secondary"
+                                                        data-id="{{this._id}}"
+                                                        data-status="{{this.status}}"
+                                                        button-change-status>Archived</a>
+                                                {{/ifEqual}}
+                                            {{/ifEqual}}
+                                        </td>
+                                        <td class="align-middle">
+                                            <a href="#" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                    data-id="{{this._id}}"
+                                                    button-delete>Delete</button>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,10 +1,10 @@
 <div class="col-lg-2 col-md-4 fixed-top sidebar">
     <a href="{{prefixAdmin}}"
        class="navbar-brand text-light d-block mx-auto text-center py-3 mb-4 bottom-border"><img
-            src="./img/Admin.webp" class="img-fluid" width="100px" alt="logo"></a>
+            src="/admin/img/Admin.webp" class="img-fluid" width="100px" alt="logo"></a>
 
     <div class="bottom-border pb-3">
-        <img src="./img/profile.jpg" alt="avatar" width="60" class="rounded-circle">
+        <img src="/admin/img/profile.jpg" alt="avatar" width="60" class="rounded-circle">
         <a href="#" class="text-light">Unknown</a>
     </div>
 
@@ -14,6 +14,13 @@
                class="nav-link text-light p-3 mb-2 sidebar-link
                 {{#ifEqual currentPage "dashboard"}}current{{/ifEqual}}">
                 <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{prefixAdmin}}/categories"
+               class="nav-link text-light p-3 mb-2 sidebar-link
+                {{#ifEqual currentPage "categories"}}current{{/ifEqual}}">
+                <i class="fa fa-folder-open text-light fa-lg mr-3"></i>Categories
             </a>
         </li>
         <li class="nav-item">
