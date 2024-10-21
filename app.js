@@ -10,6 +10,7 @@ const layoutMiddleware = require('./middlewares/layout.middleware');
 const systemConfig = require('./config/system');
 const database = require('./config/database');
 const methodOverride = require('method-override');
+const bodyParser = require('body-parser');
 
 const adminRouter = require('./routes/admin/index.route');
 const clientRouter = require('./routes/client/index.route');
@@ -19,6 +20,9 @@ database.connect();
 
 // Method-override
 app.use(methodOverride('_method'));
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // view engine setup
 app.engine(
@@ -32,8 +36,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // app.use(logger('combined'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

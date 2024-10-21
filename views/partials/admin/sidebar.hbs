@@ -8,34 +8,29 @@
         <a href="#" class="text-light">Unknown</a>
     </div>
 
-    <ul class="navbar-nav flex-column mt-5">
-        <li class="nav-item">
-            <a href="{{prefixAdmin}}"
-               class="nav-link text-light p-3 mb-2 sidebar-link
+    <div class="sidebar-wrap">
+        <ul class="navbar-nav flex-column mt-5">
+            <li class="nav-item">
+                <a href="{{prefixAdmin}}"
+                   class="nav-link text-light p-3 mb-2 sidebar-link
                 {{#ifEqual currentPage "dashboard"}}current{{/ifEqual}}">
-                <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{prefixAdmin}}/categories"
-               class="nav-link text-light p-3 mb-2 sidebar-link
-                {{#ifEqual currentPage "categories"}}current{{/ifEqual}}">
-                <i class="fa fa-folder-open text-light fa-lg mr-3"></i>Categories
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{prefixAdmin}}/products"
-               class="nav-link text-light p-3 mb-2 sidebar-link
+                    <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{prefixAdmin}}/products"
+                   class="nav-link text-light p-3 mb-2 sidebar-link
                 {{#ifEqual currentPage "products"}}current{{/ifEqual}}">
-                <i class="fa fa-database text-light fa-lg mr-3"></i>Product
-            </a>
-        </li>
-        <li class="nav-item">
-            <a href="{{prefixAdmin}}/products/create"
-               class="nav-link text-light p-3 mb-2 sidebar-link
-                {{#ifEqual currentPage "createProduct"}}current{{/ifEqual}}">
-                <i class="fa fa-plus-circle text-light fa-lg mr-3"></i>Add product
-            </a>
-        </li>
-    </ul>
+                    <i class="fa fa-database text-light fa-lg mr-3"></i>Product
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{prefixAdmin}}/categories"
+                   class="nav-link text-light p-3 mb-2 sidebar-link
+                {{#ifEqual currentPage "categories"}}current{{/ifEqual}}">
+                    <i class="fa fa-folder-open text-light fa-lg mr-3"></i>Category
+                </a>
+            </li>
+        </ul>
+    </div>
 </div>

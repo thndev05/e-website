@@ -24,6 +24,26 @@ module.exports.create = (req, res) => {
 }
 
 // [POST] /admin/categories/create
-module.exports.store = (req, res) => {
-    res.json("POSTING")
+module.exports.createPost = (req, res) => {
+    console.log(req.body); // Problem: nhan object rong
+    res.send('ok');
+}
+
+// [DELETE] /admin/products/delete/:id
+module.exports.delete = async (req, res) => {
+    const id = req.params.id;
+
+    await Category.updateOne({ _id: id}, { deleted: true }).lean();
+
+    res.redirect('back');
+}
+
+// [PATCH] /admin/products/change-status/:status/:id
+module.exports.changeStatus = async (req, res) => {
+    const id = req.params.id;
+    const status = req.params.status;
+
+    await Category.updateOne({ _id: id }, { status: status }).lean();
+
+    res.redirect('back');
 }
