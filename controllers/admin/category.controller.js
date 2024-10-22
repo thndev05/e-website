@@ -1,4 +1,5 @@
 const Category = require('../../models/category.model');
+const {prefixAdmin} = require("../../config/system");
 
 // [GET] /admin/categories
 module.exports.index = (req, res) => {
@@ -24,9 +25,11 @@ module.exports.create = (req, res) => {
 }
 
 // [POST] /admin/categories/create
-module.exports.createPost = (req, res) => {
-    console.log(req.body); // Problem: nhan object rong
-    res.send('ok');
+module.exports.createPost = async (req, res) => {
+    const category = await Category.create(req.body);
+    category.save();
+
+    res.redirect(`${prefixAdmin}/categories`);
 }
 
 // [DELETE] /admin/products/delete/:id
@@ -46,4 +49,28 @@ module.exports.changeStatus = async (req, res) => {
     await Category.updateOne({ _id: id }, { status: status }).lean();
 
     res.redirect('back');
+}
+
+// [GET] /admin/categories/edit/:id
+module.exports.edit = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const category = await Category.findOne({ _id: id }).lean();
+
+        res.render('admin/categories/edit', {
+            pageTitle: 'Update Category',
+            currentPage: 'categories',
+            category: category
+        });
+    } catch {
+        res.redirect(`${prefixAdmin}/categories`);
+    }
+}
+
+// [PATCH] /admin/categories/edit/:id
+module.exports.editPatch = async (req, res) => {
+    const id = req.params.id;
+    await Category.updateOne({ _id: id }, req.body);
+
+    res.redirect(`${prefixAdmin}/categories`);
 }

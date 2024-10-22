@@ -21,8 +21,7 @@ database.connect();
 // Method-override
 app.use(methodOverride('_method'));
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // view engine setup
 app.engine(

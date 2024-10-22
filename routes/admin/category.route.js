@@ -13,5 +13,8 @@ router.delete('/delete/:id', controller.delete);
 
 router.patch('/change-status/:status/:id', controller.changeStatus);
 
+router.get('/edit/:id', controller.edit);
+router.patch('/edit/:id', controller.editPatch);
+
 
 module.exports = router;
