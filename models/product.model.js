@@ -4,6 +4,7 @@ const slug = require('mongoose-slug-updater');
 mongoose.plugin(slug);
 
 const variantSchema = new mongoose.Schema({
+    name: { type: String },
     size: { type: String },
     color: { type: String },
     price: { type: Number, required: true },

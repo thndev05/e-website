@@ -1,0 +1,120 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-title text-center mt-3">
+                                <h3>Add Product</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="create/" method="POST">
+                                    <div class="form-group">
+                                        <label for="name">Product Name:</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               placeholder="Enter Product Name">
+                                        <div class="invalid-feedback">Product Name Can't Be Empty</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="description">Product Description:</label>
+                                        <input type="text" class="form-control" id="description"
+                                               placeholder="Enter Product Description" name="description">
+                                        <div class="invalid-feedback">Product Description Can't Be Empty</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="category">Product Category:</label>
+                                        <select class="form-select form-control" id="category" name="category">
+                                            <option value="no">No Category</option>
+                                            {{#each categories}}
+                                                <option value="{{this.name}}">{{this.name}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="status">Product Status:</label>
+                                        <select class="form-select form-control" id="status" name="status">
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <p>Product Image:</p>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="product-images" name="productImages" multiple required>
+                                        <label class="custom-file-label" for="product-images">Choose
+                                            files...</label>
+                                        <div class="invalid-feedback">File Format Not Supported</div>
+                                    </div>
+
+                                    <!-- Variants -->
+                                    <div class="form-group mt-3">
+                                        <div id="variants-container">
+                                            <p class="mb-2">Product Variants</p>
+
+                                            <div class="align-items-end variant-item mb-3 border p-3">
+                                                <div class="form-row">
+                                                    <div class="col">
+                                                        <label for="variant-name">Variant Name</label>
+                                                        <input type="text" class="form-control" name="variants[0].name"
+                                                               placeholder="Enter Product Variant Name">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="variant-color">Color</label>
+                                                        <input type="text" class="form-control" name="variants[0].color"
+                                                               placeholder="Enter Color">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="variant-size">Size</label>
+                                                        <input type="text" class="form-control" name="variants[0].size"
+                                                               placeholder="Enter Size">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row mt-2">
+                                                    <div class="col">
+                                                        <label for="variant-price">Price</label>
+                                                        <input type="number" class="form-control" name="variants[0].price"
+                                                               placeholder="Enter Price">
+                                                    </div>
+                                                    <div class="col">
+                                                        <label for="variant-stock">Quantity</label>
+                                                        <input type="number" class="form-control" name="variants[0].stock"
+                                                               placeholder="Enter Quantity">
+                                                    </div>
+                                                </div>
+                                                <div class="form-row mt-2">
+                                                    <p class="mt-2 ml-1 mr-1 mb-2">Variant Image:</p>
+                                                    <div class="custom-file ml-1 mr-1">
+                                                        <input type="file" class="custom-file-input" name="variants[0].image" required>
+                                                        <label class="custom-file-label" for="variant-image">Choose
+                                                            file...</label>
+                                                        <div class="invalid-feedback">File Format Not Supported</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col-auto">
+                                                        <button type="button" class="btn btn-danger remove-variant mt-4" button-delete-variant>Remove</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-info mb-3" id="add-variant-btn">Add Variant</button>
+                                    </div>
+
+                                    <button class="btn btn-dark mt-5 mx-auto d-block" type="submit">Add
+                                        Product</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/admin/js/addProduct.js"></script>
