@@ -26,8 +26,8 @@ module.exports.create = (req, res) => {
 
 // [POST] /admin/categories/create
 module.exports.createPost = async (req, res) => {
-    const category = await Category.create(req.body);
-    category.save();
+    const category = new Category(req.body);
+    await category.save();
 
     res.redirect(`${prefixAdmin}/categories`);
 }

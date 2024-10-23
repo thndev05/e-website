@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="form-row mt-2">
                     <p>Variant Image:</p>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="variants[${variantIndex}].image" required>
+                        <input type="file" class="custom-file-input" name="variants[${variantIndex}].image">
                         <label class="custom-file-label" for="variantImage">Choose file...</label>
                     </div>
                 </div>
