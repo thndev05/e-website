@@ -170,3 +170,11 @@ body {
   max-width: 750px;
 }
 
+.image-preview-container {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 10px;
+  padding: 5px;
+}
+
