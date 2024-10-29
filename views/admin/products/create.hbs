@@ -42,12 +42,13 @@
                                         </select>
                                     </div>
 
-                                    <p>Product Image:</p>
+                                    <p>Product Images:</p>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="product-images" name="productImages" multiple required>
-                                        <label class="custom-file-label" for="product-images">Choose
-                                            files...</label>
+                                        <input type="file" accept="image/*" class="custom-file-input" id="product-images" name="productImages" multiple required>
+                                        <label id="product-images-label" class="custom-file-label" for="product-images">Choose files...</label>
                                         <div class="invalid-feedback">File Format Not Supported</div>
+                                    </div>
+                                    <div id="product-image-preview-container" class="image-preview-container row mt-3">
                                     </div>
 
                                     <!-- Variants -->
@@ -88,10 +89,16 @@
                                                 <div class="form-row mt-2">
                                                     <p class="mt-2 ml-1 mr-1 mb-2">Variant Image:</p>
                                                     <div class="custom-file ml-1 mr-1">
-                                                        <input type="file" class="custom-file-input" name="variants[0].image">
-                                                        <label class="custom-file-label" for="variant-image">Choose
+                                                        <input type="file" id="variant-image-0" class="custom-file-input" name="variants[0].image">
+                                                        <label id="variant-image-label-0" class="custom-file-label" for="variant-image-0">Choose
                                                             file...</label>
                                                         <div class="invalid-feedback">File Format Not Supported</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-row">
+                                                    <div class="col-12">
+                                                        <div id="variant-image-preview-container-0" class="image-preview-container row mt-3">
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row">

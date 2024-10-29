@@ -1,17 +1,79 @@
 let variantIndex = 0;
 
+function addVariantImageInputListeners() {
+    for (let i = 0 ; i <= variantIndex ; i++) {
+        const variantImageInput = document.querySelector('#variant-image-' + variantIndex);
+        const variantImageLabel = document.querySelector('#variant-image-label-' + variantIndex);
+        const variantImagePreviewContainer = document.querySelector('#variant-image-preview-container-' + variantIndex);
+
+        if (variantImageInput && variantImageLabel) {
+            variantImageInput.addEventListener('change', (event) => {
+                const files = Array.from(event.target.files);
+                if (files.length > 0) {
+                    variantImageLabel.textContent = files.map(file => file.name).join(', ');
+                } else {
+                    variantImageLabel.textContent = 'Choose file...';
+                }
+
+                variantImagePreviewContainer.innerHTML = '';
+                files.forEach(file => {
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const col = document.createElement("div");
+                            col.classList.add("col-6", "col-md-4", "col-lg-3", "mb-3");
+
+                            const img = document.createElement("img");
+                            img.src = e.target.result;
+                            img.classList.add("img-fluid", "rounded");
+                            img.style.maxHeight = "150px";
+
+                            col.appendChild(img);
+                            variantImagePreviewContainer.appendChild(col);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                })
+            })
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const productImageInput = document.querySelector('#product-images');
-    const productImageLabel = document.querySelector('.custom-file-label');
+    const productImageLabel = document.querySelector('#product-images-label');
+    const previewContainer = document.querySelector('#product-image-preview-container');
 
     productImageInput.addEventListener('change', (event) => {
         const files = Array.from(event.target.files);
         if (files.length > 0) {
-            productImageLabel.textContent = files.map(file => file.name).join(', ');
+            productImageLabel.textContent = `${files.length} file(s) selected`;
         } else {
             productImageLabel.textContent = 'Choose files...';
         }
+
+        previewContainer.innerHTML = "";
+        files.forEach(file => {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const col = document.createElement("div");
+                    col.classList.add("col-6", "col-md-4", "col-lg-3", "mb-3"); // Thay đổi kích thước theo màn hình
+
+                    const img = document.createElement("img");
+                    img.src = e.target.result;
+                    img.classList.add("img-fluid", "rounded");
+                    img.style.maxHeight = "150px";
+
+                    col.appendChild(img);
+                    previewContainer.appendChild(col);
+                };
+                reader.readAsDataURL(file);
+            }
+        })
     });
+
+    addVariantImageInputListeners();
 
     const variantsContainer = document.querySelector('#variants-container');
     const addVariantButton = document.querySelector('#add-variant-btn');
@@ -61,8 +123,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="form-row mt-2">
                     <p>Variant Image:</p>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="variants[${variantIndex}].image">
-                        <label class="custom-file-label" for="variantImage">Choose file...</label>
+                        <input type="file" id="variant-image-${variantIndex}" class="custom-file-input" name="variants[${variantIndex}].image">
+                        <label id="variant-image-label-${variantIndex}" class="custom-file-label" for="variantImage">Choose file...</label>
                     </div>
                 </div>
                 <div class="form-row">
@@ -73,5 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
 
         variantsContainer.insertAdjacentHTML('beforeend', variantItem);
+
+        addVariantImageInputListeners();
     });
 });
