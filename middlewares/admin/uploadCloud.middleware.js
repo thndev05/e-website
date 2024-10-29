@@ -32,8 +32,11 @@ module.exports.upload = async (req, res, next) => {
 
       const results = await Promise.all(uploadPromises);
 
-      req.body.files = results.map(result => result.secure_url);
-
+      req.body.files = results.map((result, index) => ({
+        fieldName: req.files[index].fieldname,
+        image: result.secure_url
+      }));
+      
       next();
     } catch (error) {
       console.error("Upload error:", error);

@@ -68,8 +68,8 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-  const { name, description, category, status, productImages } = req.body;
-  const data = { name, description, category, status, productImages };
+  const { name, description, category, status } = req.body;
+  const data = { name, description, category, status };
 
   const variants = [];
 
@@ -90,9 +90,26 @@ module.exports.createPost = async (req, res) => {
   });
 
 
+  req.body.files.forEach(file => {
+    const { fieldName, image } = file;
+
+    const variantRegex = /^variants\[(\d+)\]\.image$/;
+    const match = fieldName.match(variantRegex);
+
+    if (match) {
+      const index = match[1];
+      if (variants[index]) {
+        variants[index].image = image;
+      }
+    }
+  });
+
+
   const findCategory = await Category.findOne({ name: data.category });
   data.variants = variants;
   data.category = findCategory._id;
+  data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
+  data.thumbnail = data.images[0];
 
   const product = new Product(data);
   await product.save();
