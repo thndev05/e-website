@@ -116,3 +116,20 @@ module.exports.createPost = async (req, res) => {
 
   res.redirect(`${prefixAdmin}/products`);
 }
+
+// [GET] /admin/products/edit
+module.exports.edit = async (req, res) => {
+  const id = req.params.id;
+  const product = await Product.findById(id).lean();
+  const productCategory = await Category.findById(product.category);
+  const listCategory = await Category.find({});
+
+
+  res.render('admin/products/edit', {
+    product: product,
+    productCategory: productCategory,
+    categories: listCategory,
+    pageTitle: 'Update Product',
+    currentPage: 'products'
+  });
+}
