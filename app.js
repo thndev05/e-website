@@ -40,6 +40,9 @@ app.set('view engine', 'hbs');
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Tiny MCE
+app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce')));
+
 // Middleware set layout
 layoutMiddleware(app);
 
