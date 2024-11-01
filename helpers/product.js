@@ -26,3 +26,41 @@ module.exports.generateSKU = (name, color, size) => {
 
   return `${namePart}-${colorPart}-${sizePart}-${randomPart}`;
 };
+
+module.exports.extractVariantsFromReqBody = (body) => {
+  const variants = [];
+
+  Object.keys(body).forEach(key => {
+    const variantRegex = /^variants\[(\d+)]\.(.*)$/;
+    const match = key.match(variantRegex);
+
+    if (match) {
+      const index = match[1];
+      const field = match[2];
+
+      if (!variants[index]) {
+        variants[index] = {};
+      }
+
+      variants[index][field] = body[key];
+    }
+  });
+
+  if (body.files) {
+    body.files.forEach(file => {
+      const {fieldName, image} = file;
+
+      const variantRegex = /^variants\[(\d+)]\.image$/;
+      const match = fieldName.match(variantRegex);
+
+      if (match) {
+        const index = match[1];
+        if (variants[index]) {
+          variants[index].image = image;
+        }
+      }
+    });
+  }
+
+  return variants;
+}

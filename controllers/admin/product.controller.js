@@ -3,6 +3,7 @@ const Category = require('../../models/category.model');
 const ProductHelpers = require('../../helpers/product');
 const searchHelper = require('../../helpers/search');
 const {prefixAdmin} = require("../../config/system");
+const {generateSKU} = require("../../helpers/product");
 
 
 // [GET] /admin/products
@@ -121,9 +122,8 @@ module.exports.createPost = async (req, res) => {
 module.exports.edit = async (req, res) => {
   const id = req.params.id;
   const product = await Product.findById(id).lean();
-  const productCategory = await Category.findById(product.category);
-  const listCategory = await Category.find({});
-
+  const productCategory = await Category.findById(product.category).lean();
+  const listCategory = await Category.find({}).lean();
 
   res.render('admin/products/edit', {
     product: product,
@@ -132,4 +132,49 @@ module.exports.edit = async (req, res) => {
     pageTitle: 'Update Product',
     currentPage: 'products'
   });
+}
+
+// [PATCH] /admin/product/edit
+module.exports.editPatch = async (req, res) => {
+  const id = req.params.id;
+  const oldProduct = await Product.findById(id).lean();
+
+  const { name, description, category, status, isProductImagesChanged } = req.body;
+  const data = { name, description, category, status };
+
+  const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
+
+  for (let oldVariant of oldProduct.variants) {
+    for (let newVariant of variants) {
+      if (newVariant.originalSKU === oldVariant.sku && newVariant.isImageChanged === 'false') {
+        newVariant.image = oldVariant.image;
+      }
+
+      const {oldName, oldColor, oldSize} = oldVariant;
+      const {newName, newColor, newSize} = newVariant;
+
+      if (oldName === newName && oldColor === newColor && oldSize === newSize) {
+        newVariant.sku = oldVariant.sku;
+      } else {
+        newVariant.sku = ProductHelpers.generateSKU(newName, newColor, newSize);
+      }
+    }
+  }
+
+  const findCategory = await Category.findOne({ name: data.category });
+  data.category = findCategory._id;
+
+  if (isProductImagesChanged === 'true') {
+    data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
+  } else {
+    data.images = oldProduct.images;
+  }
+
+  data.variants = variants;
+
+  data.thumbnail = data.images[0];
+
+  await Product.updateOne({ _id: id }, data);
+
+  res.redirect(`${prefixAdmin}/products`);
 }

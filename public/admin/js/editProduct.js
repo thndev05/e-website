@@ -1,13 +1,26 @@
-let variantIndex = 0;
+function getHighestVariantIndex() {
+    let index = 0;
+    while (document.querySelector('#variant-image-' + index)) {
+        index += 1;
+    }
+    return index;
+}
+
+let variantIndex = getHighestVariantIndex();
 
 function addVariantImageInputListeners() {
     for (let i = 0 ; i <= variantIndex ; i++) {
         const variantImageInput = document.querySelector('#variant-image-' + i);
         const variantImageLabel = document.querySelector('#variant-image-label-' + i);
         const variantImagePreviewContainer = document.querySelector('#variant-image-preview-container-' + i);
+        const isVariantImageChanged = document.querySelector(`#is-variant-image-changed-${i}`)
+
 
         if (variantImageInput && variantImageLabel) {
             variantImageInput.addEventListener('change', (event) => {
+
+                isVariantImageChanged.value = true;
+
                 const files = Array.from(event.target.files);
                 if (files.length > 0) {
                     variantImageLabel.textContent = files.map(file => file.name).join(', ');
@@ -43,8 +56,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const productImageInput = document.querySelector('#product-images');
     const productImageLabel = document.querySelector('#product-images-label');
     const previewContainer = document.querySelector('#product-image-preview-container');
+    const isProductImagesChangedElement = document.querySelector('#is-product-images-changed');
 
     productImageInput.addEventListener('change', (event) => {
+
+        isProductImagesChangedElement.value = true;
+
         const files = Array.from(event.target.files);
         if (files.length > 0) {
             productImageLabel.textContent = `${files.length} file(s) selected`;
