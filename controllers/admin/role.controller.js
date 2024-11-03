@@ -80,3 +80,8 @@ module.exports.editPost = async(req, res) => {
 
   res.redirect(`${prefixAdmin}/roles`);
 }
+
+// [GET] /admin/roles/permissions
+module.exports.permissions = (req, res) => {
+  res.send('ok');
+}
