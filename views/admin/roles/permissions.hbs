@@ -1,0 +1,91 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <h1 class="mb-4">Decentralize Permission</h1>
+                {{#if documents}}
+                    <div class="d-none" data-documents="{{documents}}"></div>
+
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mb-3" button-submit-permissions>
+                            Update
+                        </button>
+                    </div>
+
+                    <table class="table table-hover table-sm" table-permissions>
+                        <thead>
+                            <tr>
+                                <th>Tính năng</th>
+                                {{#each documents}}
+                                    <th class="text-center">{{this.name}}</th>
+                                {{/each}}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Hidden ID Row -->
+                            <tr data-name="id" class="d-none">
+                                <td></td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="text" value="{{this._id}}">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
+                            <!-- Category Permissions -->
+                            <tr>
+                                <td colspan="4"><b>Danh mục sản phẩm</b></td>
+                            </tr>
+                            <tr data-name="products-category_view">
+                                <td>Xem</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="products-category_create">
+                                <td>Thêm mới</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="products-category_edit">
+                                <td>Chỉnh sửa</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="products-category_delete">
+                                <td style="color: red">Xóa</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
+                        </tbody>
+                    </table>
+                {{/if}}
+
+                <!-- Hidden Form for Permissions Update -->
+                <form form-change-permissions method="POST" action="{{prefixAdmin}}/roles/permissions?_method=PATCH" class="d-none">
+                    <div class="form-group">
+                        <input type="text" class="form-control" name="permissions">
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/admin/js/role.js"></script>
