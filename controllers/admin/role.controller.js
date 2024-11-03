@@ -82,6 +82,12 @@ module.exports.editPost = async(req, res) => {
 }
 
 // [GET] /admin/roles/permissions
-module.exports.permissions = (req, res) => {
-  res.send('ok');
+module.exports.permissions = async (req, res) => {
+  const documents = await Role.find({ deleted: false }).lean();
+
+  res.render('admin/roles/permissions', {
+    pageTitle: 'Decentralize Permissions',
+    currentPage: 'roles',
+    documents: documents
+  });
 }
