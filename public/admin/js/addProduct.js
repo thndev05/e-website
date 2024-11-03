@@ -138,4 +138,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addVariantImageInputListeners();
     });
+
+    const tagsInput = document.querySelector('#tags');
+    const tagify = new Tagify(tagsInput, {
+        whitelist: ["Minimal", "T-Shirts", "Jeans", "Winter", "New", "Sale"],
+        dropdown: {
+            maxItems: 5,
+            enabled: 0
+        }
+    });
+
 });

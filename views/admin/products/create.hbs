@@ -19,11 +19,20 @@
                                                placeholder="Enter Product Name">
                                         <div class="invalid-feedback">Product Name Can't Be Empty</div>
                                     </div>
+
                                     <div class="form-group">
                                         <label for="description">Product Description:</label>
                                         <textarea class="form-control textarea-mce" id="description" placeholder="Enter Product Description" name="description" rows="5"></textarea>
                                         <div class="invalid-feedback">Product Description Can't Be Empty</div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="brand">Product Brand:</label>
+                                        <input type="text" class="form-control" id="brand" name="brand"
+                                               placeholder="Enter Product Brand">
+                                        <div class="invalid-feedback">Product Brand Can't Be Empty</div>
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="category">Product Category:</label>
                                         <select class="form-select form-control" id="category" name="category">
@@ -33,6 +42,7 @@
                                             {{/each}}
                                         </select>
                                     </div>
+
                                     <div class="form-group">
                                         <label for="status">Product Status:</label>
                                         <select class="form-select form-control" id="status" name="status">
@@ -48,6 +58,12 @@
                                         <div class="invalid-feedback">File Format Not Supported</div>
                                     </div>
                                     <div id="product-image-preview-container" class="image-preview-container row mt-3">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="tags">Product Tags:</label>
+                                        <input type="text" class="form-control" id="tags" name="tags"
+                                               placeholder="Enter Product Tags">
                                     </div>
 
                                     <!-- Variants -->

@@ -69,8 +69,8 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-  const { name, description, category, status } = req.body;
-  const data = { name, description, category, status };
+  const { name, description, category, status, brand, tags } = req.body;
+  const data = { name, description, category, status, brand};
 
   const variants = [];
 
@@ -112,6 +112,8 @@ module.exports.createPost = async (req, res) => {
   data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
   data.thumbnail = data.images[0];
 
+  data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
+
   const product = new Product(data);
   await product.save();
 
@@ -130,7 +132,8 @@ module.exports.edit = async (req, res) => {
     productCategory: productCategory,
     categories: listCategory,
     pageTitle: 'Update Product',
-    currentPage: 'products'
+    currentPage: 'products',
+    normalizedTags: product.tags ? product.tags.join(',') : "",
   });
 }
 
@@ -139,8 +142,8 @@ module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
   const oldProduct = await Product.findById(id).lean();
 
-  const { name, description, category, status, isProductImagesChanged } = req.body;
-  const data = { name, description, category, status };
+  const { name, description, category, status, isProductImagesChanged, brand, tags} = req.body;
+  const data = { name, description, category, status, brand };
 
   const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
 
@@ -173,6 +176,8 @@ module.exports.editPatch = async (req, res) => {
   data.variants = variants;
 
   data.thumbnail = data.images[0];
+
+  data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
 
   await Product.updateOne({ _id: id }, data);
 

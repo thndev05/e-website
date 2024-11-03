@@ -24,8 +24,10 @@ variantSchema.pre('save', function (next) {
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
     description: String,
+    brand: String,
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     images: [{ type: String }],
+    tags: [String],
     slug: {
         type: String,
         slug: "name",
