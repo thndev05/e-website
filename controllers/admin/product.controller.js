@@ -117,6 +117,8 @@ module.exports.createPost = async (req, res) => {
   const product = new Product(data);
   await product.save();
 
+  console.log(product);
+
   res.redirect(`${prefixAdmin}/products`);
 }
 
@@ -180,6 +182,8 @@ module.exports.editPatch = async (req, res) => {
   data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
 
   await Product.updateOne({ _id: id }, data);
+
+  console.log(data);
 
   res.redirect(`${prefixAdmin}/products`);
 }

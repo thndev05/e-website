@@ -13,7 +13,7 @@ function addVariantImageInputListeners() {
         const variantImageInput = document.querySelector('#variant-image-' + i);
         const variantImageLabel = document.querySelector('#variant-image-label-' + i);
         const variantImagePreviewContainer = document.querySelector('#variant-image-preview-container-' + i);
-        const isVariantImageChanged = document.querySelector(`#is-variant-image-changed-${i}`)
+        const isVariantImageChanged = document.querySelector('#is-variant-image-changed-' + i);
 
 
         if (variantImageInput && variantImageLabel) {
@@ -129,12 +129,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="form-row mt-2">
                     <div class="col">
-                        <label for="variantPrice">Price</label>
-                        <input type="number" class="form-control" name="variants[${variantIndex}].price" placeholder="Enter Price">
+                        <label for="variant-stock">Quantity</label>
+                        <input type="number" class="form-control" name="variants[${variantIndex}].stock"
+                               placeholder="Enter Quantity">
                     </div>
                     <div class="col">
-                        <label for="variantStock">Quantity</label>
-                        <input type="number" class="form-control" name="variants[${variantIndex}].stock" placeholder="Enter Quantity">
+                        <label for="variant-cost-price">Cost Price</label>
+                        <input type="number" class="form-control" name="variants[${variantIndex}].costPrice"
+                               placeholder="Enter Cost Price">
+                    </div>
+                </div>
+                <div class="form-row mt-2">
+                    <div class="col">
+                        <label for="variant-price">Price</label>
+                        <input type="number" class="form-control" name="variants[${variantIndex}].price"
+                               placeholder="Enter Price">
+                    </div>
+                    <div class="col">
+                        <label for="variant-sale-price">Sale Price</label>
+                        <input type="number" class="form-control" name="variants[${variantIndex}].salePrice"
+                               placeholder="Enter Sale Price">
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -144,6 +158,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         <label id="variant-image-label-${variantIndex}" class="custom-file-label" for="variantImage">Choose file...</label>
                     </div>
                 </div>
+                
+                <div class="form-row">
+                    <div class="col-12">
+                        <div id="variant-image-preview-container-${variantIndex}" class="image-preview-container row mt-3">
+                        </div>
+                    </div>
+                </div>
+                
+                <input type="hidden" id="is-variant-image-changed-${variantIndex}" name="variants[${variantIndex}].isImageChanged" value=false>
+                
                 <div class="form-row">
                     <div class="col-auto">
                         <button type="button" class="btn btn-danger remove-variant mt-4" button-delete-variant>Remove</button>
