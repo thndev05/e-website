@@ -83,11 +83,22 @@ module.exports.editPost = async(req, res) => {
 
 // [GET] /admin/roles/permissions
 module.exports.permissions = async (req, res) => {
-  const documents = await Role.find({ deleted: false }).lean();
+  const documents = await Role.find({ deleted: false, status: 'active'}).lean();
 
   res.render('admin/roles/permissions', {
     pageTitle: 'Decentralize Permissions',
     currentPage: 'roles',
     documents: documents
   });
+}
+
+// [PATCH] /admin/roles/permissions
+module.exports.permissionsPatch = async (req, res) => {
+  const data = JSON.parse(req.body.permissions);
+
+  for (const item of data) {
+    await Role.updateOne({ _id: item.id }, { permissions: item.permissions });
+  }
+
+  res.redirect('back');
 }

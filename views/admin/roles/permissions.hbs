@@ -7,7 +7,7 @@
             <div class="col-lg-10 col-md-8 ml-auto">
                 <h1 class="mb-4">Decentralize Permission</h1>
                 {{#if documents}}
-                    <div class="d-none" data-documents="{{documents}}"></div>
+                    <div class="d-none" data-documents="{{JSONstringify documents}}"></div>
 
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary mb-3" button-submit-permissions>
@@ -18,7 +18,7 @@
                     <table class="table table-hover table-sm" table-permissions>
                         <thead>
                             <tr>
-                                <th>Tính năng</th>
+                                <th>Features</th>
                                 {{#each documents}}
                                     <th class="text-center">{{this.name}}</th>
                                 {{/each}}
@@ -37,34 +37,154 @@
 
                             <!-- Category Permissions -->
                             <tr>
-                                <td colspan="4"><b>Danh mục sản phẩm</b></td>
+                                <td colspan="4"><b>Category</b></td>
                             </tr>
-                            <tr data-name="products-category_view">
-                                <td>Xem</td>
+                            <tr data-name="category_view">
+                                <td>View</td>
                                 {{#each documents}}
                                     <td class="text-center">
                                         <input type="checkbox">
                                     </td>
                                 {{/each}}
                             </tr>
-                            <tr data-name="products-category_create">
-                                <td>Thêm mới</td>
+                            <tr data-name="category_create">
+                                <td>Create</td>
                                 {{#each documents}}
                                     <td class="text-center">
                                         <input type="checkbox">
                                     </td>
                                 {{/each}}
                             </tr>
-                            <tr data-name="products-category_edit">
-                                <td>Chỉnh sửa</td>
+                            <tr data-name="category_edit">
+                                <td>Edit</td>
                                 {{#each documents}}
                                     <td class="text-center">
                                         <input type="checkbox">
                                     </td>
                                 {{/each}}
                             </tr>
-                            <tr data-name="products-category_delete">
-                                <td style="color: red">Xóa</td>
+                            <tr data-name="category_delete">
+                                <td style="color: red">Delete</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
+
+                            <!-- Product Permissions -->
+                            <tr>
+                                <td colspan="4"><b>Product</b></td>
+                            </tr>
+                            <tr data-name="product_view">
+                                <td>View</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="product_create">
+                                <td>Create</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="product_edit">
+                                <td>Edit</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="product_delete">
+                                <td style="color: red">Delete</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
+                            <!-- Role Permissions -->
+                            <tr>
+                                <td colspan="4"><b>Role</b></td>
+                            </tr>
+                            <tr data-name="role_view">
+                                <td>View</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="role_create">
+                                <td>Create</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="role_edit">
+                                <td>Edit</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="role_decentralize">
+                                <td>Decentralize</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="role_delete">
+                                <td style="color: red">Delete</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
+                            <!-- Account Permissions -->
+                            <tr>
+                                <td colspan="4"><b>Account</b></td>
+                            </tr>
+                            <tr data-name="account_view">
+                                <td>View</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="account_create">
+                                <td>Create</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="account_edit">
+                                <td>Edit</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="account_delete">
+                                <td style="color: red">Delete</td>
                                 {{#each documents}}
                                     <td class="text-center">
                                         <input type="checkbox">
@@ -88,4 +208,4 @@
     </div>
 </section>
 
-<script src="/admin/js/role.js"></script>
+    <script src="/admin/js/permission.js"></script>
