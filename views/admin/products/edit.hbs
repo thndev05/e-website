@@ -41,6 +41,16 @@
                                             {{/each}}
                                         </select>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label for="gender">Product Gender:</label>
+                                        <select class="form-select form-control" id="gender" name="gender">
+                                            <option value="unisex" {{#ifEqual product.gender 'unisex'}}selected{{/ifEqual}}>Unisex</option>
+                                            <option value="male"   {{#ifEqual product.gender 'male'}}selected{{/ifEqual}}>Male</option>
+                                            <option value="female" {{#ifEqual product.gender 'female'}}selected{{/ifEqual}}>Female</option>
+                                        </select>
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="status">Product Status:</label>
                                         <select class="form-select form-control" id="status" name="status">

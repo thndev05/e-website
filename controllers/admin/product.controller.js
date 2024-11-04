@@ -69,8 +69,8 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-  const { name, description, category, status, brand, tags } = req.body;
-  const data = { name, description, category, status, brand};
+  const { name, description, category, status, brand, tags, gender } = req.body;
+  const data = { name, description, category, status, brand, gender};
 
   const variants = [];
 
@@ -144,8 +144,8 @@ module.exports.editPatch = async (req, res) => {
   const id = req.params.id;
   const oldProduct = await Product.findById(id).lean();
 
-  const { name, description, category, status, isProductImagesChanged, brand, tags} = req.body;
-  const data = { name, description, category, status, brand };
+  const { name, description, category, status, isProductImagesChanged, brand, tags, gender} = req.body;
+  const data = { name, description, category, status, brand, gender };
 
   const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
 
