@@ -178,3 +178,6 @@ body {
   padding: 5px;
 }
 
+.form-control.tagify {
+  height: auto;
+}
