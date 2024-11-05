@@ -1,0 +1,85 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-5 mb-4 mb-xl-0"></div>
+                    <div class="col-5 mb-4 mb-xl-0">
+                        <form id="form-search" class="form-inline d-none d-lg-block">
+                            <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
+                                   name="keyword" value="{{searchKeyword}}">
+                            <button class="btn btn-light btn-outline-secondary" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-2 mb-4 mb-xl-0">
+                        <a href="{{prefixAdmin}}/accounts/create" class="btn btn-outline-success text-center">
+                            <i class="fa fa-plus-circle fa-lg mr-1"></i>Create new</a>
+                    </div>
+                    <div class="col-12 mb-4 mb-xl-0 mt-5">
+                        <h4 class="text-muted text-center mb-3">Accounts</h4>
+                        <table class="table bg-light table-striped  text-center" id="categories">
+                            <thead>
+                            <tr class="text-muted">
+                                <th>#No</th>
+                                <th>Avatar</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each accounts}}
+                                <tr>
+                                    <td class="align-middle">{{#add @index 1}}{{/add}}</td>
+                                    <td class="align-middle">
+                                        <img src="{{this.avatar}}" width="70px" alt="{{this.name}}">
+                                    </td>
+                                    <td class="align-middle">{{this.name}}</td>
+                                    <td class="align-middle">{{this.roleName}}</td>
+                                    <td class="align-middle">{{this.email}}</td>
+                                    <td class="align-middle">
+                                        {{#ifEqual this.status 'active'}}
+                                            <a  href="javascript:;"
+                                                class="badge badge-success"
+                                                data-id="{{this._id}}"
+                                                data-status="{{this.status}}"
+                                                button-change-status>Active</a>
+                                        {{else}}
+                                            <a  href="javascript:;"
+                                                class="badge badge-danger"
+                                                data-id="{{this._id}}"
+                                                data-status="{{this.status}}"
+                                                button-change-status>Inactive</a>
+                                        {{/ifEqual}}
+                                    </td>
+                                    <td class="align-middle">
+                                        <a href="/admin/accounts/edit/{{this._id}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <button class="btn btn-sm btn-outline-danger"
+                                                data-id="{{this._id}}"
+                                                button-delete>Delete</button>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form action="" method="POST" id="form-delete-item" data-path="{{prefixAdmin}}/accounts/delete">
+</form>
+
+<form action="" method="POST" id="form-change-status" data-path="{{prefixAdmin}}/accounts/change-status">
+</form>
+
+<script src="js/account.js"></script>

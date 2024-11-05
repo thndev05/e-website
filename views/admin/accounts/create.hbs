@@ -1,0 +1,75 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-title text-center mt-3">
+                                <h3>Create Account</h3>
+                            </div>
+                            <div class="card-body">
+                                <form action="create/" method="POST" enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="name">Name:</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               placeholder="Enter account name" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Email:</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                               placeholder="Enter account email" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="name">Password:</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                               placeholder="Enter account password" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="category">Role:</label>
+                                        <select class="form-select form-control" id="role" name="role">
+                                            <option value="no">No Role</option>
+                                            {{#each roles}}
+                                                <option value="{{this._id}}">{{this.name}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="status">Status:</label>
+                                        <select class="form-select form-control" id="status" name="status">
+                                            <option value="active">Active</option>
+                                            <option value="inactive">Inactive</option>
+                                        </select>
+                                    </div>
+
+                                    <p>Avatar:</p>
+                                    <div class="custom-file">
+                                        <input type="file" accept="image/*" class="custom-file-input" id="avatar" name="avatar">
+                                        <label id="avatar-label" class="custom-file-label" for="avatar">Choose files...</label>
+                                        <div class="invalid-feedback">File Format Not Supported</div>
+                                    </div>
+                                    <div id="image-preview-container" class="image-preview-container row mt-3">
+                                    </div>
+
+                                    <button class="btn btn-dark mt-5 mx-auto d-block" style="height: 50px; width: 160px" type="submit">Create
+                                        Account</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/admin/js/addAccount.js"></script>
+
+

@@ -45,13 +45,18 @@ module.exports.create = (req, res) => {
 
 // [POST] /admin/roles/create
 module.exports.createPost = async(req, res) => {
-  const { name, description, status } = req.body;
-  const data = { name, description, status };
+  try {
+    const { name, description, status } = req.body;
+    const data = { name, description, status };
 
-  const role = new Role(data);
-  await role.save();
+    const role = new Role(data);
+    await role.save();
 
-  res.redirect(`${prefixAdmin}/roles`);
+    res.redirect(`${prefixAdmin}/roles`);
+  } catch (e) {
+    console.log(e);
+    res.redirect(`${prefixAdmin}/roles`);
+  }
 }
 
 // [GET] /admin/roles/edit/:id
@@ -72,13 +77,18 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/roles/edit/:id
 module.exports.editPost = async(req, res) => {
-  const id = req.params.id;
-  const { name, description, status } = req.body;
-  const data = { name, description, status };
+  try {
+    const id = req.params.id;
+    const { name, description, status } = req.body;
+    const data = { name, description, status };
 
-  await Role.updateOne({ _id: id }, data);
+    await Role.updateOne({ _id: id }, data);
 
-  res.redirect(`${prefixAdmin}/roles`);
+    res.redirect(`${prefixAdmin}/roles`);
+  } catch (e) {
+    console.log(e);
+    res.redirect(`${prefixAdmin}/roles`);
+  }
 }
 
 // [GET] /admin/roles/permissions

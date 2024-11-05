@@ -1,6 +1,6 @@
 // Permission
 const tablePermissions = document.querySelector('[table-permissions]');
-if(tablePermissions) {
+if (tablePermissions) {
   const buttonSubmit = document.querySelector('[button-submit-permissions]');
 
   buttonSubmit.onclick = () => {
@@ -11,14 +11,14 @@ if(tablePermissions) {
       const name = row.getAttribute('data-name');
       const inputs = row.querySelectorAll('input');
 
-      if(name === 'id') {
+      if (name === 'id') {
         inputs.forEach((input) => {
           const id = input.value;
 
           permissions.push({
             id: id,
             permissions: []
-          })
+          });
         });
       } else {
         inputs.forEach((input, index) => {
@@ -31,17 +31,48 @@ if(tablePermissions) {
       }
     });
 
-    if(permissions.length > 0) {
-      const formChangePermissions = document.querySelector('[form-change-permissions]');
-      const inputPermissions = formChangePermissions.querySelector('input');
+    // Hiện SweetAlert2 xác nhận
+    if (permissions.length > 0) {
+      Swal.fire({
+        title: 'Confirmation',
+        text: 'Are you sure to change permissions?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const formChangePermissions = document.querySelector('[form-change-permissions]');
+          const inputPermissions = formChangePermissions.querySelector('input');
 
-      inputPermissions.value = JSON.stringify(permissions);
+          inputPermissions.value = JSON.stringify(permissions);
 
-      formChangePermissions.submit();
+          Swal.fire({
+            title: 'Success!',
+            text: 'Change permissions successfully.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+
+          setTimeout(() => {
+            formChangePermissions.submit();
+          }, 1000);
+        }
+      });
+    } else {
+      Swal.fire({
+        title: 'Info',
+        text: 'Don\'t have permission to change.',
+        icon: 'info',
+        confirmButtonText: 'OK'
+      });
     }
   };
 }
 // End Permissions
+
 
 // Permissions data default
 const dataDocuments = document.querySelector('[data-documents]');

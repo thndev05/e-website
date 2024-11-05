@@ -3,24 +3,40 @@ if (buttonsDelete) {
   const formDeleteItem = document.querySelector('#form-delete-item');
   const path = formDeleteItem.getAttribute('data-path');
 
-
   buttonsDelete.forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
 
-      const isConfirm = confirm('Bạn có chắc chắn muốn xoá sản phẩm này?');
+      // Show SweetAlert2 confirmation dialog
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you really want to delete this item?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const id = btn.getAttribute('data-id');
+          const action = path + `/${id}?_method=DELETE`;
+          formDeleteItem.action = action;
 
-      if (isConfirm) {
-        const id = btn.getAttribute('data-id');
+          Swal.fire({
+            title: 'Success!',
+            text: 'Delete successfully',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          })
 
-        const action = path + `/${id}?_method=DELETE`;
+          setTimeout(() => {
+            formDeleteItem.submit();
 
-        formDeleteItem.action = action;
-
-        formDeleteItem.submit();
-      }
+          }, 1000);
+        }
+      });
     });
-  })
+  });
 }
 
 const buttonsChangeStatus = document.querySelectorAll('[button-change-status]');
@@ -34,14 +50,34 @@ if (buttonsChangeStatus) {
 
       const id = btn.getAttribute('data-id');
       const status = btn.getAttribute('data-status');
+      let changedStatus = status === 'active' ? 'inactive' : 'active';
 
-      let changedStatus = status == 'active' ? 'inactive' : 'active';
+      // Show SweetAlert2 confirmation dialog
+      Swal.fire({
+        title: 'Change Status?',
+        text: `Do you want to set this account to ${changedStatus}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const action = path + `/${changedStatus}/${id}?_method=PATCH`;
+          formChangeStatus.action = action;
 
-      const action = path + `/${changedStatus}/${id}?_method=PATCH`;
+          Swal.fire({
+            title: 'Success!',
+            text: 'Change status successfully',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          })
 
-      formChangeStatus.action = action;
-
-      formChangeStatus.submit();
-    })
+          setTimeout(() => {
+            formChangeStatus.submit();
+          }, 1000);
+        }
+      });
+    });
   });
 }

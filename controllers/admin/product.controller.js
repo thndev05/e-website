@@ -69,121 +69,134 @@ module.exports.create = async (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
-  const { name, description, category, status, brand, tags, gender } = req.body;
-  const data = { name, description, category, status, brand, gender};
+  try {
+    const { name, description, category, status, brand, tags, gender } = req.body;
+    const data = { name, description, category, status, brand, gender};
 
-  const variants = [];
+    const variants = [];
 
-  Object.keys(req.body).forEach(key => {
-    const variantRegex = /^variants\[(\d+)\]\.(.*)$/;
-    const match = key.match(variantRegex);
+    Object.keys(req.body).forEach(key => {
+      const variantRegex = /^variants\[(\d+)\]\.(.*)$/;
+      const match = key.match(variantRegex);
 
-    if (match) {
-      const index = match[1];
-      const field = match[2];
+      if (match) {
+        const index = match[1];
+        const field = match[2];
 
-      if (!variants[index]) {
-        variants[index] = {};
+        if (!variants[index]) {
+          variants[index] = {};
+        }
+
+        variants[index][field] = req.body[key];
       }
-
-      variants[index][field] = req.body[key];
-    }
-  });
+    });
 
 
-  req.body.files.forEach(file => {
-    const { fieldName, image } = file;
+    req.body.files.forEach(file => {
+      const { fieldName, image } = file;
 
-    const variantRegex = /^variants\[(\d+)\]\.image$/;
-    const match = fieldName.match(variantRegex);
+      const variantRegex = /^variants\[(\d+)\]\.image$/;
+      const match = fieldName.match(variantRegex);
 
-    if (match) {
-      const index = match[1];
-      if (variants[index]) {
-        variants[index].image = image;
+      if (match) {
+        const index = match[1];
+        if (variants[index]) {
+          variants[index].image = image;
+        }
       }
-    }
-  });
+    });
 
 
-  const findCategory = await Category.findOne({ name: data.category });
-  data.variants = variants;
-  data.category = findCategory._id;
-  data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
-  data.thumbnail = data.images[0];
+    const findCategory = await Category.findOne({ name: data.category });
+    data.variants = variants;
+    data.category = findCategory._id;
+    data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
+    data.thumbnail = data.images[0];
 
-  data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
+    data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
 
-  const product = new Product(data);
-  await product.save();
+    const product = new Product(data);
+    await product.save();
 
-  console.log(product);
-
-  res.redirect(`${prefixAdmin}/products`);
+    res.redirect(`${prefixAdmin}/products`);
+  } catch (e) {
+    console.log(e);
+    res.redirect(`${prefixAdmin}/products`);
+  }
 }
 
 // [GET] /admin/products/edit
 module.exports.edit = async (req, res) => {
-  const id = req.params.id;
-  const product = await Product.findById(id).lean();
-  const productCategory = await Category.findById(product.category).lean();
-  const listCategory = await Category.find({}).lean();
+  try {
+    const id = req.params.id;
+    const product = await Product.findById(id).lean();
+    const productCategory = await Category.findById(product.category).lean();
+    const listCategory = await Category.find({}).lean();
 
-  res.render('admin/products/edit', {
-    product: product,
-    productCategory: productCategory,
-    categories: listCategory,
-    pageTitle: 'Update Product',
-    currentPage: 'products',
-    normalizedTags: product.tags ? product.tags.join(',') : "",
-  });
+    res.render('admin/products/edit', {
+      product: product,
+      productCategory: productCategory,
+      categories: listCategory,
+      pageTitle: 'Update Product',
+      currentPage: 'products',
+      normalizedTags: product.tags ? product.tags.join(',') : "",
+    });
+  } catch (e) {
+    console.log(e);
+    res.redirect(`${prefixAdmin}/products`);
+  }
 }
 
 // [PATCH] /admin/product/edit
 module.exports.editPatch = async (req, res) => {
-  const id = req.params.id;
-  const oldProduct = await Product.findById(id).lean();
+  try {
+    const id = req.params.id;
+    const oldProduct = await Product.findById(id).lean();
 
-  const { name, description, category, status, isProductImagesChanged, brand, tags, gender} = req.body;
-  const data = { name, description, category, status, brand, gender };
+    const { name, description, category, status, isProductImagesChanged, brand, tags, gender} = req.body;
+    const data = { name, description, category, status, brand, gender };
 
-  const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
+    const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
 
-  for (let oldVariant of oldProduct.variants) {
-    for (let newVariant of variants) {
-      if (newVariant.originalSKU === oldVariant.sku && newVariant.isImageChanged === 'false') {
-        newVariant.image = oldVariant.image;
-      }
+    for (let oldVariant of oldProduct.variants) {
+      for (let newVariant of variants) {
+        if (newVariant.originalSKU === oldVariant.sku && newVariant.isImageChanged === 'false') {
+          newVariant.image = oldVariant.image;
+        }
 
-      const {oldName, oldColor, oldSize} = oldVariant;
-      const {newName, newColor, newSize} = newVariant;
+        const {oldName, oldColor, oldSize} = oldVariant;
+        const {newName, newColor, newSize} = newVariant;
 
-      if (oldName === newName && oldColor === newColor && oldSize === newSize) {
-        newVariant.sku = oldVariant.sku;
-      } else {
-        newVariant.sku = ProductHelpers.generateSKU(newName, newColor, newSize);
+        if (oldName === newName && oldColor === newColor && oldSize === newSize) {
+          newVariant.sku = oldVariant.sku;
+        } else {
+          newVariant.sku = ProductHelpers.generateSKU(newName, newColor, newSize);
+        }
       }
     }
+
+    const findCategory = await Category.findOne({ name: data.category });
+    data.category = findCategory._id;
+
+    if (isProductImagesChanged === 'true') {
+      data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
+    } else {
+      data.images = oldProduct.images;
+    }
+
+    data.variants = variants;
+
+    data.thumbnail = data.images[0];
+
+    data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
+
+    await Product.updateOne({ _id: id }, data);
+
+    console.log(data);
+
+    res.redirect(`${prefixAdmin}/products`);
+  } catch(e) {
+    console.log(e);
+    res.redirect(`${prefixAdmin}/products`);
   }
-
-  const findCategory = await Category.findOne({ name: data.category });
-  data.category = findCategory._id;
-
-  if (isProductImagesChanged === 'true') {
-    data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
-  } else {
-    data.images = oldProduct.images;
-  }
-
-  data.variants = variants;
-
-  data.thumbnail = data.images[0];
-
-  data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
-
-  await Product.updateOne({ _id: id }, data);
-
-  console.log(data);
-
-  res.redirect(`${prefixAdmin}/products`);
 }

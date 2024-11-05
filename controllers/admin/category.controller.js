@@ -26,10 +26,15 @@ module.exports.create = (req, res) => {
 
 // [POST] /admin/categories/create
 module.exports.createPost = async (req, res) => {
-    const category = new Category(req.body);
-    await category.save();
+    try {
+        const category = new Category(req.body);
+        await category.save();
 
-    res.redirect(`${prefixAdmin}/categories`);
+        res.redirect(`${prefixAdmin}/categories`);
+    } catch (err) {
+        console.log(err);
+        res.redirect(`${prefixAdmin}/categories`);
+    }
 }
 
 // [DELETE] /admin/products/delete/:id
@@ -69,8 +74,13 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/categories/edit/:id
 module.exports.editPatch = async (req, res) => {
-    const id = req.params.id;
-    await Category.updateOne({ _id: id }, req.body);
+    try {
+        const id = req.params.id;
+        await Category.updateOne({ _id: id }, req.body);
 
-    res.redirect(`${prefixAdmin}/categories`);
+        res.redirect(`${prefixAdmin}/categories`);
+    } catch (e) {
+        console.log(e);
+        res.redirect(`${prefixAdmin}/categories`);
+    }
 }
