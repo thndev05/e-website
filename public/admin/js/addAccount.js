@@ -32,5 +32,53 @@ document.addEventListener('DOMContentLoaded', () => {
     })
   });
 
+  // Add SweetAlert for the submit button
+  const nameInput = document.querySelector('#name');
+  const emailInput = document.querySelector('#email');
+  const passwordInput = document.querySelector('#password');
+
+  if (nameInput && emailInput && passwordInput) {
+    var initialName = nameInput.value;
+    var initialEmail = emailInput.value;
+    var initialPassword = passwordInput.value;
+  }
+
+  const buttonSubmit = document.querySelector('[button-create]');
+  if(buttonSubmit) {
+    buttonSubmit.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      const newName = nameInput.value !== initialName;
+      const newEmail = emailInput.value !== initialEmail;
+      const newPassword = passwordInput.value !== initialPassword;
+
+      if (newName && newEmail && newPassword) {
+        Swal.fire({
+          title: 'Confirm',
+          text: 'Are you sure you want to create this account?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, create account!',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const form = buttonSubmit.closest('form');
+            form.submit();
+          }
+        });
+      } else {
+        Swal.fire({
+          title: 'Invalid information',
+          text: 'Please fill valid information.',
+          icon: 'info',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  }
+
 });
+
 

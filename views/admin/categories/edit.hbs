@@ -18,7 +18,7 @@
                                       id="form-create-category">
                                     <div class="form-group">
                                         <label for="name">Category Name:</label>
-                                        <input type="text" class="form-control" name="name"
+                                        <input type="text" class="form-control" name="name" id="name"
                                                placeholder="Enter Category Name" value="{{category.name}}" required>
                                     </div>
                                     <div class="form-group">
@@ -34,7 +34,7 @@
                                             <option value="inactive" {{#ifEqual category.status "inactive"}}selected{{/ifEqual}}>Inactive</option>
                                         </select>
                                     </div>
-                                    <button class="btn btn-dark mt-5 mx-auto d-block" type="submit">Update
+                                    <button button-edit class="btn btn-dark mt-5 mx-auto d-block" type="submit">Update
                                         Category</button>
                                 </form>
                             </div>
@@ -45,3 +45,5 @@
         </div>
     </div>
 </section>
+
+<script src="/admin/js/category.js"></script>

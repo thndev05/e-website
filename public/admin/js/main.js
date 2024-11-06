@@ -52,11 +52,16 @@ $(document).ready(function () {
 
 // Cart Page Javascript
 var decrease = document.getElementById('decrease');
-var increase = document.getElementById('increase');
-var itmval = document.getElementById('quantity');
+if (decrease) {
+  decrease.addEventListener('click', decrease_qun);
+}
 
-decrease.addEventListener('click', decrease_qun);
-increase.addEventListener('click', increase_qun);
+var increase = document.getElementById('increase');
+if (increase) {
+  increase.addEventListener('click', increase_qun);
+}
+
+var itmval = document.getElementById('quantity');
 
 function decrease_qun() {
   if (itmval.value <= 0) {

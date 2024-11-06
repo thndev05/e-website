@@ -1,7 +1,11 @@
 const buttonsDelete = document.querySelectorAll('[button-delete]');
 if (buttonsDelete) {
   const formDeleteItem = document.querySelector('#form-delete-item');
-  const path = formDeleteItem.getAttribute('data-path');
+  let path = ''
+
+  if (formDeleteItem) {
+    path = formDeleteItem.getAttribute('data-path');
+  }
 
   buttonsDelete.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -42,7 +46,11 @@ if (buttonsDelete) {
 const buttonsChangeStatus = document.querySelectorAll('[button-change-status]');
 if (buttonsChangeStatus) {
   const formChangeStatus = document.querySelector('#form-change-status');
-  const path = formChangeStatus.getAttribute('data-path');
+  let path = '';
+
+  if (formChangeStatus) {
+    path = formChangeStatus.getAttribute('data-path');
+  }
 
   buttonsChangeStatus.forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -81,3 +89,52 @@ if (buttonsChangeStatus) {
     });
   });
 }
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  // Add SweetAlert for the submit button
+  const nameInput = document.querySelector('#name');
+  const emailInput = document.querySelector('#email');
+
+  if (nameInput && emailInput) {
+    var initialName = nameInput.value;
+    var initialEmail = emailInput.value;
+  }
+
+  const buttonSubmit = document.querySelector('[button-edit]');
+  if(buttonSubmit) {
+    buttonSubmit.addEventListener('click', (event) => {
+      event.preventDefault();
+
+      const newName = nameInput.value !== initialName;
+      const newEmail = emailInput.value !== initialEmail;
+
+      if (newName && newEmail) {
+        Swal.fire({
+          title: 'Confirm',
+          text: 'Are you sure you want to create this account?',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, create account!',
+          cancelButtonText: 'Cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            const form = buttonSubmit.closest('form');
+            form.submit();
+          }
+        });
+      } else {
+        Swal.fire({
+          title: 'Invalid information',
+          text: 'Please fill valid information.',
+          icon: 'info',
+          confirmButtonText: 'OK'
+        });
+      }
+    });
+  }
+})
+
