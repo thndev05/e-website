@@ -37,7 +37,7 @@
                                         <label for="category">Product Category:</label>
                                         <select class="form-select form-control" id="category" name="category">
                                             {{#each categories}}
-                                                <option value="{{this.name}}" {{#ifEqual this.name productCategory.name}}selected{{/ifEqual}}>{{this.name}}</option>
+                                                <option value="{{this.name}}" {{#ifEqual this.name ../productCategory.name}}selected{{/ifEqual}}>{{this.name}}</option>
                                             {{/each}}
                                         </select>
                                     </div>
