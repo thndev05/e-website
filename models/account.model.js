@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const generate = require('../helpers/generate');
 
 const accountSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
@@ -10,6 +11,12 @@ const accountSchema = new mongoose.Schema({
     match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   },
   password: { type: String, required: true },
+  token: {
+    type: String,
+    default: (function() {
+      return generate.generateRandomString(20);
+    }),
+  },
   role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
   avatar: String,
   status: String,
