@@ -27,8 +27,13 @@ module.exports.create = (req, res) => {
 // [POST] /admin/categories/create
 module.exports.createPost = async (req, res) => {
     try {
-        const category = new Category(req.body);
+        const { subcategories, ...restData } = req.body;
+        const parsedSubcategories = subcategories ? JSON.parse(subcategories).map(item => item.value) : [];
+
+        const category = new Category({...restData, subcategories: parsedSubcategories});
         await category.save();
+
+        console.log(category);
 
         res.redirect(`${prefixAdmin}/categories`);
     } catch (err) {
@@ -65,7 +70,8 @@ module.exports.edit = async (req, res) => {
         res.render('admin/categories/edit', {
             pageTitle: 'Update Category',
             currentPage: 'categories',
-            category: category
+            category: category,
+            joinedSubcategories: category.subcategories ? category.subcategories.join(',') : "",
         });
     } catch {
         res.redirect(`${prefixAdmin}/categories`);
@@ -76,7 +82,11 @@ module.exports.edit = async (req, res) => {
 module.exports.editPatch = async (req, res) => {
     try {
         const id = req.params.id;
-        await Category.updateOne({ _id: id }, req.body);
+
+        const { subcategories, ...restData } = req.body;
+        const parsedSubcategories = subcategories ? JSON.parse(subcategories).map(item => item.value) : [];
+
+        await Category.updateOne({ _id: id }, {...restData, subcategories: parsedSubcategories});
 
         res.redirect(`${prefixAdmin}/categories`);
     } catch (e) {

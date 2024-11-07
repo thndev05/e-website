@@ -28,6 +28,13 @@
                                                placeholder="Enter Category Description" value="{{category.description}}">
                                     </div>
                                     <div class="form-group">
+                                        <label for="subcategories">Subcategories:</label>
+                                        <input type="text" class="form-control" id="subcategories"
+                                               name="subcategories"
+                                               placeholder="Enter Subcategories"
+                                               value="{{joinedSubcategories}}">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="status">Category Status:</label>
                                         <select class="form-select form-control" id="status" name="status">
                                             <option value="active" {{#ifEqual category.status "active"}}selected{{/ifEqual}}>Active</option>

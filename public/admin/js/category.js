@@ -1,6 +1,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 
+  const subcategoriesInput = document.querySelector('#subcategories');
+  const tagify = new Tagify(subcategoriesInput);
+
   const buttonsDelete = document.querySelectorAll('[button-delete]');
   if (buttonsDelete) {
     const formDeleteItem = document.querySelector('#form-delete-item');

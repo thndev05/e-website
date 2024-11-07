@@ -8,6 +8,10 @@ const categorySchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    subcategories: {
+        type: [String],
+        default: [],
+    },
     createdAt: { type: Date, default: Date.now }
 });
 
