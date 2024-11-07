@@ -44,6 +44,13 @@
                                     </div>
 
                                     <div class="form-group">
+                                        <label for="subcategory">Product Subcategory:</label>
+                                        <select class="form-select form-control" id="subcategory" name="subcategory">
+                                            <option value="">Select Subcategory</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
                                         <label for="gender">Product Gender:</label>
                                         <select class="form-select form-control" name="gender" id="gender">
                                             <option value="unisex">Unisex</option>
@@ -159,6 +166,27 @@
         </div>
     </div>
 </section>
+
+<script>
+    document.getElementById('category').addEventListener('change', function() {
+        const categoryName = this.value;
+        const subcategorySelect = document.getElementById('subcategory');
+
+        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+
+        const category = {{{JSONstringify categories}}};
+        const selectedCategory = category.find(c => c.name === categoryName);
+
+        if (selectedCategory) {
+            selectedCategory.subcategories.forEach(subcategory => {
+                const option = document.createElement('option');
+                option.value = subcategory;
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    });
+</script>
 
 <script src="/admin/js/addProduct.js"></script>
 <script src="/tinymce/tinymce.min.js"></script>

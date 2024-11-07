@@ -42,6 +42,17 @@
                                         </select>
                                     </div>
 
+
+                                    <div class="form-group">
+                                        <label for="subcategory">Product Subcategory:</label>
+                                        <select class="form-select form-control" id="subcategory" name="subcategory">
+                                            <option value="{{product.subcategory}}">{{product.subcategory}}</option>
+                                            {{#each productCategory.subcategories}}
+                                                <option value="{{this}}">{{this}}</option>
+                                            {{/each}}
+                                        </select>
+                                    </div>
+
                                     <div class="form-group">
                                         <label for="gender">Product Gender:</label>
                                         <select class="form-select form-control" id="gender" name="gender">
@@ -178,6 +189,35 @@
         </div>
     </div>
 </section>
+
+<script>
+    // Remove duplicated value in subcategory
+    const subcategorySelect = document.getElementById('subcategory');
+    const uniqueOptions = [...new Set([...subcategorySelect.options].map(option => option.value))]
+            .map(value => [...subcategorySelect.options].find(option => option.value === value));
+    subcategorySelect.innerHTML = '';
+    uniqueOptions.forEach(option => subcategorySelect.appendChild(option));
+
+    // Change subcategories values
+    document.getElementById('category').addEventListener('change', function() {
+
+        const categoryName = this.value;
+
+        subcategorySelect.innerHTML = '<option value="">Select Subcategory</option>';
+
+        const category = {{{JSONstringify categories}}};
+        const selectedCategory = category.find(c => c.name === categoryName);
+
+        if (selectedCategory) {
+            selectedCategory.subcategories.forEach(subcategory => {
+                const option = document.createElement('option');
+                option.value = subcategory;
+                option.textContent = subcategory;
+                subcategorySelect.appendChild(option);
+            });
+        }
+    });
+</script>
 
 <script src="/admin/js/editProduct.js"></script>
 <script src="/tinymce/tinymce.min.js"></script>

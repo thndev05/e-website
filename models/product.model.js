@@ -28,6 +28,7 @@ const productSchema = new mongoose.Schema({
     description: String,
     brand: String,
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+    subcategory: String,
     gender: { type: String, enum: ['male', 'female', 'unisex'] },
     images: [{ type: String }],
     tags: [String],
