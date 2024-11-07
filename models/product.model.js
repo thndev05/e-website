@@ -5,10 +5,10 @@ const productHelper = require('../helpers/product');
 mongoose.plugin(slug);
 
 const variantSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    size: { type: String, required: true },
-    color: { type: String, required: true },
-    costPrice: { type: Number, required: true},
+    name: { type: String, default: "" },
+    size: { type: String, default: "" },
+    color: { type: String, default: "" },
+    costPrice: { type: Number, required: true },
     price: { type: Number, required: true},
     salePrice: { type: Number },
     quantity: { type: Number, default: 0 },

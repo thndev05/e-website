@@ -19,9 +19,9 @@ module.exports.getMaxPrice = (items) => {
 };
 
 module.exports.generateSKU = (name, color, size) => {
-  const namePart = name.substring(0, 3).toUpperCase();
-  const colorPart = color.substring(0, 3).toUpperCase();
-  const sizePart = size.toUpperCase();
+  const namePart = name ? name.substring(0, 3).toUpperCase() : "";
+  const colorPart = color ? color.substring(0, 3).toUpperCase() : "";
+  const sizePart = size ? size.toUpperCase() : "";
   const randomPart = Math.floor(1000 + Math.random() * 9000);
 
   return `${namePart}-${colorPart}-${sizePart}-${randomPart}`;
