@@ -7,7 +7,7 @@ const Account = require("../../models/account.model");
 //[GET] /admin/auth/login
 module.exports.login = async (req, res) => {
   if(req.cookies.token) {
-    res.redirect(`${systemConfig.prefixAdmin}/`);
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
   } else {
     res.render('admin/auth/login', {
       pageTitle: 'LOGIN SYSTEM'
@@ -30,6 +30,7 @@ module.exports.loginPost = async (req, res) => {
   if(!user) {
     return res.redirect('back');
   }
+
   if(await bcrypt.compare(password, user.password) == false) {
     return res.redirect('back');
   }
@@ -39,7 +40,7 @@ module.exports.loginPost = async (req, res) => {
   }
 
   res.cookie('token', user.token);
-  res.redirect(`${systemConfig.prefixAdmin}/`);
+  res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 }
 
 //[GET] /admin/auth/logout
