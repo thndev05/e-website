@@ -18,9 +18,14 @@ const JSONstringify = function (context) {
   return JSON.stringify(context);
 };
 
+const includes = function(array, value) {
+  return array.includes(value);
+};
+
 module.exports = {
   ifEqual,
   add,
   setVar,
-  JSONstringify
+  JSONstringify,
+  includes
 };
