@@ -7,37 +7,39 @@
             <div class="col-lg-10 col-md-8 ml-auto">
                 <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-title text-center mt-3">
-                                <h3>Update Role</h3>
+                        {{#if (includes role.permissions 'role_edit')}}
+                            <div class="card">
+                                <div class="card-title text-center mt-3">
+                                    <h3>Update Role</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST"
+                                          action="{{prefixAdmin}}/roles/edit/{{roleServer._id}}?_method=PATCH"
+                                          id="form-create-role">
+                                        <div class="form-group">
+                                            <label for="name">Role Name:</label>
+                                            <input type="text" class="form-control" id="name" name="name"
+                                                   placeholder="Enter Role Name" value="{{roleServer.name}}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Role Description:</label>
+                                            <input type="text" class="form-control" id="description"
+                                                   name="description"
+                                                   placeholder="Enter Role Description" value="{{roleServer.description}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="status">Role Status:</label>
+                                            <select class="form-select form-control" id="status" name="status">
+                                                <option value="active" {{#ifEqual roleServer.status "active"}}selected{{/ifEqual}}>Active</option>
+                                                <option value="inactive" {{#ifEqual roleServer.status "inactive"}}selected{{/ifEqual}}>Inactive</option>
+                                            </select>
+                                        </div>
+                                        <button button-edit class="btn btn-dark mt-5 mx-auto d-block" type="submit">Update
+                                            Role</button>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="card-body">
-                                <form method="POST"
-                                      action="{{prefixAdmin}}/roles/edit/{{role._id}}?_method=PATCH"
-                                      id="form-create-role">
-                                    <div class="form-group">
-                                        <label for="name">Role Name:</label>
-                                        <input type="text" class="form-control" id="name" name="name"
-                                               placeholder="Enter Role Name" value="{{role.name}}" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="description">Role Description:</label>
-                                        <input type="text" class="form-control" id="description"
-                                               name="description"
-                                               placeholder="Enter Role Description" value="{{role.description}}">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="status">Role Status:</label>
-                                        <select class="form-select form-control" id="status" name="status">
-                                            <option value="active" {{#ifEqual role.status "active"}}selected{{/ifEqual}}>Active</option>
-                                            <option value="inactive" {{#ifEqual role.status "inactive"}}selected{{/ifEqual}}>Inactive</option>
-                                        </select>
-                                    </div>
-                                    <button button-edit class="btn btn-dark mt-5 mx-auto d-block" type="submit">Update
-                                        Role</button>
-                                </form>
-                            </div>
-                        </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>

@@ -107,10 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     buttonSubmit.addEventListener('click', (event) => {
       event.preventDefault();
 
-      const newName = nameInput.value !== initialName;
-      const newEmail = emailInput.value !== initialEmail;
-
-      if (newName && newEmail) {
+      if (initialName !== '' || initialEmail !== '') {
         Swal.fire({
           title: 'Confirm',
           text: 'Are you sure you want to create this account?',

@@ -7,7 +7,8 @@
             <div class="col-lg-10 col-md-8 ml-auto">
                 <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
                     <div class="col-12">
-                        <div class="card">
+                        {{#if (includes role.permissions 'product_edit')}}
+                            <div class="card">
                             <div class="card-title text-center mt-3">
                                 <h3>Edit Product</h3>
                             </div>
@@ -183,6 +184,7 @@
                                 </form>
                             </div>
                         </div>
+                        {{/if}}
                     </div>
                 </div>
             </div>

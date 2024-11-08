@@ -17,10 +17,13 @@
                             </button>
                         </form>
                     </div>
-                    <div class="col-2 mb-4 mb-xl-0">
-                        <a href="{{prefixAdmin}}/products/create" class="btn btn-outline-success text-center">
-                            <i class="fa fa-plus-circle fa-lg mr-1"></i>Create new</a>
-                    </div>
+                    {{#if (includes role.permissions 'product_create')}}
+                         <div class="col-2 mb-4 mb-xl-0">
+                            <a href="{{prefixAdmin}}/products/create" class="btn btn-outline-success text-center">
+                                <i class="fa fa-plus-circle fa-lg mr-1"></i>Create new</a>
+                        </div>
+                    {{/if}}
+
                     <!-- First Table -->
                     <div class="col-12 mb-4 mb-xl-0 mt-5">
                         <h4 class="text-muted text-center mb-3">Products</h4>
@@ -51,21 +54,27 @@
                                                     class="badge badge-success"
                                                     data-id="{{this._id}}"
                                                     data-status="{{this.status}}"
-                                                    button-change-status>Active </a>
+                                                    {{#if (includes ../role.permissions 'product_edit')}}
+                                                    button-change-status{{/if}}>Active</a>
                                             {{else}}
                                                 <a  href="javascript:;"
                                                     class="badge badge-danger"
                                                     data-id="{{this._id}}"
                                                     data-status="{{this.status}}"
-                                                    button-change-status>Inactive</a>
+                                                    {{#if (includes ../role.permissions 'product_edit')}}
+                                                    button-change-status{{/if}}>Inactive</a>
                                             {{/ifEqual}}
                                         </td>
                                         <td class="align-middle">
                                             <a href="#" class="btn btn-sm btn-outline-secondary">Detail</a>
-                                            <a href="products/edit/{{this._id}}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                            <button class="btn btn-sm btn-outline-danger"
-                                                    data-id="{{this._id}}"
-                                                    button-delete>Delete</button>
+                                            {{#if (includes ../role.permissions 'product_edit')}}
+                                                <a href="products/edit/{{this._id}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                            {{/if}}
+                                            {{#if (includes ../role.permissions 'product_delete')}}
+                                                <button class="btn btn-sm btn-outline-danger"
+                                                        data-id="{{this._id}}"
+                                                        button-delete>Delete</button>
+                                            {{/if}}
                                         </td>
                                     </tr>
                                 {{/each}}

@@ -127,8 +127,6 @@ module.exports.editPatch = async (req, res) => {
       data.avatar = files[0].image;
     }
 
-    console.log(data)
-
     await Account.updateOne({ _id: id }, data);
 
     res.redirect(`${prefixAdmin}/accounts`);

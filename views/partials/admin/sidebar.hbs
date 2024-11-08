@@ -3,9 +3,13 @@
        class="navbar-brand text-light d-block mx-auto text-center py-3 mb-4 bottom-border"><img
             src="/admin/img/Admin.webp" class="img-fluid" width="100px" alt="logo"></a>
 
-    <div class="bottom-border pb-3">
-        <img src="/admin/img/profile.jpg" alt="avatar" width="60" class="rounded-circle">
-        <a href="#" class="text-light">Unknown</a>
+    <div class="bottom-border pb-3 d-flex justify-content-center align-items-center">
+        <img src="{{user.avatar}}" alt="avatar" width="60" height="60" class="rounded-circle mx-2">
+        <div class="d-block justify-content-center align-items-center">
+            <a href="#" class="text-light"><strong>{{user.name}}</strong></a>
+            <br>
+            <span class="text-light text-center">{{role.name}}</span>
+        </div>
     </div>
 
     <div class="sidebar-wrap">
@@ -17,34 +21,42 @@
                     <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="{{prefixAdmin}}/products"
-                   class="nav-link text-light p-3 mb-2 sidebar-link
-                {{#ifEqual currentPage "products"}}current{{/ifEqual}}">
-                    <i class="fa fa-database text-light fa-lg mr-3"></i>Product
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{prefixAdmin}}/categories"
-                   class="nav-link text-light p-3 mb-2 sidebar-link
-                {{#ifEqual currentPage "categories"}}current{{/ifEqual}}">
-                    <i class="fa fa-folder-open text-light fa-lg mr-3"></i>Category
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{prefixAdmin}}/roles"
-                   class="nav-link text-light p-3 mb-2 sidebar-link
-                {{#ifEqual currentPage "roles"}}current{{/ifEqual}}">
-                    <i class="fa fa-gear text-light fa-lg mr-3"></i>Role
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="{{prefixAdmin}}/accounts"
-                   class="nav-link text-light p-3 mb-2 sidebar-link
-                {{#ifEqual currentPage "accounts"}}current{{/ifEqual}}">
-                    <i class="fa fa-user-circle text-light fa-lg mr-3"></i>Account
-                </a>
-            </li>
+            {{#if (includes role.permissions 'product_view')}}
+                <li class="nav-item">
+                    <a href="{{prefixAdmin}}/products"
+                       class="nav-link text-light p-3 mb-2 sidebar-link
+                    {{#ifEqual currentPage "products"}}current{{/ifEqual}}">
+                        <i class="fa fa-database text-light fa-lg mr-3"></i>Product
+                    </a>
+                </li>
+            {{/if}}
+            {{#if (includes role.permissions 'category_view')}}
+                <li class="nav-item">
+                    <a href="{{prefixAdmin}}/categories"
+                       class="nav-link text-light p-3 mb-2 sidebar-link
+                    {{#ifEqual currentPage "categories"}}current{{/ifEqual}}">
+                        <i class="fa fa-folder-open text-light fa-lg mr-3"></i>Category
+                    </a>
+                </li>
+            {{/if}}
+            {{#if (includes role.permissions 'role_view')}}
+                <li class="nav-item">
+                    <a href="{{prefixAdmin}}/roles"
+                       class="nav-link text-light p-3 mb-2 sidebar-link
+                    {{#ifEqual currentPage "roles"}}current{{/ifEqual}}">
+                        <i class="fa fa-gear text-light fa-lg mr-3"></i>Role
+                    </a>
+                </li>
+            {{/if}}
+            {{#if (includes role.permissions 'account_view')}}
+                <li class="nav-item">
+                    <a href="{{prefixAdmin}}/accounts"
+                       class="nav-link text-light p-3 mb-2 sidebar-link
+                    {{#ifEqual currentPage "accounts"}}current{{/ifEqual}}">
+                        <i class="fa fa-user-circle text-light fa-lg mr-3"></i>Account
+                    </a>
+                </li>
+            {{/if}}
         </ul>
     </div>
 </div>

@@ -68,7 +68,7 @@ module.exports.edit = async (req, res) => {
     res.render('admin/roles/edit', {
       pageTitle: 'Update Role',
       currentPage: 'roles',
-      role: role,
+      roleServer: role,
     });
   } catch (error) {
     console.log(error);
