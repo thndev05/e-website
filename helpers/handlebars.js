@@ -29,6 +29,13 @@ const getFirstImage = function (images) {
   return '';
 }
 
+const getSecondImage = function (images) {
+  if (Array.isArray(images) && images.length > 1) {
+    return images[1];
+  }
+  return '';
+}
+
 
 module.exports = {
   ifEqual,
@@ -36,5 +43,6 @@ module.exports = {
   setVar,
   JSONstringify,
   includes,
-  getFirstImage
+  getFirstImage,
+  getSecondImage
 };
