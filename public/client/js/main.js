@@ -265,7 +265,7 @@
   // owlCarousel
 
   $(".product-slider").owlCarousel({
-    loop: true,
+    loop: false,
 
     margin: 30,
 
@@ -768,3 +768,12 @@
     google.maps.event.addDomListener(window, "load", basicmap);
   }
 })(jQuery);
+
+document.addEventListener("DOMContentLoaded", () => {
+  $(document).ready(function () {
+    $('#myTab a').on('click', function (e) {
+      e.preventDefault();
+      $(this).tab('show');
+    });
+  });
+});

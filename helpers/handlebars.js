@@ -22,10 +22,19 @@ const includes = function(array, value) {
   return array.includes(value);
 };
 
+const getFirstImage = function (images) {
+  if (Array.isArray(images) && images.length > 0) {
+    return images[0];
+  }
+  return '';
+}
+
+
 module.exports = {
   ifEqual,
   add,
   setVar,
   JSONstringify,
-  includes
+  includes,
+  getFirstImage
 };

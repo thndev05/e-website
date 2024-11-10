@@ -2,6 +2,7 @@
 {{> client/header}}
 
 <main>
+    <!--  Slider-area  -->
     <section class="slider-area pos-relative">
         <div class="slider-active">
             <div class="single-slider slide-1-style slide-height-2 slide-height-4 d-flex align-items-center" data-background="/client/img/slider/slide5.jpg">
@@ -64,6 +65,190 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--  Banner-area  -->
+    <section class="banner-area pt-100 box-90">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="banner-2 pos-relative mb-30">
+                        <a href="shop.html"><img src="/client/img/banner/banner-2/banner3.jpg" alt=""></a>
+                        <div class="banner-trend">
+                            <span>Trendy Item</span>
+                            <h2><a href="/shop">New Year Trend Coming 2024</a></h2>
+                            <div class="discover-link">
+                                <a href="/shop">discover</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="banner-2 pos-relative mb-30">
+                        <a href="/shop"><img src="/client/img/banner/banner-2/banner4.jpg" alt=""></a>
+                        <div class="banner-look">
+                            <span>Get the look</span>
+                            <h2>Festive Looks</h2>
+                            <img src="img/icon/look.png" alt="">
+                            <p>Your delivery of outfit ideas, updated daily</p>
+                            <a href="/shop" class="btn theme-btn">discover</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--  Product-area  -->
+    <section class="product-area box-90 pt-70 pb-40">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xl-5 col-lg-12">
+                    <div class="area-title mb-50">
+                        <h2>Brand New Products</h2>
+                        <p>Browse the huge variety of our products</p>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-12">
+                    <div class="product-tab mb-40">
+                        <ul class="nav product-nav  justify-content-xl-end" id="myTab" role="tablist">
+                            <ul class="nav product-nav justify-content-xl-end" id="myTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="all-tab" data-toggle="tab" href="#all-products" role="tab" aria-controls="all-products" aria-selected="true">All</a>
+                                </li>
+                                {{#each categories}}
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="{{this.name}}-tab" data-toggle="tab" href="#{{this.name}}" role="tab" aria-controls="{{this.name}}" aria-selected="false">{{this.name}}</a>
+                                    </li>
+                                {{/each}}
+                            </ul>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="product-tab-content">
+                        <div class="tab-content" id="myTabContent">
+                            <!-- Tab All Products -->
+                            <div class="tab-pane fade show active" id="all-products" role="tabpanel">
+                                <div class="product-slider owl-carousel">
+                                    {{#each products}}
+                                        <div class="pro-item">
+                                            <div class="product-wrapper mb-50">
+                                                <div class="product-img mb-25">
+                                                    <a href="#">
+                                                        <img src="{{getFirstImage this.images}}" alt="{{this.name}}">
+                                                    </a>
+                                                </div>
+                                                <div class="product-content">
+                                                    <div class="pro-cat mb-10">
+                                                        <a href="#">{{this.brand}} - </a>
+                                                        <a href="#">{{this.subcategory}}</a>
+                                                    </div>
+                                                    <h4>
+                                                        <a href="#">{{this.name}}</a>
+                                                    </h4>
+                                                    <div class="product-meta">
+                                                        <div class="pro-price">
+                                                            <span>${{this.minPrice}} USD - ${{this.maxPrice}} USD</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="product-wishlist">
+                                                        <a href="#"><i class="far fa-heart" title="Wishlist"></i></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {{/each}}
+                                </div>
+                            </div>
+
+                            <!-- Tabs for each category -->
+                            {{#each categories}}
+                                <div class="tab-pane fade" id="{{this.name}}" role="tabpanel">
+                                    <div class="product-slider owl-carousel">
+                                        {{#each (lookup ../productsByCategory this.name)}}
+                                            <div class="pro-item">
+                                                <div class="product-wrapper mb-50">
+                                                    <div class="product-img mb-25">
+                                                        <a href="#">
+                                                            <img src="{{getFirstImage this.images}}" alt="{{this.name}}">
+                                                        </a>
+                                                    </div>
+                                                    <div class="product-content">
+                                                        <div class="pro-cat mb-10">
+                                                            <a href="#">{{this.brand}} - </a>
+                                                            <a href="#">{{this.subcategory}}</a>
+                                                        </div>
+                                                        <h4>
+                                                            <a href="#">{{this.name}}</a>
+                                                        </h4>
+                                                        <div class="product-meta">
+                                                            <div class="pro-price">
+                                                                <span>${{this.minPrice}} USD - ${{this.maxPrice}} USD</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="product-wishlist">
+                                                            <a href="#"><i class="far fa-heart" title="Wishlist"></i></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                </div>
+                            {{/each}}
+                        </div>
+
+                    </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!--  Features-area  -->
+    <section class="features-area box-90">
+        <div class="container-fluid">
+            <div class="theme-soft-bg fix pt-100 pb-50">
+                <div class="row">
+                    <div class="col-xl-12">
+                        <div class="area-title text-center mb-50">
+                            <h2>Special Features</h2>
+                            <p>Get special services from our shop.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="features">
+                    <div class="single-seatures width-20 mb-50 text-center">
+                        <i class="flaticon-shopping-cart-1"></i>
+                        <span>Free Delivery</span>
+                        <h3>Free Delivery</h3>
+                    </div>
+                    <div class="single-seatures width-20 mb-50 text-center">
+                        <i class="flaticon-good"></i>
+                        <span>100% Customer</span>
+                        <h3>Feedbacks</h3>
+                    </div>
+                    <div class="single-seatures width-20 mb-50 text-center">
+                        <i class="flaticon-return-1"></i>
+                        <span>10 Days</span>
+                        <h3>For Free Return</h3>
+                    </div>
+                    <div class="single-seatures width-20 mb-50 text-center">
+                        <i class="flaticon-return"></i>
+                        <span>Payment</span>
+                        <h3>Secure System</h3>
+                    </div>
+                    <div class="single-seatures width-20 mb-50 text-center">
+                        <i class="flaticon-customer-service"></i>
+                        <span>24/7</span>
+                        <h3>Online Supports</h3>
                     </div>
                 </div>
             </div>
