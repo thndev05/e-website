@@ -1,0 +1,17 @@
+{{> client/preloader}}
+{{> client/header}}
+{{> client/breadcrumb}}
+
+<main>
+    <section class="profile-area pt-100 pb-100">
+        <div class="container mt-5">
+            <h1 class="my-5">User Information</h1>
+            <p>Full Name: {{user.fullName}}</p>
+            <p>Email: {{user.email}}</p>
+            <p>Birthdate: {{parseDate user.birthdate 'DD/MM/YYYY'}}</p>
+            <a href="/auth/logout" class="btn theme-btn mt-5">Log out</a>
+        </div>
+    </section>
+</main>
+
+{{> client/footer}}

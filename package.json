@@ -15,6 +15,7 @@
     "dotenv": "^16.4.5",
     "express": "~4.16.1",
     "express-handlebars": "^8.0.1",
+    "express-session": "^1.18.1",
     "http-errors": "~1.6.3",
     "method-override": "^3.0.0",
     "mongoose": "^8.7.1",

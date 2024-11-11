@@ -1,6 +1,7 @@
 require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -22,6 +23,21 @@ database.connect();
 app.use(methodOverride('_method'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Session
+app.use(
+  session({
+    secret: 'POWERGJOPSDFNFWPOWREO',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+      secure: false,
+      httpOnly: true,
+    },
+  })
+);
+
 
 // view engine setup
 app.engine(
