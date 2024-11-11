@@ -1,11 +1,11 @@
 <footer class="{{#unless isHome}}footer-area pl-100 pr-100{{/unless}}">
-    <div class="footer-area box-90 pt-100 pb-60">
+    <div class="footer-area box-90 pt-100 pb-60" {{#unless isHome}}data-background="/client/img/bg/footer.jpg" style="background-image: url('/client/img/bg/footer.jpg')"{{/unless}}>
         <div class="container-fluid">
             <div class="row">
                 <div class="{{#if isHome}}col-xl-3 col-lg-5{{else}}col-xl-5 col-lg-{{/if}} col-md-6 ">
                     <div class="footer-widget mb-40 {{#unless isHome}}pr-70{{/unless}}">
                         <div class="footer-logo">
-                            <a href="index.html"><img src="/client/img/logo/footer-logo.png" alt=""></a>
+                            <a href="/"><img src="/client/img/logo/footer-logo.png" alt=""></a>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore mag na
                             aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
@@ -79,7 +79,7 @@
                     {{#if isHome}}
                         <div class="col-xl-6 col-lg-6 col-md-6">
                             <div class="copyright text-center text-md-left">
-                                <p>Copyright © 2019 <a href="#">SayyamCode</a>. All Rights Reserved</p>
+                                <p>Copyright © 2024 <a href="/">XXX</a>. All Rights Reserved</p>
                             </div>
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6">
@@ -92,9 +92,11 @@
                             </div>
                         </div>
                     {{else}}
-                    <div class="col-xl-12">
-                    <div class="copyright text-center">
-                        <p>Copyright © 2019 <a href="#">thndev05</a>. All Rights Reserved</p>
+                        <div class="col-xl-12">
+                            <div class="copyright text-center">
+                                <p>Copyright © 2024 <a href="/">XXX</a>. All Rights Reserved</p>
+                            </div>
+                        </div>
                     {{/if}}
                 </div>
             </div>
