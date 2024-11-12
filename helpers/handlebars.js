@@ -11,15 +11,15 @@ const add = function (a, b) {
 };
 
 const subtract = function (a, b) {
-  return a - b;
+    return a - b;
 }
 
 const max = function (a, b) {
-  return Math.max(Number(a), Number(b));
+    return Math.max(Number(a), Number(b));
 }
 
 const min = function (a, b) {
-  return Math.min(Number(a), Number(b));
+    return Math.min(Number(a), Number(b));
 }
 
 const setVar = function (value) {
@@ -48,22 +48,32 @@ const getSecondImage = function (images) {
   return '';
 }
 
-const range = function (start, end) {
-  let result = [];
-  for (let i = start; i <= end; i++) {
-    result.push(i);
-  }
-  return result;
-}
+const parseDate = function (date, format = 'DD/MM/YYYY') {
+    if (!date) return '';
 
-const greaterThan = function (a, b) {
-  return Number(a) > Number(b);
-}
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
+
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+
+    switch (format) {
+        case 'DD/MM/YYYY':
+            return `${day}/${month}/${year}`;
+        case 'YYYY-MM-DD':
+            return `${year}-${month}-${day}`;
+        case 'MM/DD/YYYY':
+            return `${month}/${day}/${year}`;
+        default:
+            return `${day}/${month}/${year}`;
+    }
+};
 
 
 module.exports = {
   ifEqual,
-  add,
+  add, 
   subtract,
   max,
   min,
@@ -72,6 +82,5 @@ module.exports = {
   includes,
   getFirstImage,
   getSecondImage,
-  range,
-  greaterThan,
+  parseDate,
 };
