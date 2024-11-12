@@ -70,6 +70,17 @@ const parseDate = function (date, format = 'DD/MM/YYYY') {
     }
 };
 
+const range = function (start, end) {
+    const result = [];
+    for (let i = Number(start); i <= Number(end); i++) {
+        result.push(i);
+    }
+    return result;
+}
+
+const greaterThan = function (a, b) {
+    return Number(a) > Number(b);
+}
 
 module.exports = {
   ifEqual,
@@ -83,4 +94,6 @@ module.exports = {
   getFirstImage,
   getSecondImage,
   parseDate,
+  range,
+  greaterThan,
 };
