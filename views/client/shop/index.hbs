@@ -1,25 +1,8 @@
 {{> client/preloader}}
 {{> client/header}}
+{{> client/breadcrumb}}
 
 <main>
-    <!-- breadcrumb-area-start -->
-    <section class="breadcrumb-area" data-background="client/img/bg/page-title.png">
-        <div class="container">
-            <div class="row">
-                <div class="col-xl-12">
-                    <div class="breadcrumb-text text-center">
-                        <h1>Our Shop</h1>
-                        <ul class="breadcrumb-menu">
-                            <li><a href="index.html">home</a></li>
-                            <li><span>shop</span></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- breadcrumb-area-end -->
-
     <!-- shop-area start -->
     <section class="shop-area pt-100 pb-100">
         <div class="container">
@@ -36,49 +19,44 @@
                         </div>
 
                         <div class="shop-widget">
-                            <h3 class="shop-title">Price filter</h3>
-                            <ul class="shop-link">
-                                <li><a href="shop.html"><i class="far fa-square"></i> $0.00 - $50.00</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> $50.00 - $100.00</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> $100.00 - $150.00</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> $150.00 - $200.00</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> $200.00+</a></li>
-                            </ul>
+                            <h3 class="shop-title">Price Filter</h3>
+                            <div class="price-filter">
+                                <div id="slider-range" data-slider-min="{{minPrice}}" data-slider-max="{{maxPrice}}"></div>
+                                <input type="text" id="amount">
+                            </div>
                         </div>
 
                         <div class="shop-widget">
                             <h3 class="shop-title">Product Size</h3>
                             <ul class="shop-link">
-                                <li><a href="shop.html"><i class="far fa-square"></i> L</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> M</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> X</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> XL</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> XXL</a></li>
+                                <li><a href="#" class="product-size-filter"><i class="far fa-square"></i> L</a></li>
+                                <li><a href="#" class="product-size-filter"><i class="far fa-square"></i> M</a></li>
+                                <li><a href="#" class="product-size-filter"><i class="far fa-square"></i> X</a></li>
+                                <li><a href="#" class="product-size-filter"><i class="far fa-square"></i> XL</a></li>
+                                <li><a href="#" class="product-size-filter"><i class="far fa-square"></i> XXL</a></li>
                             </ul>
                         </div>
 
                         <div class="shop-widget">
                             <h3 class="shop-title">Catergories</h3>
                             <ul class="shop-link">
-                                <li><a href="shop.html"><i class="far fa-square"></i> Accessories</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> Bags</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> Clothing</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> Shoes</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> Exclusive</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> Uncategorized</a></li>
-                                <li><a href="shop.html"><i class="far fa-square"></i> Women</a></li>
+                                {{#each categories}}
+                                    <li><a href="#" class="category-filter"><i class="far fa-square"></i> {{this.name}} </a></li>
+                                {{/each}}
                             </ul>
                         </div>
 
                         <div class="shop-widget">
                             <h3 class="shop-title">color</h3>
                             <ul class="shop-link">
-                                <li><a href="shop.html"><span class="blue"></span> Blue</a></li>
-                                <li><a href="shop.html"><span class="green"></span> Green</a></li>
-                                <li><a href="shop.html"><span class="orange"></span> Orange</a></li>
-                                <li><a href="shop.html"><span class="navy"></span> Navy</a></li>
-                                <li><a href="shop.html"><span class="pinkish"></span> Pinkish</a></li>
-                                <li><a href="shop.html"><span class="vista"></span> Vista Blue</a></li>
+                                <li><a href="#" class="color-filter"><span class="blue"></span> Blue</a></li>
+                                <li><a href="#" class="color-filter"><span class="green"></span> Green</a></li>
+                                <li><a href="#" class="color-filter"><span class="orange"></span> Orange</a></li>
+                                <li><a href="#" class="color-filter"><span class="navy"></span> Navy</a></li>
+                                <li><a href="#" class="color-filter"><span class="pinkish"></span> Pinkish</a></li>
+                                <li><a href="#" class="color-filter"><span class="vista"></span> Vista Blue</a></li>
+                                <li><a href="#" class="color-filter"><span class="black"></span> Black</a></li>
+                                <li><a href="#" class="color-filter"><span class="white"></span> White</a></li>
                             </ul>
                         </div>
 
@@ -176,7 +154,11 @@
                     <div class="row mb-10">
                         <div class="col-xl-5 col-lg-6 col-md-6">
                             <div class="product-showing mb-40">
-                                <p>Showing {{startIndex}}–{{endIndex}} of {{totalMatchingProducts}} results</p>
+                                {{#if products}}
+                                    <p>Showing {{startIndex}}–{{endIndex}} of {{totalMatchingProducts}} results</p>
+                                {{else}}
+                                    <p>Showing 0 results</p>
+                                {{/if}}
                             </div>
                         </div>
                         <div class="col-xl-7 col-lg-6 col-md-6">
@@ -301,11 +283,104 @@
                             </div>
                         </div>
                     </div>
+                    {{#if products}}
+                        <div class="basic-pagination basic-pagination-2 text-center mt-20 mb-0">
+                            <ul>
+                                <li><a href="#" onclick="setQueryParam('page', 1)"><i class="fas fa-angle-double-left"></i></a></li>
+                                {{#each (range (max 1 (subtract page 5)) (min totalPages (add page 5)))}}
+                                    {{#ifEqual this ../page}}
+                                        <li class="active" onclick="setQueryParam('page', {{this}})"><a href="#">{{this}}</a></li>
+                                    {{else}}
+                                        <li><a href="#" onclick="setQueryParam('page', {{this}})">{{this}}</a></li>
+                                    {{/ifEqual}}
+                                {{/each}}
+                                {{#if (greaterThan page 1)}}
+                                    <li><a href="#"><i class="fas fa-ellipsis-h"></i></a></li>
+                                {{/if}}
+                                <li><a href="#" onclick="setQueryParam('page', {{totalPages}})"><i class="fas fa-angle-double-right"></i></a></li>
+                            </ul>
+                        </div>
+                    {{/if}}
                 </div>
             </div>
         </div>
     </section>
 </main>
 
-
 {{> client/footer}}
+
+<script>
+    function setQueryParam(paramToChange, newValue) {
+        const params = new URLSearchParams(window.location.search);
+        params.set(paramToChange, newValue);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+
+    // Handle size filter
+    const sizes = params.getAll('size');
+    const productSizeFilterElements = document.querySelectorAll('.product-size-filter')
+
+    productSizeFilterElements.forEach(e => {
+        const size = e.textContent.trim();
+        if (sizes.includes(size)) {
+            e.classList.add('active');
+            e.children.item(0).className = 'far fa-check-square';
+
+            e.addEventListener('click', () => {
+                params.delete('size', size);
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            });
+        } else {
+            e.addEventListener('click', () => {
+                params.append('size', size);
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            });
+        }
+    });
+
+    // Handle category filter
+    const categories = params.getAll('category');
+    const categoryFilterElements = document.querySelectorAll('.category-filter');
+
+    categoryFilterElements.forEach(e => {
+       const category = e.textContent.trim();
+       if (categories.includes(category)) {
+           e.classList.add('active');
+           e.children.item(0).className = 'far fa-check-square';
+
+           e.addEventListener('category', () => {
+               params.delete('size', size);
+               window.location.href = `${window.location.pathname}?${params.toString()}`;
+           });
+       } else {
+           e.addEventListener('click', () => {
+               params.append('category', category);
+               window.location.href = `${window.location.pathname}?${params.toString()}`;
+           });
+       }
+    });
+    
+    // Handle color filter
+    const colors = params.getAll('color');
+    const colorFilterElements = document.querySelectorAll('.color-filter');
+    
+    colorFilterElements.forEach(e => {
+        const color = e.textContent.trim();
+        if (colors.includes(color)) {
+            e.classList.add('active');
+
+            e.addEventListener('color', () => {
+                params.delete('size', size);
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            });
+        } else {
+            e.addEventListener('click', () => {
+                params.append('color', color);
+                window.location.href = `${window.location.pathname}?${params.toString()}`;
+            });
+        }
+    });
+    
+</script>

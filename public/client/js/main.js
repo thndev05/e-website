@@ -613,28 +613,50 @@
     e.stopPropagation();
   });
 
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      const context = this;
+      const args = arguments;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+  }
+
   /* Price filter active */
 
-  if ($("#slider-range").length) {
-    $("#slider-range").slider({
+  const sliderRange = $("#slider-range");
+
+  if (sliderRange.length) {
+    const min = Number(sliderRange.data('slider-min'));
+    const max = Number(sliderRange.data('slider-max'));
+
+    sliderRange.slider({
       range: true,
 
       min: 0,
 
-      max: 500,
+      max: 20000,
 
-      values: [75, 300],
+      values: [min, max],
 
       slide: function (event, ui) {
         $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
       },
+
+      stop: debounce(function (event, ui) {
+        // Set price url param
+        const params = new URLSearchParams(window.location.search);
+        params.set('price', ui.values[0] + "-" + ui.values[1]);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+      }, 300),
     });
 
     $("#amount").val(
       "$" +
-        $("#slider-range").slider("values", 0) +
+        sliderRange.slider("values", 0) +
         " - $" +
-        $("#slider-range").slider("values", 1)
+        sliderRange.slider("values", 1)
     );
 
     $("#filter-btn").on("click", function () {

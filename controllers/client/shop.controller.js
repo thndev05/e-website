@@ -5,9 +5,17 @@ const ProductHelpers = require("../../helpers/product");
 module.exports.index = async (req, res) => {
   const limit = 10;
 
-  const { keyword, category, color, price, size, page = 1 } = req.query;
+  const { keyword, category, color, price, size } = req.query;
+  let page = Number(req.query.page) || 1;
 
   const query = { deleted: false };
+
+  let minPrice = 0;
+  let maxPrice = 20000;
+
+  const categories = await Category.find({
+    deleted: false,
+  }).lean();
 
   if (keyword) {
     const regex = new RegExp(keyword, 'i');
@@ -18,18 +26,22 @@ module.exports.index = async (req, res) => {
   }
 
   if (price) {
-    const [minPrice, maxPrice] = price.split('-').map(Number);
+    [minPrice, maxPrice] = price.split('-').map(Number);
     query["variants.price"] = { $gte: minPrice, $lte: maxPrice };
   }
 
   if (size) {
-    query["variants.size"] = size;
+    const sizes = Array.isArray(size) ? size : [size];
+    query["variants.size"] = { $in: sizes };
   }
 
   if (category) {
-    const categoryObj = await Category.findOne({name: category});
-    if (categoryObj) {
-      query.category = categoryObj._id;
+    const categories = Array.isArray(category) ? category : [category];
+    const categoryObjects = await Category.find({ name: { $in: categories } });
+    const categoryIds = categoryObjects.map(cat => cat._id);
+
+    if (categoryIds.length > 0) {
+      query.category = { $in: categoryIds };
     } else {
       throw new Error('Category not found');
     }
@@ -66,11 +78,16 @@ module.exports.index = async (req, res) => {
   res.render('client/shop/index', {
     title: 'Shop',
     isHome: false,
+    breadcrumbTitle: 'Our Shop',
+    breadcrumb: 'Shop',
+    categories: categories,
     products: products,
     totalPages: totalPages,
     totalMatchingProducts: totalMatchingProducts,
     page: page,
     startIndex: totalMatchingProducts !== 0 ? (page - 1) * limit + 1 : 0,
-    endIndex: Math.min(page * limit + limit, totalMatchingProducts),
+    endIndex: Math.min(page * limit, totalMatchingProducts),
+    minPrice: minPrice,
+    maxPrice: maxPrice,
   })
 }

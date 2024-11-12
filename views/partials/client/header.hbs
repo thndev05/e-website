@@ -1,5 +1,5 @@
 <header class="{{#if isHome}}transparent-header transparent-header-2{{/if}}">
-    <div class="header-area box-90">
+    <div class="header-area box-90" {{#unless isHome}}id="header-sticky"{{/unless}}>
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-xl-2 col-lg-6 col-md-6 col-7 d-flex align-items-center {{#if isHome}}col-sm-3{{else}}col-sm-5 pos-relative{{/if}}">

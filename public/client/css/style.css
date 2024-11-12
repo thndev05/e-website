@@ -4336,7 +4336,7 @@ input.main-search-input:-ms-input-placeholder {
 
 }
 
-.shop-link li a:hover i,.shop-link li a:hover  {
+.shop-link li a:hover i,.shop-link li a:hover, .shop-link li a.active, .shop-link li a.active i{
 
 	color: #FE4536;
 
@@ -4500,6 +4500,14 @@ input.main-search-input:-ms-input-placeholder {
 
 	background: #00fff6;
 
+}
+
+.shop-link li span.white {
+	background: #FFFFFF;
+}
+
+.shop-link li span.black {
+	background: #000000;
 }
 
 .side-pro-img {

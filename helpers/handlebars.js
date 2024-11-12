@@ -10,6 +10,18 @@ const add = function (a, b) {
   return a + b;
 };
 
+const subtract = function (a, b) {
+  return a - b;
+}
+
+const max = function (a, b) {
+  return Math.max(Number(a), Number(b));
+}
+
+const min = function (a, b) {
+  return Math.min(Number(a), Number(b));
+}
+
 const setVar = function (value) {
   return value;
 };
@@ -36,13 +48,30 @@ const getSecondImage = function (images) {
   return '';
 }
 
+const range = function (start, end) {
+  let result = [];
+  for (let i = start; i <= end; i++) {
+    result.push(i);
+  }
+  return result;
+}
+
+const greaterThan = function (a, b) {
+  return Number(a) > Number(b);
+}
+
 
 module.exports = {
   ifEqual,
   add,
+  subtract,
+  max,
+  min,
   setVar,
   JSONstringify,
   includes,
   getFirstImage,
-  getSecondImage
+  getSecondImage,
+  range,
+  greaterThan,
 };
