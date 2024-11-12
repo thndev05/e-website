@@ -10,6 +10,18 @@ const add = function (a, b) {
   return a + b;
 };
 
+const subtract = function (a, b) {
+    return a - b;
+}
+
+const max = function (a, b) {
+    return Math.max(Number(a), Number(b));
+}
+
+const min = function (a, b) {
+    return Math.min(Number(a), Number(b));
+}
+
 const setVar = function (value) {
   return value;
 };
@@ -37,34 +49,51 @@ const getSecondImage = function (images) {
 }
 
 const parseDate = function (date, format = 'DD/MM/YYYY') {
-  if (!date) return '';
+    if (!date) return '';
 
-  const d = new Date(date);
-  if (isNaN(d.getTime())) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return '';
 
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
 
-  switch (format) {
-    case 'DD/MM/YYYY':
-      return `${day}/${month}/${year}`;
-    case 'YYYY-MM-DD':
-      return `${year}-${month}-${day}`;
-    case 'MM/DD/YYYY':
-      return `${month}/${day}/${year}`;
-    default:
-      return `${day}/${month}/${year}`;
-  }
+    switch (format) {
+        case 'DD/MM/YYYY':
+            return `${day}/${month}/${year}`;
+        case 'YYYY-MM-DD':
+            return `${year}-${month}-${day}`;
+        case 'MM/DD/YYYY':
+            return `${month}/${day}/${year}`;
+        default:
+            return `${day}/${month}/${year}`;
+    }
 };
+
+const range = function (start, end) {
+    const result = [];
+    for (let i = Number(start); i <= Number(end); i++) {
+        result.push(i);
+    }
+    return result;
+}
+
+const greaterThan = function (a, b) {
+    return Number(a) > Number(b);
+}
 
 module.exports = {
   ifEqual,
-  add,
+  add, 
+  subtract,
+  max,
+  min,
   setVar,
   JSONstringify,
   includes,
   getFirstImage,
   getSecondImage,
-  parseDate
+  parseDate,
+  range,
+  greaterThan,
 };
