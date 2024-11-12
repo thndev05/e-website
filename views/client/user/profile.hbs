@@ -72,11 +72,55 @@
 
             <div class="card p-4 mt-4">
                 <h3 class="mb-4">Address</h3>
-                <form action="/user/updateAddress" method="POST">
-                    <div class="form-group">
-                        <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter your address">{{user.address}}</textarea>
+
+                {{#if user.address.length}}
+                    <ul class="list-group mb-4">
+                        {{#each user.address}}
+                            <li class="list-group-item d-flex justify-content-between align-items-start">
+                                <div>
+                                    <p><strong>Phone:</strong> {{this.phone}}</p>
+                                    <p><strong>Address:</strong> {{this.street}}, {{this.ward}}, {{this.district}}, {{this.province}}</p>
+                                </div>
+                                <form action="/user/deleteAddress/{{@root.user.id}}/{{@index}}?_method=DELETE" method="POST">
+                                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash mr-1"></i>Delete</button>
+                                </form>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+
+                <button type="button" class="btn theme-btn w-100 mb-3" id="addNewAddress">Add New Address</button>
+
+                <form action="/user/updateAddress/{{user.id}}?_method=PATCH" method="POST" id="addressForm" style="display: none;">
+                    <div class="form-group mb-3">
+                        <label for="phoneNumber">Phone Number:</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phone" placeholder="Enter your phone number">
                     </div>
-                    <button type="submit" class="btn theme-btn w-100">Save address</button>
+
+                    <div class="form-group mb-3">
+                        <label for="address">Address:</label>
+                        <div class="d-flex gap-3">
+                            <select class="form-control" id="province" name="province">
+                                <option value="">Province/City</option>
+                            </select>
+                            <select class="form-control mx-3" id="district" name="district">
+                                <option value="">District</option>
+                            </select>
+                            <select class="form-control" id="ward" name="ward">
+                                <option value="">Ward</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="street">Street/House Number:</label>
+                        <input type="text" class="form-control" id="street" name="street" placeholder="Enter detailed address">
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" id="cancelAddressForm">Cancel</button>
+                        <button type="submit" class="btn theme-btn ml-2">Save Address</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -88,3 +88,53 @@ module.exports.changePassword = async (req, res) => {
         });
     }
 }
+
+//[PATCH] /user/updateAddress/:id
+module.exports.updateAddress = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { phone, province, district, ward, street } = req.body;
+
+        const newAddress = {
+            phone,
+            province,
+            district,
+            ward,
+            street
+        };
+
+        const userData = await User.findById(id);
+        userData.address.push(newAddress);
+
+        req.session.user = userData;
+        await userData.save();
+
+        res.redirect('back');
+    } catch (e) {
+        console.log(e);
+        res.redirect('back');
+    }
+}
+
+//[DELETE] /deleteAddress/:id/:index
+module.exports.deleteAddress = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const index = req.params.index;
+
+        const userData = await User.findById(id);
+
+        if (userData && userData.address && userData.address[index]) {
+            userData.address.splice(index, 1);
+        }
+
+        await userData.save();
+
+        req.session.user = userData;
+
+        res.redirect('back');
+    } catch (e) {
+        console.log(e);
+        res.redirect('back');
+    }
+}
