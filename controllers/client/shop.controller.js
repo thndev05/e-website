@@ -48,14 +48,24 @@ module.exports.index = async (req, res) => {
   }
 
   if (color) {
-    query["variants"] = {
-      $elemMatch: {
-        color: {
-          $regex: color,
-          $options: "i",
+    if (Array.isArray(color)) {
+      query["variants"] = {
+        $elemMatch: {
+          color: {
+            $in: color.map(col => new RegExp(col, "i")),
+          }
         }
-      }
-    };
+      };
+    } else {
+      query["variants"] = {
+        $elemMatch: {
+          color: {
+            $regex: color,
+            $options: "i",
+          }
+        }
+      };
+    }
   }
 
   const totalMatchingProducts = await Product.countDocuments(query);
