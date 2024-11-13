@@ -1,5 +1,6 @@
 const User = require('../../models/user.model');
 const bcrypt = require('bcrypt');
+const updateSessionUser = require('../../helpers/session');
 
 //[GET] /user/profile
 module.exports.profile = async (req, res) => {
@@ -20,26 +21,18 @@ module.exports.updateProfile = async (req, res) => {
         const id = req.params.id;
         await User.updateOne({ _id: id }, req.body);
 
-        const updatedUser = await User.findById(id);
-
-        req.session.user = {
-            id: updatedUser._id,
-            birthdate: updatedUser.birthdate,
-            fullName: updatedUser.fullName,
-            email: updatedUser.email,
-            address: updatedUser.address
-        };
+        await updateSessionUser(req, id);
 
         res.redirect('back');
     } catch (e) {
         console.log(e);
         res.render('client/user/profile', {
-          pageTitle: 'Profile',
-          breadcrumbTitle: 'Profile',
-          breadcrumb: 'Profile'
+            pageTitle: 'Profile',
+            breadcrumbTitle: 'Profile',
+            breadcrumb: 'Profile'
         });
     }
-}
+};
 
 //[PATCH] /user/changePassword/:id
 module.exports.changePassword = async (req, res) => {
@@ -87,78 +80,38 @@ module.exports.changePassword = async (req, res) => {
 
         const changedPassword = await bcrypt.hash(newPassword, 12);
         await User.updateOne({ _id: id }, { password: changedPassword });
-
-
         res.redirect('/auth/logout');
     } catch (e) {
         console.log(e);
-        res.render('client/user/profile', {
-            pageTitle: 'Profile',
-            breadcrumbTitle: 'Profile',
-            breadcrumb: 'Profile'
-        });
+        res.redirect('back');
     }
 }
 
 //[PATCH] /user/updateAddress/:id
 module.exports.updateAddress = async (req, res) => {
     try {
-        const id = req.params.id;
-        const { phone, province, district, ward, street } = req.body;
-
-        const newAddress = {
-            phone,
-            province,
-            district,
-            ward,
-            street
-        };
-
-        const userData = await User.findById(id);
-        userData.address.push(newAddress);
-
-        req.session.user = {
-            id: userData._id,
-            birthdate: userData.birthdate,
-            fullName: userData.fullName,
-            email: userData.email,
-            address: userData.address
-        };
-
-        await userData.save();
-
+        const { id } = req.params;
+        const newAddress = req.body;
+        await User.updateOne({ _id: id }, { $push: { address: newAddress } });
+        await updateSessionUser(req, id);
         res.redirect('back');
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.redirect('back');
     }
-}
+};
 
 //[DELETE] /deleteAddress/:id/:index
 module.exports.deleteAddress = async (req, res) => {
     try {
-        const id = req.params.id;
-        const index = req.params.index;
-
-        const userData = await User.findById(id);
-
-        if (userData && userData.address && userData.address[index]) {
-            userData.address.splice(index, 1);
-        }
-
-        await userData.save();
-
-        req.session.user = {
-            id: userData._id,
-            birthdate: userData.birthdate,
-            fullName: userData.fullName,
-            email: userData.email,
-            address: userData.address
-        };
+        const { id, index } = req.params;
+        await User.updateOne({ _id: id }, { $unset: { [`address.${index}`]: 1 } });
+        await User.updateOne({ _id: id }, { $pull: { address: null } });
+        await updateSessionUser(req, id);
 
         res.redirect('back');
     } catch (e) {
-        console.log(e);
+        console.error(e);
         res.redirect('back');
     }
-}
+};
