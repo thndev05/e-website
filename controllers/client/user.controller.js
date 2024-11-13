@@ -19,7 +19,17 @@ module.exports.updateProfile = async (req, res) => {
     try {
         const id = req.params.id;
         await User.updateOne({ _id: id }, req.body);
-        req.session.user = req.body;
+
+        const updatedUser = await User.findById(id);
+
+        req.session.user = {
+            id: updatedUser._id,
+            birthdate: updatedUser.birthdate,
+            fullName: updatedUser.fullName,
+            email: updatedUser.email,
+            address: updatedUser.address
+        };
+
         res.redirect('back');
     } catch (e) {
         console.log(e);
@@ -77,8 +87,9 @@ module.exports.changePassword = async (req, res) => {
 
         const changedPassword = await bcrypt.hash(newPassword, 12);
         await User.updateOne({ _id: id }, { password: changedPassword });
-        res.redirect('back');
 
+
+        res.redirect('/auth/logout');
     } catch (e) {
         console.log(e);
         res.render('client/user/profile', {
@@ -106,7 +117,14 @@ module.exports.updateAddress = async (req, res) => {
         const userData = await User.findById(id);
         userData.address.push(newAddress);
 
-        req.session.user = userData;
+        req.session.user = {
+            id: userData._id,
+            birthdate: userData.birthdate,
+            fullName: userData.fullName,
+            email: userData.email,
+            address: userData.address
+        };
+
         await userData.save();
 
         res.redirect('back');
@@ -130,7 +148,13 @@ module.exports.deleteAddress = async (req, res) => {
 
         await userData.save();
 
-        req.session.user = userData;
+        req.session.user = {
+            id: userData._id,
+            birthdate: userData.birthdate,
+            fullName: userData.fullName,
+            email: userData.email,
+            address: userData.address
+        };
 
         res.redirect('back');
     } catch (e) {
