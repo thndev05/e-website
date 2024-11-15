@@ -158,19 +158,24 @@ module.exports.editPatch = async (req, res) => {
 
     const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
 
+    console.log("Origin variants: " + JSON.stringify(oldProduct.variants));
+    console.log("Received variants: " + JSON.stringify(variants));
+
     for (let oldVariant of oldProduct.variants) {
       for (let newVariant of variants) {
-        if (newVariant.originalSKU === oldVariant.sku && newVariant.isImageChanged === 'false') {
-          newVariant.image = oldVariant.image;
-        }
+        if (newVariant.originalSKU === oldVariant.sku) {
+          if (newVariant.isImageChanged === 'false') {
+            newVariant.image = oldVariant.image;
+          }
 
-        const {oldName, oldColor, oldSize} = oldVariant;
-        const {newName, newColor, newSize} = newVariant;
+          const {oldName, oldColor, oldSize} = oldVariant;
+          const {newName, newColor, newSize} = newVariant;
 
-        if (oldName === newName && oldColor === newColor && oldSize === newSize) {
-          newVariant.sku = oldVariant.sku;
-        } else {
-          newVariant.sku = ProductHelpers.generateSKU(newName, newColor, newSize);
+          if (oldName === newName && oldColor === newColor && oldSize === newSize) {
+            newVariant.sku = oldVariant.sku;
+          } else {
+            newVariant.sku = ProductHelpers.generateSKU(newName, newColor, newSize);
+          }
         }
       }
     }
@@ -192,7 +197,7 @@ module.exports.editPatch = async (req, res) => {
 
     await Product.updateOne({ _id: id }, data);
 
-    console.log(data);
+    console.log("Result variants: " + JSON.stringify(data.variants));
 
     res.redirect(`${prefixAdmin}/products`);
   } catch(e) {
