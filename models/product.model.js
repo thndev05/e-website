@@ -11,7 +11,7 @@ const variantSchema = new mongoose.Schema({
     costPrice: { type: Number, required: true },
     price: { type: Number, required: true},
     salePrice: { type: Number },
-    quantity: { type: Number, default: 0 },
+    stock: { type: Number, default: 0 },
     sku: { type: String, unique: true },
     image: { type: String },
 });
