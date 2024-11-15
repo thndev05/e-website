@@ -3,7 +3,7 @@ module.exports.getMinPrice = (items) => {
     return null;
   }
 
-  const price = Math.min(...items.map(item => item.price));
+  const price = Math.min(...items.map(item => item.salePrice ? item.salePrice : item.price ));
 
   return price;
 };
