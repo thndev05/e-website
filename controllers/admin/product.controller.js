@@ -71,7 +71,7 @@ module.exports.create = async (req, res) => {
 module.exports.createPost = async (req, res) => {
   try {
     const { name, description, category, status, brand, tags, gender, subcategory } = req.body;
-    const data = { name, description, category, status, brand, gender};
+    const data = { name, description, category, status, brand, gender, subcategory};
 
     const variants = [];
 
@@ -114,8 +114,6 @@ module.exports.createPost = async (req, res) => {
     data.thumbnail = data.images[0];
 
     data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
-
-    data.subcategory = subcategory ? JSON.parse(subcategory).map(item => item.value) : [];
 
     const product = new Product(data);
     await product.save();
