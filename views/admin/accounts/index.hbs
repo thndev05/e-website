@@ -67,7 +67,7 @@
                                         {{#if (includes ../role.permissions 'account_edit')}}
                                             <a href="/admin/accounts/edit/{{this._id}}" class="btn btn-sm btn-outline-primary">Edit</a>
                                         {{/if}}
-                                        {{#if (includes ../role.permissions 'account_edit')}}
+                                        {{#if (includes ../role.permissions 'account_delete')}}
                                             <button class="btn btn-sm btn-outline-danger"
                                                     data-id="{{this._id}}"
                                                     button-delete>Delete</button>

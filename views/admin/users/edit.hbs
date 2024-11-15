@@ -1,0 +1,62 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row ">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-12">
+                        {{#if (includes role.permissions 'user_edit')}}
+                            <div class="card">
+                                <div class="card-title text-center mt-3">
+                                    <h3>Update User</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form action="{{prefixAdmin}}/users/edit/{{updatedUser._id}}?_method=PATCH" method="POST">
+                                        <div class="form-group">
+                                            <label for="fullName">Full Name:</label>
+                                            <input type="text" class="form-control" id="fullName" name="fullName"
+                                                   placeholder="Enter account name" value="{{updatedUser.fullName}}" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="birthdate">Date of birth:</label>
+                                            <input type="date" class="form-control" id="birthdate" name="birthdate"
+                                                   placeholder="Enter account name" value="{{updatedUser.birthdate}}" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name">Email:</label>
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                   placeholder="Enter account email" value="{{updatedUser.email}}" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            {{#if error}}
+                                                <div class="alert alert-danger text-center">
+                                                    {{error}}
+                                                </div>
+                                            {{/if}}
+
+                                            <label for="name">Password:</label>
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                   placeholder="Enter account password">
+                                        </div>
+
+                                        <button button-edit class="btn btn-dark mt-5 mx-auto d-block" style="height: 50px; width: 160px" type="submit">Update
+                                            User</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/admin/js/user.js"></script>
+
+

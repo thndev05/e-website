@@ -193,6 +193,36 @@
                                 {{/each}}
                             </tr>
 
+
+                            <!-- User Permissions -->
+                            <tr>
+                                <td colspan="4"><b>User</b></td>
+                            </tr>
+                            <tr data-name="user_view">
+                                <td>View</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="user_edit">
+                                <td>Edit</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="user_delete">
+                                <td style="color: red">Delete</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
                         </tbody>
                     </table>
                 {{/if}}

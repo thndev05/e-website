@@ -1,0 +1,62 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-5 mb-4 mb-xl-0"></div>
+                    <div class="col-5 mb-4 mb-xl-0">
+                        <form id="form-search" class="form-inline d-none d-lg-block">
+                            <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
+                                   name="keyword" value="{{searchKeyword}}">
+                            <button class="btn btn-light btn-outline-secondary" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-12 mb-4 mb-xl-0 mt-5">
+                        <h4 class="text-muted text-center mb-3">Users</h4>
+                        <table class="table bg-light table-striped  text-center" id="categories">
+                            <thead>
+                            <tr class="text-muted">
+                                <th>#No</th>
+                                <th>Name</th>
+                                <th>Birthdate</th>
+                                <th>Email</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each users}}
+                                <tr>
+                                    <td class="align-middle">{{#add @index 1}}{{/add}}</td>
+                                    <td class="align-middle">{{this.fullName}}</td>
+                                    <td class="align-middle">{{parseDate this.birthdate}}</td>
+                                    <td class="align-middle">{{this.email}}</td>
+                                    <td class="align-middle">
+                                        {{#if (includes ../role.permissions 'user_edit')}}
+                                            <a href="/admin/users/edit/{{this._id}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        {{/if}}
+                                        {{#if (includes ../role.permissions 'user_delete')}}
+                                            <button class="btn btn-sm btn-outline-danger"
+                                                    data-id="{{this._id}}"
+                                                    button-delete>Delete</button>
+                                        {{/if}}
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form action="" method="POST" id="form-delete-item" data-path="{{prefixAdmin}}/users/delete">
+</form>
+
+<script src="js/user.js"></script>
