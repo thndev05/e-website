@@ -1,0 +1,170 @@
+{{> client/preloader}}
+{{> client/header}}
+{{> client/breadcrumb}}
+
+
+<!-- shop-area start -->
+<section class="shop-details-area pt-100 pb-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-lg-4">
+                <div class="product-details-img mb-10">
+                    <div class="tab-content" id="myTabContentpro">
+                        {{#each product.images}}
+                            <div class="tab-pane fade show {{#ifEqual @index 0}}active{{/ifEqual}}" id="{{@index}}" role="tabpanel">
+                                <div class="product-large-img">
+                                    <img src="{{this}}" alt="">
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="shop-thumb-tab mb-30">
+                    <ul class="nav" id="myTab2" role="tablist">
+                        {{#each product.images}}
+                            <li class="nav-item">
+                                <a class="nav-link {{#ifEqual @index 0}}active{{/ifEqual}}" id="{{@index}}" data-toggle="tab" href="#{{@index}}" role="tab" aria-selected="true"><img
+                                        src="{{this}}" alt=""> </a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-8">
+                <div class="product-details mb-30 pl-30">
+                    <div class="details-cat mb-20">
+                        <a href="#">{{product.brand}} - </a>
+                        <a href="#">{{product.subcategory}}</a>
+                    </div>
+                    <h2 class="pro-details-title mb-15">{{product.name}}</h2>
+                    <div class="details-price mb-20">
+                        <span class="price">$$$</span>
+                        <span class="old-price">$$$</span>
+                    </div>
+                    <div class="product-variant">
+
+                        {{#if names}}
+                            <div class="product-name variant-item">
+                                <div class="variant-name">
+                                    <span>Name</span>
+                                </div>
+                                <ul class="shop-link variant">
+                                    {{#each names}}
+                                        <li class="name-select"><a href="#">{{this}}</a></li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        {{/if}}
+
+                        {{#if colors}}
+                            <div class="product-color variant-item">
+                                <div class="variant-name">
+                                    <span>Colors</span>
+                                </div>
+                                <ul class="shop-link variant">
+                                    {{#each colors}}
+                                        <li class="color-select"><a href="#">{{this}}</a></li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        {{/if}}
+
+                        {{#if sizes}}
+                            <div class="product-size variant-item">
+                                <div class="variant-name">
+                                    <span>Size</span>
+                                </div>
+                                <ul class="shop-link variant">
+                                    {{#each sizes}}
+                                        <li class="size-select"><a href="#">{{this}}</a></li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{{> client/footer}}
+
+<script>
+    const variants = {{{JSONstringify product.variants}}};
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const selectNameElements = document.querySelectorAll(".name-select");
+        const selectColorElements = document.querySelectorAll(".color-select");
+        const selectSizeElements = document.querySelectorAll(".size-select");
+
+        const productPrice = document.querySelector(".price");
+        const oldProductPrice = document.querySelector(".old-price");
+
+        let selectedName, selectedColor, selectedSize;
+        let selectedVariant = findVariant();
+
+        function findVariant(name = null, color = null, size = null) {
+            return (
+                    variants.find(variant =>
+                            (name === null || variant.name === name) &&
+                            (color === null || variant.color === color) &&
+                            (size === null || variant.size === size)
+                    ) || variants[0]
+            );
+        }
+
+        function getSelectableOptions(variants, filterFn, key) {
+            return [...new Set(variants.filter(filterFn).map(variant => variant[key]))];
+        }
+
+        function refreshSelectedVariant() {
+            updateSelection(selectNameElements, selectedName, selectedName, "active");
+            updateSelection(selectColorElements, selectedColor, getSelectableOptions(variants, v => v.name === selectedName, "color"), "disabled");
+            updateSelection(selectSizeElements, selectedSize, getSelectableOptions(variants, v => v.name === selectedName && v.color === selectedColor, "size"), "disabled");
+        }
+
+        function updateSelection(elements, selectedValue, validValues, disabledClass = "disabled") {
+            elements.forEach(el => {
+                const value = el.textContent.trim();
+                el.className = el.className.split(' ')[0]; // Reset to base class
+                if (validValues instanceof Array && !validValues.includes(value)) {
+                    el.classList.add(disabledClass);
+                } else if (value === selectedValue) {
+                    el.classList.add("active");
+                }
+            });
+        }
+
+        function selectVariant(variant) {
+            if (!variant) throw new Error("Invalid variant");
+
+            selectedName = variant.name;
+            selectedColor = variant.color;
+            selectedSize = variant.size;
+
+            productPrice.textContent = `$${variant.salePrice || variant.price}`;
+            oldProductPrice.textContent = variant.salePrice ? `$${variant.price}` : "";
+
+            selectedVariant = variant;
+            refreshSelectedVariant();
+        }
+
+        function addClickListener(elements, findVariantArgs) {
+            elements.forEach(el => {
+                el.addEventListener("click", event => {
+                    event.preventDefault();
+                    if (!el.classList.contains("disabled") && !el.classList.contains("active")) {
+                        selectVariant(findVariant(...findVariantArgs(el.textContent.trim())));
+                    }
+                });
+            });
+        }
+
+        addClickListener(selectNameElements, name => [name]);
+        addClickListener(selectColorElements, color => [selectedName, color]);
+        addClickListener(selectSizeElements, size => [selectedName, selectedColor, size]);
+
+        selectVariant(selectedVariant);
+    });
+</script>
