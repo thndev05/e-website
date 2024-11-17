@@ -4785,13 +4785,13 @@ input.main-search-input:-ms-input-placeholder {
 
 }
 
-.shop-size{
+.shop-size, .variant{
 
 	display: inline-block;
 
 }
 
-.shop-size li{
+.shop-size li, .variant li{
 
 	display: inline-block;
 
@@ -4799,7 +4799,7 @@ input.main-search-input:-ms-input-placeholder {
 
 }
 
-.shop-size li a {
+.shop-size li a, .variant li a {
 
 	color: #747691;
 
@@ -4817,7 +4817,11 @@ input.main-search-input:-ms-input-placeholder {
 
 }
 
-.shop-size li.active a {
+.variant li.disabled a {
+	cursor: not-allowed;
+}
+
+.shop-size li.active a, .variant li.active a {
 
 	border: 2px solid #fe4536;
 

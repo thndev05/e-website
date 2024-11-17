@@ -163,6 +163,10 @@ module.exports.editPatch = async (req, res) => {
 
     for (let oldVariant of oldProduct.variants) {
       for (let newVariant of variants) {
+        if (!newVariant) {
+          continue;
+        }
+
         if (newVariant.originalSKU === oldVariant.sku) {
           if (newVariant.isImageChanged === 'false') {
             newVariant.image = oldVariant.image;
