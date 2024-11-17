@@ -802,80 +802,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const addNewAddressButton = document.getElementById("addNewAddress");
-  const addressForm = document.getElementById("addressForm");
-  const cancelAddressFormButton = document.getElementById("cancelAddressForm");
+  if(addNewAddressButton) {
+    const addressForm = document.getElementById("addressForm");
+    const cancelAddressFormButton = document.getElementById("cancelAddressForm");
 
-  const provinceSelect = document.getElementById("province");
-  const districtSelect = document.getElementById("district");
-  const wardSelect = document.getElementById("ward");
+    const provinceSelect = document.getElementById("province");
+    const districtSelect = document.getElementById("district");
+    const wardSelect = document.getElementById("ward");
 
-  // Fetch the administrative data from the provided API
-  const apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
-  let provinceData = [];
+    // Fetch the administrative data from the provided API
+    const apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+    let provinceData = [];
 
-  // Create an async function to fetch data
-  async function fetchAdministrativeData() {
-    try {
-      const response = await fetch(apiUrl);
-      provinceData = await response.json();
+    // Create an async function to fetch data
+    async function fetchAdministrativeData() {
+      try {
+        const response = await fetch(apiUrl);
+        provinceData = await response.json();
 
-      // Populate province dropdown
-      populateSelect(provinceSelect, provinceData, 'Name');
+        // Populate province dropdown
+        populateSelect(provinceSelect, provinceData, 'Name');
 
-      // Event listener for province selection
-      provinceSelect.addEventListener("change", (e) => {
-        const selectedProvince = e.target.value;
-        const districts = provinceData.find(p => p.Name === selectedProvince)?.Districts || [];
+        // Event listener for province selection
+        provinceSelect.addEventListener("change", (e) => {
+          const selectedProvince = e.target.value;
+          const districts = provinceData.find(p => p.Name === selectedProvince)?.Districts || [];
 
-        populateSelect(districtSelect, districts, 'Name');
-        districtSelect.disabled = false;
+          populateSelect(districtSelect, districts, 'Name');
+          districtSelect.disabled = false;
 
-        // Reset ward select when province changes
-        wardSelect.innerHTML = '<option value="">Ward</option>';
-        wardSelect.disabled = true;
-      });
+          // Reset ward select when province changes
+          wardSelect.innerHTML = '<option value="">Ward</option>';
+          wardSelect.disabled = true;
+        });
 
-      // Event listener for district selection
-      districtSelect.addEventListener("change", (e) => {
-        const selectedProvince = provinceSelect.value;
-        const selectedDistrict = e.target.value;
+        // Event listener for district selection
+        districtSelect.addEventListener("change", (e) => {
+          const selectedProvince = provinceSelect.value;
+          const selectedDistrict = e.target.value;
 
-        const districts = provinceData.find(p => p.Name === selectedProvince)?.Districts || [];
-        const wards = districts.find(d => d.Name === selectedDistrict)?.Wards || [];
+          const districts = provinceData.find(p => p.Name === selectedProvince)?.Districts || [];
+          const wards = districts.find(d => d.Name === selectedDistrict)?.Wards || [];
 
-        populateSelect(wardSelect, wards, 'Name');
-        wardSelect.disabled = false;
-      });
+          populateSelect(wardSelect, wards, 'Name');
+          wardSelect.disabled = false;
+        });
 
-    } catch (error) {
-      console.error("Error fetching administrative data:", error);
+      } catch (error) {
+        console.error("Error fetching administrative data:", error);
+      }
     }
-  }
 
-  // Show the address form when "Add New Address" is clicked
-  addNewAddressButton.addEventListener("click", () => {
-    addressForm.style.display = "block";
-    addNewAddressButton.style.display = "none";
-  });
-
-  // Hide the address form when "Cancel" is clicked
-  cancelAddressFormButton.addEventListener("click", () => {
-    addressForm.style.display = "none";
-    addNewAddressButton.style.display = "block";
-  });
-
-  // Function to populate select elements
-  function populateSelect(selectElement, data, key) {
-    selectElement.innerHTML = `<option value="">Select ${selectElement.id.charAt(0).toUpperCase() + selectElement.id.slice(1)}</option>`;
-    data.forEach(item => {
-      const option = document.createElement("option");
-      option.value = item.Name;
-      option.text = item.Name;
-      selectElement.appendChild(option);
+    // Show the address form when "Add New Address" is clicked
+    addNewAddressButton.addEventListener("click", () => {
+      addressForm.style.display = "block";
+      addNewAddressButton.style.display = "none";
     });
-  }
 
-  // Call the async function to fetch and populate data
-  fetchAdministrativeData();
+    // Hide the address form when "Cancel" is clicked
+    cancelAddressFormButton.addEventListener("click", () => {
+      addressForm.style.display = "none";
+      addNewAddressButton.style.display = "block";
+    });
+
+    // Function to populate select elements
+    function populateSelect(selectElement, data, key) {
+      selectElement.innerHTML = `<option value="">Select ${selectElement.id.charAt(0).toUpperCase() + selectElement.id.slice(1)}</option>`;
+      data.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item.Name;
+        option.text = item.Name;
+        selectElement.appendChild(option);
+      });
+    }
+
+    // Call the async function to fetch and populate data
+    fetchAdministrativeData();
+  }
 });
 

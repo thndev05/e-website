@@ -22,6 +22,7 @@ database.connect();
 // Method-override
 app.use(methodOverride('_method'));
 
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Session

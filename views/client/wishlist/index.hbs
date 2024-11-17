@@ -1,0 +1,63 @@
+{{> client/preloader}}
+{{> client/header}}
+{{> client/breadcrumb}}
+
+<main>
+    <section class="cart-area pt-100 pb-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {{#if wishlists}}
+                        <form action="#">
+                            <div class="table-content table-responsive">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th class="product-thumbnail">Image</th>
+                                        <th class="cart-product-name">Product</th>
+                                        <th class="product-subtotal">Category</th>
+                                        <th class="product-price">Price</th>
+                                        <th class="product-quantity">View</th>
+                                        <th class="product-remove">Remove</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each wishlists}}
+                                            <tr>
+                                                <td class="product-thumbnail">
+                                                    <a href="#"><img src="{{getFirstImage this.images}}" alt="img"></a>
+                                                </td>
+                                                <td class="product-name"><a href="#">{{this.name}}</a></td>
+                                                <td class="product-category"><span class="amount">{{this.subcategory}}</span></td>
+                                                <td class="product-price"><span class="amount">${{this.minPrice}}</span></td>
+                                                <td class="product-quantity">
+                                                    <a href="#"><button class="btn theme-btn-2">View detail product</button></a>
+                                                </td>
+                                                <td class="product-remove">
+                                                    <a href="#">
+                                                        <i class="fa fa-times"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {{/each}}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </form>
+                    {{else}}
+                        <div class="text-center py-5">
+                            <p class="text-center font-weight-bold" style="font-size: 2rem">You have not added any products to your wishlist. :<</p>
+                            <hr>
+                            <a href="/shop" class="btn theme-btn-2 btn-lg mt-3">
+                                <i class="fa-brands fa-shopify"></i> View Shop
+                            </a>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{{> client/footer}}

@@ -2640,6 +2640,11 @@ img.secondary-img {
 
 }
 
+.wishlist-btn.isWishlist {
+	background: #fe4536;
+	color: #fff;
+}
+
 /* product-nav */
 
 .product-nav{}
