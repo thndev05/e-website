@@ -14,14 +14,15 @@ module.exports = (app) => {
     app.use(authMiddleware.checkAuth);
     app.use(categoryMiddleware.category)
 
-    app.use('/', homeRoutes);
     app.use('/auth', authRoutes);
-    app.use('/shop', shopRouter);
-    app.use('/user', userRoutes);
-    app.use('/contact', contactRoutes);
+
+    app.use('/', authMiddleware.requireAuth, homeRoutes);
+    app.use('/shop', authMiddleware.requireAuth, shopRouter);
+    app.use('/user', authMiddleware.requireAuth, userRoutes);
+    app.use('/contact', authMiddleware.requireAuth, contactRoutes);
     app.use('/wishlist',
       authMiddleware.requireAuth,
       wishlistRoutes
     );
-    app.use('/product', productRoutes);
+    app.use('/product', authMiddleware.requireAuth, productRoutes);
 }
