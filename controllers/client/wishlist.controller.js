@@ -45,3 +45,21 @@ module.exports.addToWishlist = async (req, res) => {
         res.json({ success: false, message: 'An error has occurred, please try again!' });
     }
 };
+
+// [DELETE] /wishlist/delete
+module.exports.removeFromWishlist = async (req, res) => {
+    try {
+        const userId = res.locals.user.id;
+        const { productId } = req.body;
+
+        await User.updateOne(
+          { _id: userId },
+          { $pull: { wishlist: productId } }
+        );
+
+        res.json({ success: true, message: 'Removed product from wishlist' });
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, message: 'An error has occurred, please try again!' });
+    }
+};

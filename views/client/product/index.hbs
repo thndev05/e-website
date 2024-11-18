@@ -101,7 +101,10 @@
                                     <div class="plus-minus">
                                         <div class="cart-plus-minus"><input type="text" value="1" /></div>
                                     </div>
-                                    <button class="details-action-icon" type="submit"><i class="fas fa-heart"></i></button>
+                                    <button class="details-action-icon wishlist-btn" type="submit"
+                                            data-product-id="{{product._id}}">
+                                        <i class="fas fa-heart"></i>
+                                    </button>
                                     <button class="details-action-icon" type="submit"><i class="fas fa-hourglass"></i></button>
                                     <div class="details-cart mt-40">
                                         <button class="btn theme-btn">purchase now</button>
@@ -234,13 +237,13 @@
                 <div class="pro-item">
                     <div class="product-wrapper mb-50">
                         <div class="product-img mb-25">
-                            <a href="#">
+                            <a href="/product/{{this.slug}}">
                                 <img src="{{getFirstImage this.images}}" alt="{{this.name}}">
                                 <img class="secondary-img" src="{{getSecondImage this.images}}" alt="{{this.name}}">
 
                             </a>
                             <div class="product-action text-center">
-                                <a href="#" title="Quick View">
+                                <a href="/product/{{this.slug}}" title="Quick View">
                                     <i class="flaticon-eye"></i>
                                 </a>
                                 <a href="#" title="Shoppingb Cart">
@@ -263,7 +266,9 @@
                                 </div>
                             </div>
                             <div class="product-wishlist">
-                                <a href="#"><i class="far fa-heart" title="Wishlist"></i></a>
+                                <a href="javascript:void(0);" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
+                                    <i class="far fa-heart"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
