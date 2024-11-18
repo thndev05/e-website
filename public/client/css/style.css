@@ -9050,3 +9050,23 @@ ul.cat li a:hover {
 
 
 /*--- end of preloader ---*/
+
+/* swiper */
+.swiper-button-next,
+.swiper-button-prev {
+	color: #878787 !important;
+	transition: ease 0.3s;
+	opacity: 0;
+}
+
+.product-details-img:hover .swiper-button-next,
+.product-details-img:hover .swiper-button-prev {
+	opacity: 1;
+	pointer-events: auto;
+	color: #303030;
+}
+
+.swiper-slide img {
+	cursor: pointer;
+}
+
