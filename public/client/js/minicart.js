@@ -74,7 +74,15 @@ function displayCart(cart) {
                 body: JSON.stringify(data),
             }).then(() => {
                 refreshCart();
-                alert("Đã xóa sản phẩm khỏi giỏ hàng.");
+            }).catch(error => {
+                console.log('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error has occurred, please try again!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             });
         });
 

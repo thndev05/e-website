@@ -390,9 +390,36 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(data),
-            }).then(() => {
-                refreshCart();
-                alert("Đã thêm sản phẩm vào giỏ hàng.")
+            }).then((response) => {
+                if (response.ok) {
+                    refreshCart();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: "Product added to cart",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
+                } else {
+                    response.json().then(result => {
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Warning',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    });
+                }
+            }).catch((error) => {
+                console.log('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error has occurred, please try again!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             });
         });
     });
