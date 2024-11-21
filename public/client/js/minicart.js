@@ -24,8 +24,12 @@ function displayCart(cart) {
     // Reset minicart
     minicart.innerHTML = '';
 
+    let total = 0;
+
     for (const p of cart.products) {
         const product = p.product;
+
+        total += p.quantity * (p.variant.salePrice ? p.variant.salePrice : p.variant.price);
 
         const listItem = document.createElement('li');
 
@@ -37,13 +41,15 @@ function displayCart(cart) {
             </div>
             <div class="cart-content">
                 <h3>
-                    <a href="product-details.html">${product.name}</a>
+                    <a href="/product/${product.slug}">${product.name}</a>
                 </h3>
+                <div>
+                    <h4>${getVariantText(p.variant)}</h4>
+                </div>
                 <div class="cart-price">
-                    <span class="new">${p.variant.salePrice}</span>
-                    <span>
-                        <del>${p.variant.price}</del>
-                    </span>
+                    <span class="quantity">${p.quantity} x </span>
+                    <span class="new">$${p.variant.salePrice ? p.variant.salePrice : p.variant.price}</span>
+                 
                 </div>
             </div>
             <div class="del-icon">
@@ -54,5 +60,26 @@ function displayCart(cart) {
         `;
 
         minicart.appendChild(listItem);
+
+        minicart.innerHTML = minicart.innerHTML + `
+            <li>
+                <div class="total-price">
+                    <span class="f-left">Total:</span>
+                    <span class="f-right">$${total}</span>
+                </div>
+            </li>
+            <li>
+                <div class="checkout-link">
+                    <a href="cart.html">Shopping Cart</a>
+                    <a class="red-color" href="checkout.html">Checkout</a>
+                </div>
+            </li>`
     }
+}
+
+function getVariantText(variant) {
+    return [variant.name, variant.color, variant.size]
+        .filter(Boolean)
+        .join(" ")
+        .trim();
 }

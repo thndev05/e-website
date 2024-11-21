@@ -1192,12 +1192,9 @@ label {
 
 }
 
-
-
 .cart-content h3 {
 
     color: #ddd;
-
 }
 
 ul.minicart .cart-content a {
@@ -1224,6 +1221,11 @@ ul.minicart .cart-img img {
 
 }
 
+ul.minicart h4 {
+	color: #28231D;
+	font-size: 14px;
+}
+
 ul.minicart .cart-price span {
 
     color: #ddd;
@@ -1248,6 +1250,12 @@ ul.minicart .cart-price span {
 
 	font-weight: 500;
 
+}
+
+ul.minicart .cart-price .quantity {
+	color: #747691;
+	font-weight: 600;
+	font-size: 14px;
 }
 
 .header-right ul li .minicart > li {
