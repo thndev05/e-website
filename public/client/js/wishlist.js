@@ -1,4 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const fetchWishlist = async () => {
+        try {
+            const response = await fetch('/wishlist/data', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const wishlist = await response.json();
+
+            document.querySelectorAll('.wishlist-btn').forEach((button) => {
+                const productId = button.getAttribute('data-product-id');
+                if (wishlist.includes(productId)) {
+                    button.classList.add('isWishlist');
+                }
+            });
+        } catch (error) {
+            console.error('Error fetching wishlist:', error);
+        }
+    };
+    fetchWishlist();
+
+
     const wishlistButtons = document.querySelectorAll('.wishlist-btn');
     if(wishlistButtons) {
         wishlistButtons.forEach(button => {

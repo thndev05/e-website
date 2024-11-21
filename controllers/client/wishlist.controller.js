@@ -63,3 +63,22 @@ module.exports.removeFromWishlist = async (req, res) => {
         res.json({ success: false, message: 'An error has occurred, please try again!' });
     }
 };
+
+// [POST] /wishlist/data
+module.exports.getWishlistData = async (req, res) => {
+    try {
+        if (!res.locals.user) {
+            return res.json([]);
+        }
+
+        const userId = res.locals.user.id;
+        const user = await User.findOne({ _id: userId }).populate('wishlist').lean();
+
+        const wishlist = user.wishlist.map((item) => item._id.toString());
+
+        res.json(wishlist);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch wishlist data' });
+    }
+};
