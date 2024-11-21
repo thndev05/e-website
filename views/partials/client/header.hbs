@@ -72,7 +72,7 @@
                                     <i class="far fa-user"></i>
                                 </a>
                             </li>
-                            <li class="d-shop-cart"><a href="#"><i class="flaticon-shopping-cart"></i> <span class="cart-count">3</span></a>
+                            <li class="d-shop-cart"><a href="#"><i class="flaticon-shopping-cart"></i> <span class="cart-count">0</span></a>
                                 <ul class="minicart">
                                     <li>
                                         <div class="cart-img">
@@ -180,3 +180,8 @@
         </div>
     </div>
 </div>
+
+
+{{#if isAuthenticated}}
+    <script src="/client/js/minicart.js"></script>
+{{/if}}

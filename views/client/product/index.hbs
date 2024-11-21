@@ -109,7 +109,7 @@
                             <div class="product-details-action">
                                 <form class="purchase-form" action="">
                                     <div class="plus-minus">
-                                        <div class="cart-plus-minus"><input type="text" value="1" /></div>
+                                        <div class="cart-plus-minus"><input type="text" id="quantity-selector" value="1" /></div>
                                     </div>
                                     <button class="details-action-icon wishlist-btn" type="submit"
                                             data-product-id="{{product._id}}">
@@ -303,6 +303,9 @@
 
         const inStock = document.querySelector(".in-stock");
 
+        const quantitySelector = document.getElementById("quantity-selector");
+        const purchaseForm = document.querySelector(".purchase-form");
+
         let selectedName, selectedColor, selectedSize;
         let selectedVariant = findVariant();
 
@@ -370,5 +373,27 @@
         addClickListener(selectSizeElements, size => [selectedName, selectedColor, size]);
 
         selectVariant(selectedVariant);
+
+
+        purchaseForm.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            const data = {}
+            data.productId = "{{product._id}}";
+            data.quantity = Number.parseInt(quantitySelector.value);
+            data.variantSKU = selectedVariant.sku;
+
+            fetch("/cart/add", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            }).then(() => {
+                refreshCart();
+                alert("Đã thêm sản phẩm vào giỏ hàng.")
+            });
+        });
     });
 </script>
