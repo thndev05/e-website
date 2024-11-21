@@ -21,7 +21,6 @@ function refreshCart() {
 function displayCart(cart) {
     cartItemCount.textContent = cart.products.length.toString();
 
-    // Reset minicart
     minicart.innerHTML = '';
 
     let total = 0;
@@ -49,32 +48,59 @@ function displayCart(cart) {
                 <div class="cart-price">
                     <span class="quantity">${p.quantity} x </span>
                     <span class="new">$${p.variant.salePrice ? p.variant.salePrice : p.variant.price}</span>
-                 
                 </div>
-            </div>
-            <div class="del-icon">
-                <a href="#">
-                    <i class="far fa-trash-alt"></i>
-                </a>
             </div>
         `;
 
-        minicart.appendChild(listItem);
+        const delIcon = document.createElement('div');
+        delIcon.classList.add('del-icon');
 
-        minicart.innerHTML = minicart.innerHTML + `
-            <li>
-                <div class="total-price">
-                    <span class="f-left">Total:</span>
-                    <span class="f-right">$${total}</span>
-                </div>
-            </li>
-            <li>
-                <div class="checkout-link">
-                    <a href="cart.html">Shopping Cart</a>
-                    <a class="red-color" href="checkout.html">Checkout</a>
-                </div>
-            </li>`
+        const delIconLink = document.createElement('a');
+        delIconLink.innerHTML = '<i class="far fa-trash-alt"></i>';
+
+        delIcon.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const data = {};
+            data.productId = product._id;
+            data.variantSKU = p.variantSKU;
+
+            fetch('/cart/remove', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data),
+            }).then(() => {
+                refreshCart();
+                alert("Đã xóa sản phẩm khỏi giỏ hàng.");
+            });
+        });
+
+        delIcon.appendChild(delIconLink);
+        listItem.appendChild(delIcon);
+
+        minicart.appendChild(listItem);
     }
+
+    const totalPriceItem = document.createElement('li');
+    totalPriceItem.innerHTML = `
+        <div class="total-price">
+            <span class="f-left">Total:</span>
+            <span class="f-right">$${total}</span>
+        </div>
+    `;
+    minicart.appendChild(totalPriceItem);
+
+    const checkoutItem = document.createElement('li');
+    checkoutItem.innerHTML = `
+        <div class="checkout-link">
+            <a href="cart.html">Shopping Cart</a>
+            <a class="red-color" href="checkout.html">Checkout</a>
+        </div>
+    `;
+    minicart.appendChild(checkoutItem);
 }
 
 function getVariantText(variant) {

@@ -1260,7 +1260,7 @@ ul.minicart .cart-price .quantity {
 
 .header-right ul li .minicart > li {
 
-	display: block;
+	display: flex;
 
 	margin-bottom: 22px;
 
@@ -1273,6 +1273,11 @@ ul.minicart .cart-price .quantity {
 }
 
 .header-right ul li .minicart > li:last-child{margin-bottom:0;}
+
+.header-right ul li .minicart .del-icon {
+	margin-left: auto;
+	margin-right: 0;
+}
 
 .header-right ul li .minicart .del-icon > a {
 
@@ -1314,6 +1319,12 @@ ul.minicart .cart-price .quantity {
 
 	margin-top: 10px;
 
+	width: 100%;
+
+}
+
+.header-right ul li .minicart .checkout-link {
+	width: 100%;
 }
 
 .header-right ul li .minicart .checkout-link a {

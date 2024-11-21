@@ -70,13 +70,13 @@ module.exports.updateCart = async (req, res) => {
 }
 
 module.exports.removeFromCart = async (req, res) => {
-    const { productId } = req.body;
+    const { productId, variantSKU } = req.body;
 
     try {
         const userId = res.locals.user.id;
         const cart = await getOrCreateCart(userId);
 
-        cart.products = cart.products.filter(p => p.product._id.toString() !== productId);
+        cart.products = cart.products.filter(p => !(p.product._id.toString() === productId && p.variantSKU === variantSKU));
 
         await Cart.updateOne({_id: cart._id}, cart);
         res.json(cart);
