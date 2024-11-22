@@ -42,10 +42,13 @@
     <script src="/client/js/instafeed.min.js"></script>
     <script src="/client/js/plugins.js"></script>
     <script src="/client/js/main.js"></script>
-    <script src="/client/js/wishlist.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
+    {{#if isAuthenticated}}
+        <script src="/client/js/wishlist.js"></script>
+    {{/if}}
 
 </body>
 </html>
