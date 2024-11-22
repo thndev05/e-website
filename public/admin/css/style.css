@@ -260,3 +260,71 @@ tr[data-name="id"] {
   display: none !important;
 }
 
+/* Select order status */
+select.form-select {
+  font-size: 14px;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24'%3E%3Cpath fill='%23777' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 24px;
+  color: #333;
+  appearance: none;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+select.form-select option {
+  color: #333;
+}
+
+select.form-select option[value="Pending"] {
+  color: #ffc107;
+  background-color: #fff8e1;
+}
+select.form-select option[value="Confirmed"] {
+  color: #28a745;
+  background-color: #e8f5e9;
+}
+select.form-select option[value="Delivering"] {
+  color: #17a2b8;
+  background-color: #e3f2fd;
+}
+select.form-select option[value="Completed"] {
+  color: #007bff;
+  background-color: #e9ecef;
+}
+select.form-select option[value="Cancelled"] {
+  color: #dc3545;
+  background-color: #f8d7da;
+}
+
+select.form-select[value="Pending"] {
+  background-color: #fff8e1;
+  color: #856404;
+}
+select.form-select[value="Confirmed"] {
+  background-color: #e8f5e9;
+  color: #155724;
+}
+select.form-select[value="Delivering"] {
+  background-color: #e3f2fd;
+  color: #004085;
+}
+select.form-select[value="Completed"] {
+  background-color: #e9ecef;
+  color: #0056b3;
+}
+select.form-select[value="Cancelled"] {
+  background-color: #f8d7da;
+  color: #721c24;
+}

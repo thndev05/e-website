@@ -70,6 +70,39 @@ const parseDate = function (date, format = 'DD/MM/YYYY') {
     }
 };
 
+const parseDateTime = function (date, format = 'DD/MM/YYYY hh:mm:ss') {
+  if (!date) return '';
+
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+
+  const hours = String(d.getHours()).padStart(2, '0');
+  const minutes = String(d.getMinutes()).padStart(2, '0');
+  const seconds = String(d.getSeconds()).padStart(2, '0');
+
+  switch (format) {
+    case 'DD/MM/YYYY hh:mm:ss':
+      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+    case 'YYYY-MM-DD hh:mm:ss':
+      return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    case 'MM/DD/YYYY hh:mm:ss':
+      return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
+    case 'DD/MM/YYYY':
+      return `${day}/${month}/${year}`;
+    case 'YYYY-MM-DD':
+      return `${year}-${month}-${day}`;
+    case 'MM/DD/YYYY':
+      return `${month}/${day}/${year}`;
+    default:
+      return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+  }
+};
+
+
 const range = function (start, end) {
     const result = [];
     for (let i = Number(start); i <= Number(end); i++) {
@@ -98,6 +131,7 @@ module.exports = {
   getFirstImage,
   getSecondImage,
   parseDate,
+  parseDateTime,
   range,
   greaterThan,
   multiplier,
