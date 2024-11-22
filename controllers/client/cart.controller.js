@@ -3,7 +3,12 @@ const Product = require('../../models/product.model');
 const User = require("../../models/user.model");
 
 module.exports.index = async (req, res) => {
-
+    res.render('client/cart/index', {
+        title: 'Cart',
+        isHome: false,
+        breadcrumbTitle: 'Shoping Cart',
+        breadcrumb: 'Cart',
+    });
 }
 
 module.exports.cartDetail = async function (req, res, next) {
