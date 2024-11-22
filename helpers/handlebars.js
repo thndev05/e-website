@@ -82,6 +82,10 @@ const greaterThan = function (a, b) {
     return Number(a) > Number(b);
 }
 
+const multiplier = function (a, b) {
+    return Number(a) * Number(b);
+}
+
 module.exports = {
   ifEqual,
   add, 
@@ -96,4 +100,5 @@ module.exports = {
   parseDate,
   range,
   greaterThan,
+  multiplier,
 };
