@@ -5018,6 +5018,10 @@ input.main-search-input:-ms-input-placeholder {
 
 	transition: .3s;
 
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
 }
 
 .cart-plus-minus .qtybutton:hover{
