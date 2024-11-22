@@ -13,6 +13,15 @@ module.exports.requireAuth = (req, res, next) => {
     if (req.session.user) {
       next();
     } else {
-      res.redirect('/auth/login');
+
+        // Save original url
+        const resourceRegex = /\.(css|js|map|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot)$/i
+        const originalUrl = req.originalUrl;
+        if (!resourceRegex.test(originalUrl)) {
+            req.session.returnTo = req.originalUrl;
+        }
+
+        res.redirect('/auth/login');
     }
 };
+
