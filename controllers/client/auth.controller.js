@@ -96,7 +96,10 @@ module.exports.loginPost = async (req, res) => {
             address: user.address
         };
 
-        res.redirect('/');
+        const redirectTo = req.session.returnTo || '/';
+        delete req.session.returnTo;
+        res.redirect(redirectTo);
+
     } catch (error) {
         console.error(error);
         res.render('client/auth/login', {
