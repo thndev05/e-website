@@ -66,6 +66,13 @@
                     </a>
                 </li>
             {{/if}}
+            <li class="nav-item">
+                <a href="{{prefixAdmin}}/orders"
+                   class="nav-link text-light p-3 mb-2 sidebar-link
+                    {{#ifEqual currentPage "orders"}}current{{/ifEqual}}">
+                    <i class="fa fa-shopping-basket text-light fa-lg mr-3"></i>Order
+                </a>
+            </li>
         </ul>
     </div>
 </div>

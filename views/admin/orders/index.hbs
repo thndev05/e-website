@@ -1,0 +1,63 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-5 mb-4 mb-xl-0"></div>
+                    <div class="col-5 mb-4 mb-xl-0">
+                        <form id="form-search" class="form-inline d-none d-lg-block">
+                            <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
+                                   name="keyword" value="{{searchKeyword}}">
+                            <button class="btn btn-light btn-outline-secondary" type="submit">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+                    <div class="col-12 mb-4 mb-xl-0 mt-5">
+                        <h4 class="text-muted text-center mb-3">Orders</h4>
+                        <table class="table bg-light table-striped  text-center" id="categories">
+                            <thead>
+                            <tr class="text-muted">
+                                <th>#ID</th>
+                                <th>Created</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Profit</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {{#each orders}}
+                                <tr>
+                                    <td class="align-middle">{{this._id}}</td>
+                                    <td class="align-middle">{{parseDateTime this.createdAt}}</td>
+                                    <td class="align-middle">{{this.customerName}}</td>
+                                    <td class="align-middle">${{this.totalAmount}}</td>
+                                    <td class="align-middle">$...</td>
+                                    <td class="align-middle">
+                                        <select name="status" class="form-select form-select-sm" id="{{this._id}}" value="{{this.status}}">
+                                            <option value="Pending" {{#ifEqual this.status "Pending"}}selected{{/ifEqual}}>Pending</option>
+                                            <option value="Confirmed" {{#ifEqual this.status "Confirmed"}}selected{{/ifEqual}}>Confirmed</option>
+                                            <option value="Delivering" {{#ifEqual this.status "Delivering"}}selected{{/ifEqual}}>Delivering</option>
+                                            <option value="Completed" {{#ifEqual this.status "Completed"}}selected{{/ifEqual}}>Completed</option>
+                                            <option value="Cancelled" {{#ifEqual this.status "Cancelled"}}selected{{/ifEqual}}>Cancelled</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<form action="" method="POST" id="form-change-status" data-path="{{prefixAdmin}}/orders/change-status">
+</form>
+
+<script src="js/order.js"></script>
