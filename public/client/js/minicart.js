@@ -4,7 +4,7 @@ const minicart = document.querySelector('.minicart');
 refreshCart()
 
 function refreshCart() {
-    const cart = fetch("/cart/detail")
+    fetch("/cart/detail")
         .then((response) => {
             if (!response.ok) {
                 throw new Error("Failed to load cart. " + response.statusText);

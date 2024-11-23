@@ -2,12 +2,21 @@ const Cart = require('../../models/cart.model');
 const Product = require('../../models/product.model');
 const User = require("../../models/user.model");
 
-module.exports.index = async (req, res) => {
+module.exports.index = async (req, res, next) => {
+    if (!res.locals.user) {
+        const error = new Error('Not logged in');
+        next(error);
+        return;
+    }
+
+    const cart = await getOrCreateCart(res.locals.user.id);
+
     res.render('client/cart/index', {
         title: 'Cart',
         isHome: false,
         breadcrumbTitle: 'Shoping Cart',
         breadcrumb: 'Cart',
+        cart: cart,
     });
 }
 
@@ -47,13 +56,13 @@ module.exports.addToCart = async (req, res) => {
 }
 
 module.exports.updateCart = async (req, res) => {
-    const { productId, quantity } = req.body;
+    const { productId, variantSKU, quantity } = req.body;
 
     try {
         const userId = res.locals.user.id;
         const cart = await getOrCreateCart(userId);
 
-        const productIndex = cart.products.findIndex(p => p.product._id.toString() === productId);
+        const productIndex = cart.products.findIndex(p => p.product._id.toString() === productId && p.variantSKU === variantSKU);
 
         if (productIndex > -1) {
             cart.products[productIndex].quantity = quantity;
