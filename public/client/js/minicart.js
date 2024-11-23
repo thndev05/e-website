@@ -104,8 +104,8 @@ function displayCart(cart) {
     const checkoutItem = document.createElement('li');
     checkoutItem.innerHTML = `
         <div class="checkout-link">
-            <a href="cart.html">Shopping Cart</a>
-            <a class="red-color" href="checkout.html">Checkout</a>
+            <a href="/cart">Shopping Cart</a>
+            <a class="red-color" href="/checkout">Checkout</a>
         </div>
     `;
     minicart.appendChild(checkoutItem);
