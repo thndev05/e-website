@@ -89,7 +89,7 @@ function renderCartItems(cart) {
             </td>
         `;
 
-        createQuantitySelectorCell(cartRow, cartItem.quantity);
+        createQuantitySelectorCell(cartRow, cartItem.quantity, productId, variantSKU);
 
         const subTotalCell = document.createElement('td');
         subTotalCell.classList.add('product-subtotal');
