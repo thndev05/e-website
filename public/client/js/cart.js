@@ -117,6 +117,10 @@ function renderCartItems(cart) {
         cartTable.appendChild(cartRow);
     }
 
+    setCheckoutPrice(cart.subtotal, 0);
+
+    applyCoupon(currentCoupon);
+
     renderMiniCart(cart);
 }
 
@@ -127,4 +131,84 @@ function fetchAndRenderCart() {
         .catch(console.error);
 }
 
-document.addEventListener('DOMContentLoaded', fetchAndRenderCart);
+function setCheckoutPrice(subtotal, discount) {
+    const subTotalSpan = document.getElementById('subtotal-price');
+    const discountSpan = document.getElementById('discount-price');
+    const totalSpan = document.getElementById('total-price');
+
+    subTotalSpan.textContent = "$" + subtotal;
+    discountSpan.textContent = "- $" + discount;
+    totalSpan.textContent = "$" + (subtotal - discount);
+}
+
+function applyCoupon(couponCode) {
+    console.log("Applying code: " + couponCode);
+    if (!couponCode || couponCode.trim() === '') {
+        return;
+    }
+
+    fetch("/cart/apply-coupon", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode }),
+    })
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                currentCoupon = couponCode;
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: "Coupon has been applied successfully.",
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
+                const {subtotal, discount} = data;
+                setCheckoutPrice(subtotal, discount);
+
+            } else {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Warning',
+                    text: data.message,
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+
+                currentCoupon = null;
+            }
+        })
+        .catch(error => {
+            console.log('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'An error has occurred, please try again!',
+                showConfirmButton: false,
+                timer: 2000
+            });
+
+            currentCoupon = null;
+        })
+}
+
+let currentCoupon;
+
+const couponInput = document.getElementById("coupon_code");
+couponInput.addEventListener('input', function (e) {
+    e.target.value = e.target.value.toUpperCase();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAndRenderCart();
+
+    const applyCouponBtn = document.querySelector('button[name="apply_coupon"]');
+    applyCouponBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        applyCoupon(couponInput.value);
+    });
+});
