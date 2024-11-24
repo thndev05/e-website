@@ -116,6 +116,8 @@ function renderCartItems(cart) {
 
         cartTable.appendChild(cartRow);
     }
+
+    renderMiniCart(cart);
 }
 
 function fetchAndRenderCart() {

@@ -13,12 +13,12 @@ function refreshCart() {
         })
         .then((cart) => {
             console.log(cart);
-            displayCart(cart);
+            renderMiniCart(cart);
         })
 
 }
 
-function displayCart(cart) {
+function renderMiniCart(cart) {
     cartItemCount.textContent = cart.products.length.toString();
 
     minicart.innerHTML = '';
