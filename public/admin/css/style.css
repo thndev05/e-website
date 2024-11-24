@@ -328,3 +328,8 @@ select.form-select[value="Cancelled"] {
   background-color: #f8d7da;
   color: #721c24;
 }
+
+.details-row table th {
+    background-color: #aeadad;
+    color: #0b0b0b;
+}

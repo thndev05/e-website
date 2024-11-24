@@ -1,5 +1,7 @@
 const User = require('../../models/user.model');
 const Order = require('../../models/order.model');
+const Product = require('../../models/product.model');
+
 
 const { prefixAdmin } = require("../../config/system");
 
@@ -11,6 +13,13 @@ module.exports.index = async (req, res) => {
       const userID = order.userID;
       const user = await User.findById(userID).lean();
 
+    for (const item of order.products) {
+        const product = await Product.findById({ _id: item.product });
+
+        item.image = product.thumbnail;
+
+    }
+      
       order.customerName = user.fullName;
   }
 

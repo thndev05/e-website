@@ -45,3 +45,26 @@ if (selectionsChangeStatus.length > 0) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const toggleButtons = document.querySelectorAll('.toggle-details');
+
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const orderId = button.getAttribute('data-order-id');
+            const detailsRow = document.getElementById(`details-${orderId}`);
+            const icon = button.querySelector('i');
+
+            detailsRow.classList.toggle('d-none');
+
+            if (detailsRow.classList.contains('d-none')) {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        });
+    });
+});
+
