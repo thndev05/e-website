@@ -1,0 +1,71 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-12">
+                        {{#if (includes role.permissions 'coupon_edit')}}
+                            <div class="card">
+                                <div class="card-title text-center mt-3">
+                                    <h3>Edit Coupon</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{prefixAdmin}}/coupons/edit/{{coupon._id}}?_method=PATCH" id="form-edit-coupon">
+                                        <div class="form-group">
+                                            <label for="code">Coupon Code:</label>
+                                            <input type="text" class="form-control" id="code" name="code" value="{{coupon.code}}" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="discountType">Discount Type:</label>
+                                            <select class="form-select form-control" id="discountType" name="discountType" required>
+                                                <option value="percentage" {{#ifEqual coupon.discountType 'percentage'}}selected{{/ifEqual}}>Percentage</option>
+                                                <option value="fixed" {{#ifEqual coupon.discountType 'fixed'}}selected{{/ifEqual}}>Fixed Amount</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="discountValue">Discount Value:</label>
+                                            <input type="number" class="form-control" id="discountValue" name="discountValue" value="{{coupon.discountValue}}" required min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="minimumOrderValue">Minimum Order Value:</label>
+                                            <input type="number" class="form-control" id="minimumOrderValue" name="minimumOrderValue" value="{{coupon.minimumOrderValue}}" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expirationDate">Expiration Date:</label>
+                                            <input type="date" class="form-control" id="expirationDate" name="expirationDate" value="{{#parseDate coupon.expirationDate 'YYYY-MM-DD'}}{{/parseDate}}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="maxUses">Maximum Uses:</label>
+                                            <input type="number" class="form-control" id="maxUses" name="maxUses" value="{{coupon.maxUses}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="maxUsesPerUser">Maximum Uses Per User:</label>
+                                            <input type="number" class="form-control" id="maxUsesPerUser" name="maxUsesPerUser" value="{{coupon.maxUsesPerUser}}">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="isActive">Is Active:</label>
+                                            <select class="form-select form-control" id="isActive" name="isActive">
+                                                <option value="true" {{#ifEqual coupon.isActive 'true'}}selected{{/ifEqual}}>Yes</option>
+                                                <option value="false" {{#ifEqual coupon.isActive 'false'}}selected{{/ifEqual}}>No</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-dark mt-5 mx-auto d-block" type="submit">Update Coupon</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('code').addEventListener('input', function (e) {
+        e.target.value = e.target.value.toUpperCase();
+    });
+</script>

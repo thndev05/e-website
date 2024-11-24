@@ -1,0 +1,73 @@
+{{> admin/sidebar}}
+{{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                    <div class="col-12">
+                        {{#if (includes role.permissions 'coupon_create')}}
+                            <div class="card">
+                                <div class="card-title text-center mt-3">
+                                    <h3>Create Coupon</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form method="POST" action="{{prefixAdmin}}/coupons/create" id="form-create-coupon">
+                                        <div class="form-group">
+                                            <label for="code">Coupon Code:</label>
+                                            <input type="text" class="form-control" id="code" name="code" placeholder="Enter Coupon Code" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="discountType">Discount Type:</label>
+                                            <select class="form-select form-control" id="discountType" name="discountType" required>
+                                                <option value="percentage">Percentage</option>
+                                                <option value="fixed">Fixed Amount</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="discountValue">Discount Value:</label>
+                                            <input type="number" class="form-control" id="discountValue" name="discountValue"
+                                                   placeholder="Enter Discount Value" required min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="minimumOrderValue">Minimum Order Value:</label>
+                                            <input type="number" class="form-control" id="minimumOrderValue" name="minimumOrderValue"
+                                                   placeholder="Enter Minimum Order Value" min="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="expirationDate">Expiration Date:</label>
+                                            <input type="date" class="form-control" id="expirationDate" name="expirationDate" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="maxUses">Maximum Uses:</label>
+                                            <input type="number" class="form-control" id="maxUses" name="maxUses" placeholder="Enter Maximum Uses">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="maxUsesPerUser">Maximum Uses Per User:</label>
+                                            <input type="number" class="form-control" id="maxUsesPerUser" name="maxUsesPerUser" placeholder="Enter Maximum Uses Per User">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="isActive">Is Active:</label>
+                                            <select class="form-select form-control" id="isActive" name="isActive">
+                                                <option value="true">Yes</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                        </div>
+                                        <button class="btn btn-dark mt-5 mx-auto d-block" type="submit">Add Coupon</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {{/if}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    document.getElementById('code').addEventListener('input', function (e) {
+        e.target.value = e.target.value.toUpperCase();
+    });
+</script>

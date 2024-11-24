@@ -39,6 +39,15 @@
                     </a>
                 </li>
             {{/if}}
+            {{#if (includes role.permissions 'coupon_view')}}
+                <li class="nav-item">
+                    <a href="{{prefixAdmin}}/coupons"
+                       class="nav-link text-light p-3 mb-2 sidebar-link
+                    {{#ifEqual currentPage "coupons"}}current{{/ifEqual}}">
+                        <i class="fa fa-tags text-light fa-lg mr-3"></i>Coupon
+                    </a>
+                </li>
+            {{/if}}
             {{#if (includes role.permissions 'role_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/roles"
