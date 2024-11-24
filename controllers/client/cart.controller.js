@@ -1,6 +1,5 @@
 const Cart = require('../../models/cart.model');
-const Product = require('../../models/product.model');
-const User = require("../../models/user.model");
+const Coupon = require('../../models/coupon.model');
 
 module.exports.index = async (req, res, next) => {
     if (!res.locals.user) {
@@ -100,6 +99,50 @@ module.exports.removeFromCart = async (req, res) => {
     }
 }
 
+module.exports.applyCoupon = async (req, res) => {
+    const { couponCode } = req.body;
+
+    try {
+        const userId = res.locals.user.id;
+        const cart = await getOrCreateCart(userId);
+
+        const coupon = await Coupon.findOne({ code: couponCode, deleted: false, isActive: true });
+        if (!coupon) {
+            res.status(404).json({message: 'Coupon not found.' });
+            return;
+        }
+
+        if (new Date() > coupon.expirationDate) {
+            res.status(400).json({message: "Coupon has expired."})
+            return;
+        }
+
+        if (coupon.maxUses && coupon.timesUsed >= (coupon.maxUses || Infinity)) {
+            res.status(403).json({message: "Coupon usage limit reached."})
+            return
+        }
+
+        const userUsage = coupon.usageByUser.find(
+            (usage) => usage.userId.toString() === userId.toString()
+        );
+
+        if (userUsage && userUsage.uses >= (coupon.maxUsesPerUser || Infinity)) {
+            res.status(403).json({message: "You have reached the usage limit for this coupon."})
+            return;
+        }
+
+        const { subtotal } = cart;
+        const { discountType, discountValue } = coupon;
+
+        const discount = Math.min(subtotal, discountType === 'percentage' ? subtotal * discountValue / 100 : discountValue);
+
+        res.status(200).json({success: true, subtotal, discount, total: subtotal - discount});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Server error', error: err.message });
+    }
+}
+
 async function getOrCreateCart(userId) {
     let cart = await Cart.findOne({ user: userId }).populate('products.product').lean();
 
@@ -116,6 +159,8 @@ async function getOrCreateCart(userId) {
             return null;
         })
         .filter(Boolean);
+
+    cart.subtotal = cart.products.reduce((n, {quantity, variant}) => n + quantity * (variant.salePrice ? variant.salePrice : variant.price), 0);
 
     return cart;
 }

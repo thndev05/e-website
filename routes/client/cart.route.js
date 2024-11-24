@@ -8,5 +8,6 @@ router.get('/detail', controller.cartDetail);
 router.post('/add', controller.addToCart);
 router.delete('/remove', controller.removeFromCart);
 router.patch('/update', controller.updateCart);
+router.post('/apply-coupon/', controller.applyCoupon);
 
 module.exports = router;
