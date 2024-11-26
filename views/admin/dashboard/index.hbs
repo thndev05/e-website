@@ -1,2 +1,90 @@
 {{> admin/sidebar}}
 {{> admin/header}}
+
+<section>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row pt-md-5 mt-md-3 mb-5">
+                    <div class="col-sm-6 col-xl-3 p-2">
+                        <div class="card cstm-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <i class="fa fa-shopping-cart fa-4x text-danger"></i>
+                                    <div class="text-right text-secondary">
+                                        <h5>Revenue</h5>
+                                        <h3 id="sales">$0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3 p-2">
+                        <div class="card cstm-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <i class="fa fa-money fa-4x text-success"></i>
+                                    <div class="text-right text-secondary">
+                                        <h5>Profit</h5>
+                                        <h3 id="profit">$0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3 p-2">
+                        <div class="card cstm-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <i class="fa fa-users fa-4x text-info"></i>
+                                    <div class="text-right text-secondary">
+                                        <h5>Users</h5>
+                                        <h3 id="users">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3 p-2">
+                        <div class="card cstm-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <i class="fa fa-truck fa-4x text-danger"></i>
+                                    <div class="text-right text-secondary">
+                                        <h5>Orders</h5>
+                                        <h3 id="orders">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-10 col-md-8 ml-auto">
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6 mt-4">
+                        <h4 class="text-muted text-center mb-3">Monthly Orders</h4>
+                        <canvas id="ordersChart" width="300" height="300"></canvas>
+                    </div>
+                    <div class="col-12 col-md-6 mt-4">
+                        <h4 class="text-muted text-center mb-3">Top Selling Products</h4>
+                        <canvas id="topProductsChart" width="300" height="300"></canvas>
+                    </div>
+
+
+                    <div class="col-12 col-md-6 mt-4">
+                        <h4 class="text-muted text-center mb-3">Monthly Revenue</h4>
+                        <canvas id="revenueChart" width="300" height="300"></canvas>
+                    </div>
+                    <div class="col-12 col-md-6 mt-4 mb-4 mb-md-0">
+                        <h4 class="text-muted text-center mb-3">Monthly Profit</h4>
+                        <canvas id="profitChart" width="300" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
