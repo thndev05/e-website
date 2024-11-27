@@ -1,4 +1,5 @@
 const User = require('../../models/user.model');
+const Order = require('../../models/order.model');
 const bcrypt = require('bcrypt');
 const updateSessionUser = require('../../helpers/session');
 
@@ -115,3 +116,29 @@ module.exports.deleteAddress = async (req, res) => {
         res.redirect('back');
     }
 };
+
+//[GET] /user/profile
+module.exports.purchase = async (req, res) => {
+    const userID = res.locals.user.id;
+    const status = req.query.status || 'all';
+
+    let filter = {
+        userID: userID
+    };
+
+    if (status !== 'all') {
+        filter.status = status;
+    }
+
+    const orders = await Order.find(filter).lean();
+
+    console.log(orders);
+
+    res.render('client/user/purchase', {
+        pageTitle: 'Purchase history',
+        breadcrumbTitle: 'Purchase',
+        breadcrumb: 'Purchase',
+        orders: orders,
+        selectedStatus: status
+    });
+}

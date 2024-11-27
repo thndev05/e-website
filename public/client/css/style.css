@@ -9096,3 +9096,107 @@ ul.cat li a:hover {
 .fa.fa-times {
 	cursor: pointer;
 }
+
+/* CSS for Order History Button */
+.btn-order-history {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	color: #fe4536;
+	border: 1px solid #fe4536;
+	background-color: transparent;
+	transition: all 0.3s ease;
+}
+
+.btn-order-history:hover {
+	background-color: #fe4536;
+	color: white;
+}
+
+.btn-order-history i {
+	font-size: 16px;
+}
+
+
+/* Khu vực chính của trang purchase */
+.purchase-page .purchase-area {
+	background-color: #f8f9fa;
+	padding: 50px 0;
+}
+
+.purchase-page h1 {
+	text-align: center;
+	font-size: 32px;
+	margin-bottom: 20px;
+	color: #343a40;
+}
+
+/* Tab điều hướng */
+.purchase-page .purchase-nav-tabs {
+	justify-content: center;
+	border-bottom: 2px solid #dee2e6;
+}
+
+.purchase-page .purchase-nav-item .purchase-nav-link {
+	color: #fe4536;
+	font-weight: 500;
+	padding: 10px 20px;
+	border: 1px solid transparent;
+	border-radius: 5px;
+	margin: 5px;
+	text-align: center;
+	transition: all 0.3s ease-in-out;
+	text-transform: uppercase;
+}
+
+.purchase-page .purchase-nav-item .purchase-nav-link:hover {
+	background-color: #fe4536;
+	color: white;
+}
+
+.purchase-page .purchase-nav-item .purchase-nav-link.active {
+	background-color: #fe4536;
+	color: white;
+	border-color: #fe4536;
+}
+
+/* Danh sách đơn hàng */
+.purchase-page .purchase-list-group {
+	margin-top: 20px;
+	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.purchase-page .purchase-list-item {
+	background-color: white;
+	border: 1px solid #dee2e6;
+	border-radius: 5px;
+	margin-bottom: 15px;
+	padding: 20px;
+	transition: all 0.2s ease-in-out;
+}
+
+.purchase-page .purchase-list-item:hover {
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.purchase-page .purchase-list-item h5 {
+	font-size: 20px;
+	margin-bottom: 10px;
+	color: #495057;
+}
+
+.purchase-page .purchase-list-item p {
+	margin: 5px 0;
+	font-size: 16px;
+	color: #6c757d;
+}
+
+/* Tin nhắn khi không có đơn hàng */
+.purchase-page .purchase-no-orders {
+	text-align: center;
+	color: #6c757d;
+	font-size: 18px;
+}
+

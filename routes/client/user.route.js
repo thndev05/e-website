@@ -11,5 +11,8 @@ router.patch('/changePassword/:id', controller.changePassword);
 router.patch('/updateAddress/:id', controller.updateAddress);
 router.delete('/deleteAddress/:id/:index', controller.deleteAddress);
 
+router.get('/purchase', controller.purchase);
+
+
 
 module.exports = router;

@@ -1,0 +1,58 @@
+{{> client/preloader}}
+{{> client/header}}
+{{> client/breadcrumb}}
+
+<main class="purchase-page">
+    <section class="purchase-area pt-100 pb-100">
+        <div class="container">
+            <h1>ORDER HISTORY</h1>
+
+            <ul class="nav nav-tabs purchase-nav-tabs">
+                <li class="nav-item purchase-nav-item">
+                    <a class="nav-link purchase-nav-link {{#ifEqual selectedStatus 'all'}}active{{/ifEqual}}"
+                       href="?status=all">All</a>
+                </li>
+                <li class="nav-item purchase-nav-item">
+                    <a class="nav-link purchase-nav-link {{#ifEqual selectedStatus 'pending'}}active{{/ifEqual}}"
+                       href="?status=pending">Pending</a>
+                </li>
+                <li class="nav-item purchase-nav-item">
+                    <a class="nav-link purchase-nav-link {{#ifEqual selectedStatus 'confirmed'}}active{{/ifEqual}}"
+                       href="?status=confirmed">Confirmed</a>
+                </li>
+                <li class="nav-item purchase-nav-item">
+                    <a class="nav-link purchase-nav-link {{#ifEqual selectedStatus 'delivering'}}active{{/ifEqual}}"
+                       href="?status=delivering">Delivering</a>
+                </li>
+                <li class="nav-item purchase-nav-item">
+                    <a class="nav-link purchase-nav-link {{#ifEqual selectedStatus 'completed'}}active{{/ifEqual}}"
+                       href="?status=completed">Completed</a>
+                </li>
+                <li class="nav-item purchase-nav-item">
+                    <a class="nav-link purchase-nav-link {{#ifEqual selectedStatus 'cancelled'}}active{{/ifEqual}}"
+                       href="?status=cancelled">Cancelled</a>
+                </li>
+            </ul>
+
+            <div class="mt-4">
+                {{#if orders.length}}
+                    <div class="purchase-list-group">
+                        {{#each orders}}
+                            <div class="purchase-list-item">
+                                <h5>ID #{{this._id}}</h5>
+                                <p><strong>Status:</strong> {{this.status}}</p>
+                                <p><strong>Date:</strong> {{parseDateTime this.createdAt}}</p>
+                                <p><strong>Total:</strong> {{this.totalAmount}} USD</p>
+                            </div>
+                        {{/each}}
+                    </div>
+                {{else}}
+                    <p class="purchase-no-orders">There are no orders</p>
+                {{/if}}
+            </div>
+        </div>
+    </section>
+</main>
+
+
+{{> client/footer}}

@@ -287,44 +287,44 @@ select.form-select option {
   color: #333;
 }
 
-select.form-select option[value="Pending"] {
+select.form-select option[value="pending"] {
   color: #ffc107;
   background-color: #fff8e1;
 }
-select.form-select option[value="Confirmed"] {
+select.form-select option[value="confirmed"] {
   color: #28a745;
   background-color: #e8f5e9;
 }
-select.form-select option[value="Delivering"] {
+select.form-select option[value="delivering"] {
   color: #17a2b8;
   background-color: #e3f2fd;
 }
-select.form-select option[value="Completed"] {
+select.form-select option[value="completed"] {
   color: #007bff;
   background-color: #e9ecef;
 }
-select.form-select option[value="Cancelled"] {
+select.form-select option[value="cancelled"] {
   color: #dc3545;
   background-color: #f8d7da;
 }
 
-select.form-select[value="Pending"] {
+select.form-select[value="pending"] {
   background-color: #fff8e1;
   color: #856404;
 }
-select.form-select[value="Confirmed"] {
+select.form-select[value="confirmed"] {
   background-color: #e8f5e9;
   color: #155724;
 }
-select.form-select[value="Delivering"] {
+select.form-select[value="delivering"] {
   background-color: #e3f2fd;
   color: #004085;
 }
-select.form-select[value="Completed"] {
+select.form-select[value="completed"] {
   background-color: #e9ecef;
   color: #0056b3;
 }
-select.form-select[value="Cancelled"] {
+select.form-select[value="cancelled"] {
   background-color: #f8d7da;
   color: #721c24;
 }
