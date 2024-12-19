@@ -5514,9 +5514,7 @@ input.main-search-input:-ms-input-placeholder {
 
 }
 
-
-
-.table-content table td.product-name {
+table td.product-name {
 
   font-size: 16px;
 
@@ -5524,16 +5522,11 @@ input.main-search-input:-ms-input-placeholder {
 
   text-transform: capitalize;
 
-}
-
-
-
-.table-content table td.product-name a:hover {
-
-  color: #fe4536;
+	vertical-align: top;
+	position: relative;
+	display: block;
 
 }
-
 
 
 .table-content table td {
@@ -5548,8 +5541,6 @@ input.main-search-input:-ms-input-placeholder {
 
 }
 
-
-
 .table-content table th, .table-content table td {
 
   border-bottom: 1px solid #eaedff;
@@ -5557,6 +5548,38 @@ input.main-search-input:-ms-input-placeholder {
   border-right: 1px solid #eaedff;
 
 }
+
+.product-info {
+	display: flex;
+	flex-direction: column;
+	font-size: 16px;
+	padding-left: 5px;
+}
+
+.product-info .amount{
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	transform: translateY(-50%);
+	/*font-weight: bold;*/
+	/*color: #333;*/
+}
+
+.product-info .product-name {
+	font-weight: bold;
+}
+
+.product-info .product-variant {
+	font-style: italic;
+	color: #666;
+}
+
+.table-content table td.product-name a:hover {
+
+	color: #fe4536;
+
+}
+
 
 
 
@@ -6284,8 +6307,6 @@ p.checkout-coupon input[type="text"] {
 
 }
 
-
-
 .your-order-table table th, .your-order-table table td {
 
   border-bottom: 1px solid #eaedff;
@@ -6294,15 +6315,13 @@ p.checkout-coupon input[type="text"] {
 
   color: #6f7172;
 
-  font-size: 14px;
+  font-size: 18px;
 
   padding: 15px 0;
 
   text-align: left;
 
 }
-
-
 
 @media (max-width: 767px) {
 
@@ -6333,7 +6352,6 @@ p.checkout-coupon input[type="text"] {
   width: 250px;
 
 }
-
 
 
 .panel-body > p {
@@ -6374,7 +6392,8 @@ p.checkout-coupon input[type="text"] {
 
   border-bottom: 0;
 
-  font-size: 14px;
+  font-size: 18px;
+	font-weight: bold;
 
 }
 
@@ -6394,7 +6413,9 @@ p.checkout-coupon input[type="text"] {
 
 }
 
-
+.cart_item .product-total .amount {
+	font-size: 17px;
+}
 
 .your-order-table table tr.order-total td span {
 
@@ -6516,14 +6537,9 @@ p.checkout-coupon input[type="text"] {
 
 }
 
-
-
-.payment-method .accordion .card:first-of-type {
-
-  border: 1px solid #eaedff;
-
+.payment-method .card.active {
+	border-color: #FE4536;
 }
-
 
 
 .card-header:first-child {
@@ -6539,7 +6555,14 @@ p.checkout-coupon input[type="text"] {
   background-color: #ffffff;
 
   border-bottom: 1px solid #eaedff;
+}
 
+.payment-method .card-header label {
+	font-weight: bold;
+}
+
+.payment-method .payment-method-radio-input {
+	display: none;
 }
 
 
