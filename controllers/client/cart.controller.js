@@ -1,5 +1,6 @@
 const Cart = require('../../models/cart.model');
 const Coupon = require('../../models/coupon.model');
+const CartHelper = require('../../helpers/cart');
 
 module.exports.index = async (req, res, next) => {
     if (!res.locals.user) {
@@ -8,7 +9,7 @@ module.exports.index = async (req, res, next) => {
         return;
     }
 
-    const cart = await getOrCreateCart(res.locals.user.id);
+    const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
 
     res.render('client/cart/index', {
         title: 'Cart',
@@ -26,7 +27,7 @@ module.exports.cartDetail = async function (req, res, next) {
         return;
     }
 
-    const cart = await getOrCreateCart(res.locals.user.id);
+    const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
     res.json(cart);
 }
 
@@ -35,7 +36,7 @@ module.exports.addToCart = async (req, res) => {
         const userId = res.locals.user.id;
         const { productId, variantSKU, quantity } = req.body;
 
-        const cart = await getOrCreateCart(userId);
+        const cart = await CartHelper.getOrCreateCart(userId);
 
         const productIndex = cart.products.findIndex(p => p.product._id.toString() === productId && p.variantSKU === variantSKU);
 
@@ -59,7 +60,7 @@ module.exports.updateCart = async (req, res) => {
 
     try {
         const userId = res.locals.user.id;
-        const cart = await getOrCreateCart(userId);
+        const cart = await CartHelper.getOrCreateCart(userId);
 
         const productIndex = cart.products.findIndex(p => p.product._id.toString() === productId && p.variantSKU === variantSKU);
 
@@ -87,7 +88,7 @@ module.exports.removeFromCart = async (req, res) => {
 
     try {
         const userId = res.locals.user.id;
-        const cart = await getOrCreateCart(userId);
+        const cart = await CartHelper.getOrCreateCart(userId);
 
         cart.products = cart.products.filter(p => !(p.product._id.toString() === productId && p.variantSKU === variantSKU));
 
@@ -104,7 +105,7 @@ module.exports.applyCoupon = async (req, res) => {
 
     try {
         const userId = res.locals.user.id;
-        const cart = await getOrCreateCart(userId);
+        const cart = await CartHelper.getOrCreateCart(userId);
 
         const coupon = await Coupon.findOne({ code: couponCode, deleted: false, isActive: true });
         if (!coupon) {
@@ -141,26 +142,4 @@ module.exports.applyCoupon = async (req, res) => {
         console.error(err);
         res.status(500).json({ message: 'Server error', error: err.message });
     }
-}
-
-async function getOrCreateCart(userId) {
-    let cart = await Cart.findOne({ user: userId }).populate('products.product').lean();
-
-    if (!cart) {
-        cart = await Cart.create({ user: userId, products: [] });
-    }
-
-    cart.products = cart.products
-        .map(p => {
-            const variant = p.product?.variants?.find(v => v.sku === p.variantSKU);
-            if (variant) {
-                return { ...p, variant };
-            }
-            return null;
-        })
-        .filter(Boolean);
-
-    cart.subtotal = cart.products.reduce((n, {quantity, variant}) => n + quantity * (variant.salePrice ? variant.salePrice : variant.price), 0);
-
-    return cart;
 }
