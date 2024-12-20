@@ -811,43 +811,80 @@ document.addEventListener("DOMContentLoaded", () => {
     const wardSelect = document.getElementById("ward");
 
     // Fetch the administrative data from the provided API
-    const apiUrl = "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+    const apiUrl = "/client/json/geographicalData.json";
     let provinceData = [];
 
-    // Create an async function to fetch data
+    // Load Provinces into select
+    function loadProvinces(data) {
+      const fragment = document.createDocumentFragment();
+      data.forEach(province => {
+        const option = document.createElement("option");
+        option.value = province.FullName;
+        option.textContent = province.FullName;
+        fragment.appendChild(option);
+      });
+      provinceSelect.appendChild(fragment);
+    }
+
+// Update Districts based on selected Province
+    function updateDistricts() {
+      const provinceFullName = provinceSelect.value;
+
+      // Clear old options
+      districtSelect.innerHTML = "<option value=''>District</option>";
+      wardSelect.innerHTML = "<option value=''>Ward</option>";
+
+      if (provinceFullName) {
+        const province = provinceData.find(p => p.FullName === provinceFullName);
+        if (province) {
+          const fragment = document.createDocumentFragment();
+          province.District.forEach(district => {
+            const option = document.createElement("option");
+            option.value = district.FullName;
+            option.textContent = district.FullName;
+            fragment.appendChild(option);
+          });
+          districtSelect.appendChild(fragment);
+        }
+      }
+    }
+
+// Update Wards based on selected District
+    function updateWards() {
+      const provinceFullName = provinceSelect.value;
+      const districtFullName = districtSelect.value;
+
+      // Clear old options
+      wardSelect.innerHTML = "<option value=''>Ward</option>";
+
+      if (provinceFullName && districtFullName) {
+        const province = provinceData.find(p => p.FullName === provinceFullName);
+        const district = province?.District.find(d => d.FullName === districtFullName);
+        if (district) {
+          const fragment = document.createDocumentFragment();
+          district.Ward.forEach(ward => {
+            const option = document.createElement("option");
+            option.value = ward.FullName;
+            option.textContent = ward.FullName;
+            fragment.appendChild(option);
+          });
+          wardSelect.appendChild(fragment);
+        }
+      }
+    }
+
+
+    // Fetch administrative data and initialize
     async function fetchAdministrativeData() {
       try {
         const response = await fetch(apiUrl);
         provinceData = await response.json();
 
-        // Populate province dropdown
-        populateSelect(provinceSelect, provinceData, 'Name');
+        loadProvinces(provinceData);
 
-        // Event listener for province selection
-        provinceSelect.addEventListener("change", (e) => {
-          const selectedProvince = e.target.value;
-          const districts = provinceData.find(p => p.Name === selectedProvince)?.Districts || [];
-
-          populateSelect(districtSelect, districts, 'Name');
-          districtSelect.disabled = false;
-
-          // Reset ward select when province changes
-          wardSelect.innerHTML = '<option value="">Ward</option>';
-          wardSelect.disabled = true;
-        });
-
-        // Event listener for district selection
-        districtSelect.addEventListener("change", (e) => {
-          const selectedProvince = provinceSelect.value;
-          const selectedDistrict = e.target.value;
-
-          const districts = provinceData.find(p => p.Name === selectedProvince)?.Districts || [];
-          const wards = districts.find(d => d.Name === selectedDistrict)?.Wards || [];
-
-          populateSelect(wardSelect, wards, 'Name');
-          wardSelect.disabled = false;
-        });
-
+        // Add event listeners
+        provinceSelect.addEventListener("change", updateDistricts);
+        districtSelect.addEventListener("change", updateWards);
       } catch (error) {
         console.error("Error fetching administrative data:", error);
       }
@@ -864,17 +901,6 @@ document.addEventListener("DOMContentLoaded", () => {
       addressForm.style.display = "none";
       addNewAddressButton.style.display = "block";
     });
-
-    // Function to populate select elements
-    function populateSelect(selectElement, data, key) {
-      selectElement.innerHTML = `<option value="">Select ${selectElement.id.charAt(0).toUpperCase() + selectElement.id.slice(1)}</option>`;
-      data.forEach(item => {
-        const option = document.createElement("option");
-        option.value = item.Name;
-        option.text = item.Name;
-        selectElement.appendChild(option);
-      });
-    }
 
     // Call the async function to fetch and populate data
     fetchAdministrativeData();

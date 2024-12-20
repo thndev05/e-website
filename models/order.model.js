@@ -10,11 +10,15 @@ const orderSchema = new mongoose.Schema({
             price: { type: Number, required: true }
         }
     ],
-    shippingAddress: {
-        type: String,
-        required: true
+    shippingInfo: {
+        name: String,
+        phone: String,
+        province: String,
+        district: String,
+        ward: String,
+        street: String
     },
-    paymentMethod: { type: String, enum: ['online banking', 'paypal', 'cash on delivery'], required: true },
+    paymentMethod: { type: String, enum: ['banking', 'cash_on_delivery'], required: true },
     totalAmount: { type: Number, required: true },
     status: {
         type: String,
