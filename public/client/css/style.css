@@ -6116,7 +6116,7 @@ p.checkout-coupon input[type="text"] {
 
 
 
-.checkout-form-list input[type="text"], .checkout-form-list input[type="password"], .checkout-form-list input[type="email"] {
+.checkout-form-list input[type="text"], .checkout-form-list input[type="password"], .checkout-form-list input[type="email"], .checkout-form-list select {
 
   background: #ffffff;
 
@@ -6129,7 +6129,6 @@ p.checkout-coupon input[type="text"] {
   padding: 0 0 0 10px;
 
   width: 100%;
-
 }
 
 
@@ -6138,7 +6137,8 @@ p.checkout-coupon input[type="text"] {
 
 .checkout-form-list input[type="password"]::-moz-placeholder,
 
-.checkout-form-list input[type="email"]::-moz-placeholder {
+.checkout-form-list input[type="email"]::-moz-placeholder,
+.checkout-form-list input[type="email"]::-moz-placeholder{
 
   color: #6f7172;
 
@@ -6174,7 +6174,48 @@ p.checkout-coupon input[type="text"] {
 
 }
 
+.address-card {
+	border: 1px solid #eaedff;
+	border-radius: 5px;
+	padding: 15px;
+	cursor: pointer;
+	margin-bottom: 15px;
+	transition: border-color 0.3s;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 
+.address-card:hover {
+	border-color: #fe4536;
+}
+
+.address-card.active {
+	border-color: #fe4536;
+	background-color: #fef5e7;
+}
+
+.address-card input[type="radio"] {
+	display: none;
+}
+
+.shipping-address {
+	padding-left: 0;
+	padding-right: 0;
+	max-height: 0;
+	overflow: hidden;
+	transform: translateY(-20px);
+	transition: max-height 0.5s ease, transform 0.5s ease;
+}
+
+.shipping-address.show {
+	max-height: 500px;
+	transform: translateY(0);
+}
+
+.shipping-address select {
+	font-size: 14px;
+}
 
 .create-acc label {
 

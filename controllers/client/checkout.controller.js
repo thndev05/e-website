@@ -1,6 +1,7 @@
 const Cart = require('../../models/cart.model');
 const Coupon = require('../../models/coupon.model');
 const CartHelper = require('../../helpers/cart')
+const User = require("../../models/user.model");
 
 module.exports.index = async (req, res, next) => {
     if (!res.locals.user) {
@@ -12,6 +13,7 @@ module.exports.index = async (req, res, next) => {
     const { couponCode } = req.query;
 
     const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
+    const user = await User.findOne({ _id: res.locals.user.id }).lean();
 
     let cartSubTotal = 0;
     for (const cartItem of cart.products) {
@@ -41,6 +43,7 @@ module.exports.index = async (req, res, next) => {
         isHome: false,
         breadcrumbTitle: 'Checkout',
         breadcrumb: 'Checkout',
+        user: user,
         cart: cart,
         cartSubTotal: cartSubTotal,
         discount: discount,
