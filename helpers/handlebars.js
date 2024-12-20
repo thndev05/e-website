@@ -119,6 +119,23 @@ const multiplier = function (a, b) {
     return Number(a) * Number(b);
 }
 
+const currency = function (value) {
+    if (typeof value !== 'number') {
+        value = parseFloat(value) || 0; // Chuyển sang số nếu không phải số
+    }
+    return new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(value);
+}
+
+const currencyUSD = function (value) {
+    if (typeof value !== 'number') {
+        value = parseFloat(value) || 0;
+    }
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+}
+
 module.exports = {
   ifEqual,
   add, 
@@ -135,4 +152,6 @@ module.exports = {
   range,
   greaterThan,
   multiplier,
+    currency,
+    currencyUSD,
 };
