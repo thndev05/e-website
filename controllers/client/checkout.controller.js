@@ -1,7 +1,7 @@
-const Cart = require('../../models/cart.model');
 const Coupon = require('../../models/coupon.model');
 const CartHelper = require('../../helpers/cart')
 const User = require("../../models/user.model");
+const Order = require("../../models/order.model");
 
 module.exports.index = async (req, res, next) => {
     if (!res.locals.user) {
@@ -51,6 +51,73 @@ module.exports.index = async (req, res, next) => {
         couponCode: couponCode,
         alert: alert,
     });
+}
+
+module.exports.process = async(req, res) => {
+    const {fullName, phone, province, district, ward, street, notes, couponCode, paymentMethod} = req.body;
+
+    const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
+    const user = await User.findOne({ _id: res.locals.user.id }).lean();
+
+    let cartSubTotal = 0;
+    for (const cartItem of cart.products) {
+        const variant = cartItem.variant;
+
+        cartItem.effectivePrice = getEffectivePrice(variant);
+        cartItem.variantDescription = getVariantDescription(variant);
+
+        let price = Number(cartItem.effectivePrice) * Number(cartItem.quantity);
+        cartItem.price = price;
+        cartSubTotal += price;
+    }
+    cart.cartSubTotal = cartSubTotal;
+
+    let discount = 0;
+    let alert;
+    try {
+        discount = await getCouponDiscount(res.locals.user.id, cart, couponCode);
+    } catch (error) {
+        alert = error.message;
+        console.error(error);
+
+        res.render('client/checkout/index', {
+            title: 'Checkout',
+            isHome: false,
+            breadcrumbTitle: 'Checkout',
+            breadcrumb: 'Checkout',
+            alert: alert,
+        });
+    }
+
+    let coupon;
+    if (discount > 0) {
+        coupon = await Coupon.findOne({ code: couponCode });
+        if (!coupon) {
+            throw new Error('Coupon not found.');
+        }
+    }
+
+    const data = {
+        userID: res.locals.user.id,
+        products: cart.products,
+        shippingInfo: {
+            name: fullName,
+            phone,
+            province,
+            district,
+            ward,
+            street
+        },
+        paymentMethod,
+        totalAmount: cartSubTotal - discount,
+        coupon: coupon ? coupon._id : null,
+        notes,
+    }
+
+    const order = await Order.create(data);
+    console.log(order);
+
+    res.redirect("/user/purchase?status=all");
 }
 
 function getEffectivePrice(variant) {

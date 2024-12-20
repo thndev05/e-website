@@ -5,7 +5,7 @@
 <!-- checkout-area start -->
 <section class="checkout-area pb-70">
     <div class="container">
-        <form action="#">
+        <form action="checkout/process/" method="post">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="checkbox-form">
@@ -13,8 +13,8 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="checkout-form-list">
-                                    <label>Name <span class="required">*</span></label>
-                                    <input type="text" placeholder="" value="{{user.fullName}}"/>
+                                    <label for="fullName">Name <span class="required">*</span></label>
+                                    <input type="text" id="fullName" name="fullName" value="{{user.fullName}}"/>
                                 </div>
                             </div>
 
@@ -41,7 +41,7 @@
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label for="phone">Phone <span class="required">*</span></label>
-                                        <input type="text" id="phone" class="phone" placeholder="Phone" />
+                                        <input type="text" id="phone" name="phone" class="phone" placeholder="Phone"/>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -81,8 +81,8 @@
                         </div>
                         <div class="order-notes">
                             <div class="checkout-form-list">
-                                <label>Order Notes</label>
-                                <textarea id="checkout-mess" cols="30" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                                <label for="checkout-mess">Order Notes</label>
+                                <textarea id="checkout-mess" name="notes" cols="30" rows="10" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
                             </div>
                         </div>
                     </div>
@@ -136,6 +136,8 @@
                             </table>
                         </div>
 
+                        <input type="text" hidden="hidden" name="couponCode" value={{couponCode}}>
+
                         <div class="payment-method">
                             <h3>Payment Method</h3>
                             <div class="accordion" id="accordionExample">
@@ -143,7 +145,7 @@
                                 <div class="card active">
                                     <div class="card-header" id="headingOne">
                                         <h5 class="mb-0 d-flex align-items-center">
-                                            <input type="radio" name="paymentMethod" id="bankTransfer" class="payment-method-radio-input" checked>
+                                            <input type="radio" name="paymentMethod" id="bankTransfer" class="payment-method-radio-input" value="online_banking" checked>
                                             <label for="bankTransfer" class="w-100 m-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                                 Direct Bank Transfer
                                             </label>
@@ -159,7 +161,7 @@
                                 <div class="card">
                                     <div class="card-header" id="headingTwo">
                                         <h5 class="mb-0 d-flex align-items-center">
-                                            <input type="radio" name="paymentMethod" id="cashOnDelivery" class="payment-method-radio-input">
+                                            <input type="radio" name="paymentMethod" id="cashOnDelivery" class="payment-method-radio-input" value="cash_on_delivery">
                                             <label for="cashOnDelivery" class="w-100 m-0" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                                 Cash on Delivery
                                             </label>
@@ -330,6 +332,7 @@
         {{#if alert}}
             alert("{{alert}}");
 
+            // Reset url params
             const url = window.location.origin + window.location.pathname;
             window.history.replaceState({}, document.title, url);
             window.location.reload();
