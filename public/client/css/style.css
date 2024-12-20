@@ -5524,8 +5524,11 @@ table td.product-name {
 
 	vertical-align: top;
 	position: relative;
-	display: block;
 
+}
+
+table.checkout-table td.product-name {
+	display: block;
 }
 
 
@@ -5538,6 +5541,8 @@ table td.product-name {
   vertical-align: middle;
 
   font-size: 16px;
+
+	height: 100%;
 
 }
 
