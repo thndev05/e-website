@@ -4,6 +4,7 @@ const Product = require('../../models/product.model');
 
 const bcrypt = require('bcrypt');
 const updateSessionUser = require('../../helpers/session');
+const {log} = require("debug");
 
 //[GET] /user/profile
 module.exports.profile = async (req, res) => {
@@ -151,3 +152,23 @@ module.exports.purchase = async (req, res) => {
         selectedStatus: status
     });
 }
+
+//[PATCH] /user/purchase/cancel/:orderId
+module.exports.cancelOrder = async (req, res) => {
+    const { orderId } = req.body; // Lấy orderId từ req.body
+    console.log('Order ID:', orderId);
+
+    try {
+        const result = await Order.findByIdAndUpdate(orderId, { status: 'cancelled' });
+
+        if (result) {
+            return res.json({ success: true, message: 'Order has been cancelled successfully!' });
+        } else {
+            return res.json({ success: false, message: 'Order not found or cannot be cancelled!' });
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).json({ success: false, message: 'An error occurred while cancelling the order!' });
+    }
+};
+

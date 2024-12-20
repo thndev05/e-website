@@ -137,6 +137,13 @@ const currencyUSD = function (value) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 }
 
+const getLast5Chars = function (str) {
+    if (typeof str !== 'string')
+        return '';
+
+    return str.slice(-5);
+};
+
 module.exports = {
   ifEqual,
   add,
@@ -155,4 +162,5 @@ module.exports = {
   multiplier,
   currency,
   currencyUSD,
+  getLast5Chars
 };

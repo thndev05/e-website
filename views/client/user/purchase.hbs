@@ -73,26 +73,22 @@
                                     </table>
 
                                     {{#ifEqual this.status "pending"}}
-                                        <div class="btn-cancel-container">
-                                            <form action="/user/purchase/cancel/{{this._id}}" method="POST">
-                                                <button type="submit" class="btn btn-danger btn-cancel-order mt-3">
-                                                    <i class="fas fa-times"></i> Cancel Order
-                                                </button>
-                                            </form>
+                                        <div class="btn-cancel-container btn-cancel" data-orderId="{{this._id}}">
+                                            <button type="submit" class="btn btn-danger btn-cancel-order mt-3">
+                                                <i class="fas fa-times"></i> Cancel Order
+                                            </button>
                                         </div>
                                     {{else ifEqual this.status "confirmed"}}
-                                        <div class="btn-cancel-container">
+                                        <div class="btn-cancel-container btn-cancel" data-orderId="{{this._id}}">
                                             <button type="submit" class="btn btn-danger btn-cancel-order mt-3">
                                                 <i class="fas fa-times"></i> Cancel Order
                                             </button>
                                         </div>
                                     {{else}}
                                         <div class="btn-cancel-container">
-                                            <form action="/user/purchase/cancel/{{this._id}}" method="POST">
-                                                <button type="submit" class="btn btn-danger btn-cancel-order mt-3 btn-disabled" disabled>
-                                                    <i class="fas fa-times"></i> Cancel Order
-                                                </button>
-                                            </form>
+                                            <button type="submit" class="btn btn-danger btn-cancel-order mt-3 btn-disabled" disabled>
+                                                <i class="fas fa-times"></i> Cancel Order
+                                            </button>
                                         </div>
                                     {{/ifEqual}}
                                 </div>

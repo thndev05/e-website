@@ -12,6 +12,7 @@ router.patch('/updateAddress/:id', controller.updateAddress);
 router.delete('/deleteAddress/:id/:index', controller.deleteAddress);
 
 router.get('/purchase', controller.purchase);
+router.patch('/purchase/cancel/:orderId', controller.cancelOrder);
 
 
 
