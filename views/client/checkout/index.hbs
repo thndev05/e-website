@@ -21,7 +21,7 @@
                             {{#each user.address}}
                                <div class="col-md-12">
                                    <label class="address-card">
-                                       <input type="radio" name="address" value="address{{@index}}">
+                                       <input type="radio" name="address" value="{{@index}}">
                                        <div>
                                            <p><strong>Phone:</strong> {{this.phone}}</p>
                                            <p><strong>Address:</strong> {{this.street}}, {{this.ward}}, {{this.district}}, {{this.province}}</p>
@@ -40,8 +40,8 @@
                             <div class="col-md-12 shipping-address">
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
-                                        <label>Phone <span class="required">*</span></label>
-                                        <input type="text" placeholder="Phone" />
+                                        <label for="phone">Phone <span class="required">*</span></label>
+                                        <input type="text" id="phone" class="phone" placeholder="Phone" />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -75,17 +75,6 @@
                                     <div class="checkout-form-list">
                                         <label for="street">Street<span class="required">*</span></label>
                                         <input type="text" id="street" name="street" placeholder="Street address" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="checkout-form-list">
-                                        <input type="text" placeholder="Apartment, suite, unit etc. (optional)" />
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="checkout-form-list">
-                                        <label>Town / City <span class="required">*</span></label>
-                                        <input type="text" placeholder="Town / City" />
                                     </div>
                                 </div>
                             </div>
@@ -202,71 +191,93 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
+        const phoneInput = document.getElementById("phone");
+        const streetInput = document.getElementById("street");
+
+
         fetch("/client/json/geographicalData.json")
                 .then(response => response.json())
-                .then(data => {
+                .then(provinceData => {
                     function loadProvinces() {
-                        const provinceSelect = document.getElementById("province");
-                        data.forEach(province => {
+                        const fragment = document.createDocumentFragment();
+                        provinceData.forEach(province => {
                             const option = document.createElement("option");
-                            option.value = province.Code;
+                            option.value = province.FullName;
                             option.textContent = province.FullName;
-                            provinceSelect.appendChild(option);
+                            fragment.appendChild(option);
                         });
+                        provinceSelect.appendChild(fragment);
                     }
 
                     function updateDistricts() {
-                        const provinceCode = document.getElementById("province").value;
-                        const districtSelect = document.getElementById("district");
-                        const wardSelect = document.getElementById("ward");
+                        const provinceFullName = provinceSelect.value;
 
-
+                        // Clear old options
                         districtSelect.innerHTML = "<option value=''>Select District</option>";
                         wardSelect.innerHTML = "<option value=''>Select Ward</option>";
 
-                        if (provinceCode) {
-                            const province = data.find(p => p.Code === provinceCode);
+                        if (provinceFullName) {
+                            const province = provinceData.find(p => p.FullName === provinceFullName);
                             if (province) {
+                                const fragment = document.createDocumentFragment();
                                 province.District.forEach(district => {
                                     const option = document.createElement("option");
-                                    option.value = district.Code;
+                                    option.value = district.FullName;
                                     option.textContent = district.FullName;
-                                    districtSelect.appendChild(option);
+                                    fragment.appendChild(option);
                                 });
+                                districtSelect.appendChild(fragment);
                             }
                         }
                     }
 
                     function updateWards() {
-                        const districtCode = document.getElementById("district").value;
-                        const wardSelect = document.getElementById("ward");
+                        const provinceFullName = provinceSelect.value;
+                        const districtFullName = districtSelect.value;
 
+                        // Clear old options
+                        wardSelect.innerHTML = "<option value=''>Select Ward</option>";
 
-                        wardSelect.innerHTML = "<option value=''>Chọn Phường/Xã</option>";
-
-                        if (districtCode) {
-                            const provinceCode = document.getElementById("province").value;
-                            const province = data.find(p => p.Code === provinceCode);
-                            const district = province.District.find(d => d.Code === districtCode);
+                        if (provinceFullName && districtFullName) {
+                            const province = provinceData.find(p => p.FullName === provinceFullName);
+                            const district = province?.District.find(d => d.FullName === districtFullName);
                             if (district) {
+                                const fragment = document.createDocumentFragment();
                                 district.Ward.forEach(ward => {
                                     const option = document.createElement("option");
-                                    option.value = ward.Code;
+                                    option.value = ward.FullName;
                                     option.textContent = ward.FullName;
-                                    wardSelect.appendChild(option);
+                                    fragment.appendChild(option);
                                 });
+                                wardSelect.appendChild(fragment);
                             }
                         }
                     }
 
                     loadProvinces();
 
-                    const provinceSelector = document.getElementById("province");
-                    provinceSelector.addEventListener("change", () => updateDistricts());
-
-                    const districtSelector = document.getElementById("district");
-                    districtSelector.addEventListener("change", () => updateWards())
+                    provinceSelect.addEventListener("change", () => updateDistricts());
+                    districtSelect.addEventListener("change", () => updateWards())
                 });
+
+        function selectOrAddValue(selectElement, value, text = value) {
+            const option = Array.from(selectElement.options).find(opt => opt.value === value);
+
+            if (option) {
+                selectElement.value = value;
+            } else {
+                const newOption = document.createElement("option");
+                newOption.value = value;
+                newOption.textContent = text;
+                selectElement.appendChild(newOption);
+
+                selectElement.value = value;
+            }
+        }
 
         const shippingAddressDiv = document.querySelector('.shipping-address');
         document.querySelectorAll('.address-card').forEach(card => {
@@ -279,9 +290,27 @@
                 const value = radio.value;
 
                 if (value === "new-address") {
-                    shippingAddressDiv.classList.add("show")
+                    shippingAddressDiv.classList.add("show");
+
+                    phoneInput.value = "";
+                    streetInput.value = "";
+
+                    provinceSelect.selectedIndex = 0;
+
+                    districtSelect.innerHTML = "<option value=''>Select District</option>";
+                    wardSelect.innerHTML = "<option value=''>Select Ward</option>";
                 } else {
-                    shippingAddressDiv.classList.remove("show")
+                    shippingAddressDiv.classList.remove("show");
+
+                    const addresses = {{{JSONstringify user.address}}};
+                    const address = addresses[radio.value];
+
+                    selectOrAddValue(provinceSelect, address.province);
+                    selectOrAddValue(districtSelect, address.district);
+                    selectOrAddValue(wardSelect, address.ward);
+
+                    phoneInput.value = address.phone;
+                    streetInput.value = address.street;
                 }
             });
         });
