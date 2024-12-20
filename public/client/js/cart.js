@@ -211,4 +211,15 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         applyCoupon(couponInput.value);
     });
+
+    const checkoutBtn = document.querySelector('.checkout-btn');
+    checkoutBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        if (currentCoupon && currentCoupon.length > 0) {
+            window.location.href = "checkout/?couponCode=" + currentCoupon;
+        } else {
+            window.location.href = "checkout/";
+        }
+    });
 });

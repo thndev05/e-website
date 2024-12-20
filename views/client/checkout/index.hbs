@@ -71,7 +71,7 @@
                     <div class="your-order mb-30">
                         <h3>Your Order</h3>
                         <div class="your-order-table table-responsive">
-                            <table>
+                            <table class="checkout-table">
                                 <thead>
                                     <tr>
                                         <th class="product-name font-weight-bold">Product</th>
@@ -79,39 +79,29 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                {{#each cart.products}}
                                     <tr class="cart_item">
                                         <td class="product-name">
                                             <div class="product-info">
-                                                <span class="product-name">Product Name</span>
-                                                <span class="product-variant">Blue</span>
-                                                <span class="amount"><strong class="product-quantity"> × 1</strong></span>
+                                                <span class="product-name">{{this.product.name}}</span>
+                                                <span class="product-variant">{{this.variantDescription}}</span>
+                                                <span class="amount"><strong class="product-quantity"> × {{this.quantity}}</strong></span>
                                             </div>
                                         </td>
                                         <td class="product-total">
-                                            <span class="amount">$165.00</span>
+                                            <span class="amount">{{#currencyUSD this.totalPrice}}{{/currencyUSD}}</span>
                                         </td>
                                     </tr>
-                                    <tr class="cart_item">
-                                        <td class="product-name">
-                                            <div class="product-info">
-                                                <span class="product-name">Product Name</span>
-                                                <span class="product-variant">Blue</span>
-                                                <span class="amount"><strong class="product-quantity"> × 1</strong></span>
-                                            </div>
-                                        </td>
-                                        <td class="product-total">
-                                            <span class="amount">$165.00</span>
-                                        </td>
-                                    </tr>
+                                {{/each}}
                                 </tbody>
                                 <tfoot>
                                     <tr class="cart-subtotal">
                                         <th>Cart Subtotal</th>
-                                        <td><span class="amount">$215.00</span></td>
+                                        <td><span class="amount">{{#currencyUSD cartSubTotal}}{{/currencyUSD}}</span></td>
                                     </tr>
                                     <tr class="coupon-discount">
-                                        <th>Discount</th>
-                                        <td>- <span class="amount">$20.00</span></td>
+                                        <th>Discount {{#if (greaterThan discount 0)}}({{couponCode}}){{/if}}</th>
+                                        <td>- <span class="amount">{{#currencyUSD discount}}{{/currencyUSD}}</span></td>
                                     </tr>
                                     <tr class="shipping">
                                         <th>Shipping Fee</th>
@@ -119,7 +109,7 @@
                                     </tr>
                                     <tr class="order-total">
                                         <th>Order Total</th>
-                                        <td><strong><span class="amount">$215.00</span></strong>
+                                        <td><strong><span class="amount">{{#currencyUSD total}}{{/currencyUSD}}</span></strong>
                                         </td>
                                     </tr>
                                 </tfoot>
@@ -191,5 +181,12 @@
                 }
             });
         });
+        {{#if alert}}
+            alert("{{alert}}");
+
+            const url = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, url);
+            window.location.reload();
+        {{/if}}
     })
 </script>
