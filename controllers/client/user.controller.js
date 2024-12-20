@@ -1,5 +1,7 @@
 const User = require('../../models/user.model');
 const Order = require('../../models/order.model');
+const Product = require('../../models/product.model');
+
 const bcrypt = require('bcrypt');
 const updateSessionUser = require('../../helpers/session');
 
@@ -117,7 +119,7 @@ module.exports.deleteAddress = async (req, res) => {
     }
 };
 
-//[GET] /user/profile
+//[GET] /user/purchase
 module.exports.purchase = async (req, res) => {
     const userID = res.locals.user.id;
     const status = req.query.status || 'all';
@@ -131,8 +133,15 @@ module.exports.purchase = async (req, res) => {
     }
 
     const orders = await Order.find(filter).lean();
+    for (const order of orders) {
+        for (const p of order.products) {
+            console.log(p);
+            const findProduct = await Product.findById(p.product).lean();
+            console.log(findProduct);
+            p.name = findProduct.name;
+        }
+    }
 
-    console.log(orders);
 
     res.render('client/user/purchase', {
         pageTitle: 'Purchase history',
