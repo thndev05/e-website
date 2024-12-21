@@ -1,13 +1,11 @@
 const moment = require('moment-timezone');
 const Order = require('../models/order.model');
 
-module.exports.isWorking = true;
-
 let accessToken = null;
 let accessTokenExpiry = null;
 
 module.exports.check = async function () {
-    if (!module.exports.isWorking) {
+    if (module.exports.isWorking === false) {
         return;
     }
 
@@ -61,6 +59,7 @@ module.exports.check = async function () {
 
     } catch (error) {
         console.error("Lỗi khi kiểm tra lịch sử giao dịch:", error.message);
+        console.error(error);
         module.exports.isWorking = false;
     }
 

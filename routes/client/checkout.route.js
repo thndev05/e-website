@@ -8,5 +8,4 @@ router.post('/process', controller.process);
 
 router.get('/qr', controller.getQR);
 
-
 module.exports = router;

@@ -91,7 +91,7 @@ app.use(function(err, req, res, next) {
 // Register timer jobs
 setInterval(async () => {
     await onlineBakingValidator.check();
-}, 20000);
+}, 60000);
 onlineBakingValidator.check();
 
 module.exports = app;

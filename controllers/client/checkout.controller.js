@@ -155,8 +155,7 @@ module.exports.process = async (req, res) => {
             cart.products = [];
             await Cart.updateOne({ _id: cart._id }, { $set: { products: [] } }, { session });
 
-            const order = await Order.create(orderData);
-            console.log(order);
+            await Order.create(orderData);
 
             // Commit transaction and create order
             await session.commitTransaction();
@@ -225,15 +224,34 @@ async function getCouponDiscount(userId, cart, couponCode) {
 }
 
 
-module.exports.getQR = async (req, res) => {
-    const qrUrl = 'https://api.vietqr.io/image/970423-khanhq142-aW8wCoc.jpg?amount=1000';
+module.exports.getQR = async (req, res, next) => {
+    try {
+        const {transactionID} = req.query;
 
-    res.render('client/checkout/qr', {
-        title: 'QR Payment',
-        isHome: false,
-        breadcrumbTitle: 'QR Payment',
-        breadcrumb: 'QR Payment',
-        qrUrl,
-    });
-};
+        const order = await Order.findOne({transactionID: transactionID}).lean();
+        if (!order) {
+            throw new Error('Order not found!');
+        }
 
+        if (order.paymentMethod !== "online_banking") {
+            throw new Error('Payment method must be "online_banking".');
+        }
+
+        if (order.isPaid === true) {
+            throw new Error('Your order has already been paid.')
+        }
+
+        const qrUrl = `https://img.vietqr.io/image/tpbank-khanh1402-compact2.jpg?amount=${order.totalAmount}&addInfo=${transactionID}&accountName=HUYNH%20QUOC%20KHANH`;
+
+
+        res.render('client/checkout/qr', {
+            title: 'QR Payment',
+            isHome: false,
+            breadcrumbTitle: 'QR Payment',
+            breadcrumb: 'QR Payment',
+            qrUrl,
+        });
+    } catch (error) {
+        next(error);
+    }
+}
