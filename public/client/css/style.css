@@ -9353,3 +9353,71 @@ ul.cat li a:hover {
 	font-size: 18px;
 }
 
+/* QR page */
+/* Phần chính */
+main.purchase-page {
+	padding: 40px 0;
+	background-color: #ffffff;
+}
+
+/* Container */
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 15px;
+}
+
+/* Tiêu đề */
+.purchase-area h1 {
+	font-size: 28px;
+	color: #333;
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+/* Nút điều hướng */
+.btn-to-purchase {
+	display: inline-block;
+	background-color: #fe4536;
+	color: #fff;
+	padding: 10px 20px;
+	border-radius: 5px;
+	font-size: 16px;
+	text-align: center;
+	text-decoration: none;
+	transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-to-purchase:hover {
+	background-color: #da3c2d;
+	transform: scale(1.05);
+}
+
+/* Hộp QR Code */
+.qr-container {
+	text-align: center;
+	padding: 20px;
+	background-color: #f0f8ff;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	margin: 20px auto;
+	max-width: 400px;
+}
+
+.qr-container img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 5px;
+	margin-bottom: 15px;
+}
+
+.qr-container h2 {
+	font-size: 20px;
+	color: #444;
+	margin-bottom: 10px;
+}
+
+.qr-container p {
+	font-size: 14px;
+	color: #666;
+}
