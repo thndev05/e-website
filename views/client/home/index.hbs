@@ -18,8 +18,8 @@
                             <div class="slide-content slide-content-4 text-center pt-40">
                                 <h1 data-animation="fadeInUp" data-delay=".3s">New Arrival</h1>
                                 <div class="slide-btn">
-                                    <a class="btn theme-btn" href="shop.html" data-animation="fadeInLeft" data-delay=".6s">shop now</a>
-                                    <a class="btn white-btn" href="shop.html" data-animation="fadeInRight" data-delay=".9s">category</a>
+                                    <a class="btn theme-btn" href="/shop" data-animation="fadeInLeft" data-delay=".6s">shop now</a>
+                                    <a class="btn white-btn" href="/shop" data-animation="fadeInRight" data-delay=".9s">category</a>
                                 </div>
                             </div>
                         </div>
@@ -39,8 +39,8 @@
                             <div class="slide-content slide-content-4 text-center pt-40">
                                 <h1 data-animation="fadeInUp" data-delay=".3s">Trendy Collection</h1>
                                 <div class="slide-btn">
-                                    <a class="btn theme-btn" href="shop.html" data-animation="fadeInLeft" data-delay=".6s">shop now</a>
-                                    <a class="btn white-btn" href="shop.html" data-animation="fadeInRight" data-delay=".9s">category</a>
+                                    <a class="btn theme-btn" href="/shop" data-animation="fadeInLeft" data-delay=".6s">shop now</a>
+                                    <a class="btn white-btn" href="/shop" data-animation="fadeInRight" data-delay=".9s">category</a>
                                 </div>
                             </div>
                         </div>
@@ -60,8 +60,8 @@
                             <div class="slide-content slide-content-4 text-center pt-40">
                                 <h1 data-animation="fadeInUp" data-delay=".3s">Men Collection</h1>
                                 <div class="slide-btn">
-                                    <a class="btn theme-btn" href="shop.html" data-animation="fadeInLeft" data-delay=".6s">shop now</a>
-                                    <a class="btn white-btn" href="shop.html" data-animation="fadeInRight" data-delay=".9s">category</a>
+                                    <a class="btn theme-btn" href="/shop" data-animation="fadeInLeft" data-delay=".6s">shop now</a>
+                                    <a class="btn white-btn" href="/shop" data-animation="fadeInRight" data-delay=".9s">category</a>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +77,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="banner-2 pos-relative mb-30">
-                        <a href="shop.html"><img src="/client/img/banner/banner-2/banner3.jpg" alt=""></a>
+                        <a href="/shop"><img src="/client/img/banner/banner-2/banner3.jpg" alt=""></a>
                         <div class="banner-trend">
                             <span>Trendy Item</span>
                             <h2><a href="/shop">New Year Trend Coming 2024</a></h2>
@@ -166,8 +166,8 @@
                                                     </h4>
                                                     <div class="product-meta">
                                                         <div class="pro-price">
-                                                            <span>${{this.minPrice}} USD </span>
-                                                            <span class="old-price">${{this.maxPrice}} USD</span>
+                                                            <span>{{#currencyUSD this.minPrice}}{{/currencyUSD}}</span>
+                                                            <span class="old-price">{{#currencyUSD this.maxPrice}}{{/currencyUSD}}</span>
                                                         </div>
                                                     </div>
                                                     <div class="product-wishlist">
@@ -214,7 +214,7 @@
                                                         </h4>
                                                         <div class="product-meta">
                                                             <div class="pro-price">
-                                                                <span>${{this.minPrice}} USD - ${{this.maxPrice}} USD</span>
+                                                                <span>{{#currencyUSD this.minPrice}}{{/currencyUSD}} - {{#currencyUSD this.maxPrice}}{{/currencyUSD}}</span>
                                                             </div>
                                                         </div>
                                                         <div class="product-wishlist">
