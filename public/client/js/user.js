@@ -71,3 +71,23 @@ if (btnCancels.length > 0) {
         });
     });
 }
+
+const btnToPurchase = document.querySelector('.btn-to-purchase');
+if (btnToPurchase) {
+    btnToPurchase.addEventListener('click', (e) => {
+        e.preventDefault();
+        const timer = 3000;
+
+        Swal.fire({
+            icon: 'info',
+            title: 'Information',
+            text: 'Please wait a few minutes to check your transaction',
+            showConfirmButton: true,
+            timer: timer
+        });
+
+        setTimeout(() => {
+            window.location.href = btnToPurchase.getAttribute('href');
+        }, timer);
+    });
+}

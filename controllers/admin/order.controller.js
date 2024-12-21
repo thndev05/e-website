@@ -7,7 +7,7 @@ const { prefixAdmin } = require("../../config/system");
 
 // [GET] /admin/orders
 module.exports.index = async (req, res) => {
-  const orders = await Order.find({}).lean();
+  const orders = await Order.find({}).sort({ createdAt: "desc" }).lean();
 
   for (const order of orders) {
       const userID = order.userID;

@@ -33,7 +33,7 @@
                             <tbody>
                             {{#each orders}}
                                 <tr>
-                                    <td class="align-middle">{{this._id}}</td>
+                                    <td class="align-middle">{{this.transactionID}}</td>
                                     <td class="align-middle">{{parseDateTime this.createdAt}}</td>
                                     <td class="align-middle">{{this.customerName}}</td>
                                     <td class="align-middle">${{this.totalAmount}}</td>

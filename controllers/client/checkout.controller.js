@@ -224,3 +224,16 @@ async function getCouponDiscount(userId, cart, couponCode) {
     return Math.min(cartSubTotal, discountType === 'percentage' ? cartSubTotal * discountValue / 100 : discountValue);
 }
 
+
+module.exports.getQR = async (req, res) => {
+    const qrUrl = 'https://api.vietqr.io/image/970423-khanhq142-aW8wCoc.jpg?amount=1000';
+
+    res.render('client/checkout/qr', {
+        title: 'QR Payment',
+        isHome: false,
+        breadcrumbTitle: 'QR Payment',
+        breadcrumb: 'QR Payment',
+        qrUrl,
+    });
+};
+

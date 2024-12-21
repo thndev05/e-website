@@ -1,0 +1,22 @@
+{{> client/preloader}}
+{{> client/header}}
+{{> client/breadcrumb}}
+
+<main class="qr-page">
+    <section class="qr-area pt-100 pb-100">
+        <div class="container">
+            <div class="text-center">
+                <h1 class="mb-4">Scan QR Code to Complete Payment</h1>
+                <p class="mb-4">
+                    Please use your banking app or QR code scanner to process the payment.
+                </p>
+                <div class="qr-image">
+                    <img src="{{qrUrl}}" alt="QR Code for Payment" class="img-fluid">
+                </div>
+                <a href="/user/purchase" class="btn btn-to-purchase btn-order-history mt-4">Have you completed your transaction?</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+{{> client/footer}}

@@ -42,7 +42,7 @@
                         {{#each orders}}
                             <div class="card purchase-list-item mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h5 class="mb-0">Order ID: #{{this._id}}</h5>
+                                    <h5 class="mb-0">Order ID: #{{this.transactionID}}</h5>
                                     <span class="badge badge-status badge-{{this.status}}">{{this.status}}</span>
                                 </div>
                                 <div class="card-body">
