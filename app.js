@@ -92,7 +92,8 @@ app.use(function(err, req, res, next) {
             title: 'Oops...',
             text: err.message,
             confirmButtonText: 'OK',
-            redirectPage: res.locals.redirectPage,
+            redirectPage: res.redirectPage,
+            reloadPage: res.reloadPage,
         }
     });
     delete res.locals.redirectPage;

@@ -14,7 +14,6 @@ module.exports.index = async (req, res, next) => {
         next(error);
         return;
     }
-
     const { couponCode } = req.query;
 
     const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
