@@ -1,11 +1,17 @@
 const Product = require('../../models/product.model');
 const Category = require('../../models/category.model');
+const ProductHelpers = require("../../helpers/product");
 
 module.exports.index = async (req, res) => {
     const { slug } = req.params;
 
     try {
         const products = await Product.find({deleted: false}).lean();
+        for (const product of products) {
+            product.minPrice = ProductHelpers.getMinPrice(product.variants);
+            product.maxPrice = ProductHelpers.getMaxPrice(product.variants);
+        }
+
         const product = products.find(product => product.slug === slug);
 
         if (!product) {

@@ -13,7 +13,7 @@
                         <div class="shop-widget">
                             <h3 class="shop-title">Search by</h3>
                             <form action="#" class="shop-search">
-                                <input type="text" placeholder="Your keyword....">
+                                <input type="text" placeholder="Your keyword...." required>
                                 <button><i class="fa fa-search"></i></button>
                             </form>
                         </div>
@@ -176,11 +176,13 @@
                             </div>
                             <div class="pro-filter mb-40 f-right">
                                 <form action="#">
-                                    <select name="pro-filter" id="pro-filter">
-                                        <option value="1">Shop By </option>
-                                        <option value="2">Top Sales </option>
-                                        <option value="3">New Product </option>
-                                        <option value="4">A to Z Product </option>
+                                    <select name="sortBy" id="pro-filter">
+                                        <option value="name_asc">Name: A-Z</option>
+                                        <option value="name_desc">Name: Z-A</option>
+                                        <option value="price_asc">Price: Low to High</option>
+                                        <option value="price_desc">Price: High to Low</option>
+                                        <option value="top_sales">Top Sales </option>
+                                        <option value="new_product">New Product </option>
                                     </select>
                                 </form>
                             </div>
@@ -203,7 +205,7 @@
                                                     <a href="/product/{{this.slug}}" title="Quick View">
                                                         <i class="flaticon-eye"></i>
                                                     </a>
-                                                    <a href="#" title="Shoppingb Cart">
+                                                    <a class="add-to-cart-btn" href="#" title="Shopping Cart">
                                                         <i class="flaticon-shopping-cart"></i>
                                                     </a>
                                                 </div>
@@ -218,8 +220,8 @@
                                                 </h4>
                                                 <div class="product-meta">
                                                     <div class="pro-price">
-                                                        <span>${{this.minPrice}} USD</span>
-                                                        <span class="old-price">${{this.maxPrice}} USD</span>
+                                                        <span>{{#currencyUSD this.minPrice}}{{/currencyUSD}} USD</span>
+                                                        <span class="old-price">{{#currencyUSD this.maxPrice}}{{/currencyUSD}} USD</span>
                                                     </div>
                                                 </div>
                                                 <div class="product-wishlist">
@@ -261,8 +263,8 @@
                                             </h4>
                                             <div class="product-meta">
                                                 <div class="pro-price">
-                                                    <span>${{this.minPrice}} USD</span>
-                                                    <span class="old-price">${{this.maxPrice}} USD</span>
+                                                    <span>{{#currencyUSD this.minPrice}}{{/currencyUSD}} USD</span>
+                                                    <span class="old-price">{{#currencyUSD this.maxPrice}}{{/currencyUSD}} USD$</span>
                                                 </div>
                                             </div>
                                             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -271,7 +273,7 @@
                                                 <a href="/product/{{this.slug}}" title="Quick View">
                                                     <i class="flaticon-eye"></i>
                                                 </a>
-                                                <a href="#" title="Shoppingb Cart">
+                                                <a class="add-to-cart-btn" href="#" title="Shopping Cart">
                                                     <i class="flaticon-shopping-cart"></i>
                                                 </a>
                                                 <div class="product-wishlist">
@@ -326,6 +328,22 @@
 
     const params = new URLSearchParams(window.location.search);
 
+    // Handle keyword filter
+    const keywordFilterForm = document.querySelector(".shop-search");
+    const keywordInput = keywordFilterForm.querySelector("input");
+
+    keywordFilterForm.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        params.set('keyword', keywordInput.value);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    });
+
+    const keywordValue = params.get("keyword");
+    if (keywordValue) {
+        keywordInput.value = keywordValue;
+    }
+
     // Handle size filter
     const sizes = params.getAll('size');
     const productSizeFilterElements = document.querySelectorAll('.product-size-filter')
@@ -358,8 +376,8 @@
            e.classList.add('active');
            e.children.item(0).className = 'far fa-check-square';
 
-           e.addEventListener('category', () => {
-               params.delete('size', size);
+           e.addEventListener('click', () => {
+               params.delete('category', category);
                window.location.href = `${window.location.pathname}?${params.toString()}`;
            });
        } else {
@@ -379,8 +397,8 @@
         if (colors.includes(color)) {
             e.classList.add('active');
 
-            e.addEventListener('color', () => {
-                params.delete('size', size);
+            e.addEventListener('click', () => {
+                params.delete('color', color);
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         } else {

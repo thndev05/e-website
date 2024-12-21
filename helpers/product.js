@@ -1,9 +1,12 @@
-module.exports.getMinPrice = (items) => {
-  if (!items || items.length === 0) {
+const mongoose = require('mongoose');
+const Order = require('../models/order.model');
+
+module.exports.getMinPrice = (variants) => {
+  if (!variants || variants.length === 0) {
     return null;
   }
 
-  const price = Math.min(...items.map(item => item.salePrice ? item.salePrice : item.price ));
+  const price = Math.min(...variants.map(item => item.salePrice ? item.salePrice : item.price ));
 
   return price;
 };
@@ -64,3 +67,24 @@ module.exports.extractVariantsFromReqBody = (body) => {
 
   return variants;
 }
+
+module.exports.calculateProductSales = async (product) => {
+  try {
+    const result = await Order.aggregate([
+      { $match: { status: { $ne: 'cancelled' } } },
+      { $unwind: '$products' },
+      { $match: { 'products.product': product._id } },
+      {
+        $group: {
+          _id: '$products.product',
+          totalSales: { $sum: '$products.quantity' }
+        }
+      }
+    ]);
+
+    return result.length > 0 ? result[0].totalSales : 0;
+  } catch (error) {
+    console.error('Error calculating product sales:', error);
+    throw error;
+  }
+};

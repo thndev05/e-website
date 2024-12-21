@@ -680,10 +680,10 @@
     } else {
       // Don't allow decrementing below zero
 
-      if (oldValue > 0) {
+      if (oldValue > 1) {
         var newVal = parseFloat(oldValue) - 1;
       } else {
-        newVal = 0;
+        newVal = 1;
       }
     }
 
@@ -926,6 +926,3 @@ document.addEventListener('DOMContentLoaded', () => {
         },
     });
 });
-
-
-

@@ -115,9 +115,8 @@
                                             data-product-id="{{product._id}}">
                                         <i class="fas fa-heart"></i>
                                     </button>
-                                    <button class="details-action-icon" type="submit"><i class="fas fa-hourglass"></i></button>
                                     <div class="details-cart mt-40">
-                                        <button class="btn theme-btn">purchase now</button>
+                                        <button class="btn theme-btn">add to cart</button>
                                     </div>
                                 </form>
                             </div>
@@ -256,7 +255,7 @@
                                 <a href="/product/{{this.slug}}" title="Quick View">
                                     <i class="flaticon-eye"></i>
                                 </a>
-                                <a href="#" title="Shoppingb Cart">
+                                <a class="add-to-cart-btn" href="#" title="Shopping Cart">
                                     <i class="flaticon-shopping-cart"></i>
                                 </a>
                             </div>
@@ -271,8 +270,8 @@
                             </h4>
                             <div class="product-meta">
                                 <div class="pro-price">
-                                    <span>${{this.minPrice}} USD </span>
-                                    <span class="old-price">${{this.maxPrice}} USD</span>
+                                    <span>{{#currencyUSD this.minPrice}}{{/currencyUSD}}</span>
+                                    <span class="old-price">{{#currencyUSD this.maxPrice}}{{/currencyUSD}}</span>
                                 </div>
                             </div>
                             <div class="product-wishlist">
@@ -341,6 +340,13 @@
             });
         }
 
+        const currencyUSD = function (value) {
+            if (typeof value !== 'number') {
+                value = parseFloat(value) || 0;
+            }
+            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+        }
+
         function selectVariant(variant) {
             if (!variant) throw new Error("Invalid variant");
 
@@ -348,10 +354,10 @@
             selectedColor = variant.color;
             selectedSize = variant.size;
 
-            productPrice.textContent = `$${variant.salePrice || variant.price}`;
-            oldProductPrice.textContent = variant.salePrice ? `$${variant.price}` : "";
+            productPrice.textContent = currencyUSD(variant.salePrice || variant.price);
+            oldProductPrice.textContent = variant.salePrice ? currencyUSD(variant.price) : "";
 
-            inStock.textContent = selectedVariant.stock || "0";
+            inStock.textContent = variant.stock || "0";
 
             selectedVariant = variant;
             refreshSelectedVariant();
@@ -378,9 +384,20 @@
         purchaseForm.addEventListener("submit", (event) => {
             event.preventDefault();
 
+            const quantity = Number.parseInt(quantitySelector.value);
+            if (quantity > selectedVariant.stock) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Quantity Exceeds Stock',
+                    text: `The quantity you entered is greater than the available stock of ${selectedVariant.stock}.`,
+                });
+                quantitySelector.value = String(selectedVariant.stock);
+                return;
+            }
+
             const data = {}
             data.productId = "{{product._id}}";
-            data.quantity = Number.parseInt(quantitySelector.value);
+            data.quantity = quantity;
             data.variantSKU = selectedVariant.sku;
 
             fetch("/cart/add", {
