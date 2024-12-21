@@ -1,6 +1,7 @@
 const User = require('../../models/user.model');
 const Order = require('../../models/order.model');
 const Product = require('../../models/product.model');
+const Coupon = require('../../models/coupon.model');
 
 const bcrypt = require('bcrypt');
 const updateSessionUser = require('../../helpers/session');
@@ -157,9 +158,12 @@ module.exports.cancelOrder = async (req, res) => {
     console.log('Order ID:', orderId);
 
     try {
-        const result = await Order.findByIdAndUpdate(orderId, { status: 'cancelled' });
+        const order = await Order.findByIdAndUpdate(orderId, { status: 'cancelled' });
 
-        if (result) {
+        await revertCouponUsage(order, res.locals.user.id);
+        await restoreProductStock(order);
+
+        if (order) {
             return res.json({ success: true, message: 'Order has been cancelled successfully!' });
         } else {
             return res.json({ success: false, message: 'Order not found or cannot be cancelled!' });
@@ -169,4 +173,35 @@ module.exports.cancelOrder = async (req, res) => {
         return res.status(500).json({ success: false, message: 'An error occurred while cancelling the order!' });
     }
 };
+
+async function revertCouponUsage(order, userId) {
+    if (!order?.coupon) return;
+
+    const coupon = await Coupon.findById(order.coupon);
+    if (!coupon) return;
+
+    coupon.timesUsed = Math.max(0, coupon.timesUsed - 1);
+
+    const userUsage = coupon.usageByUser.find(usage => usage.userId.toString() === userId);
+    if (userUsage && userUsage.uses > 0) {
+        userUsage.uses--;
+    }
+
+    await coupon.save();
+}
+
+async function restoreProductStock(order) {
+    if (!order?.products?.length) return;
+
+    for (const p of order.products) {
+        const product = await Product.findById(p.product);
+        if (!product) continue;
+
+        const variant = product.variants.find(v => v.sku === p.variantSKU);
+        if (!variant) continue;
+
+        variant.stock += p.quantity;
+        await product.save();
+    }
+}
 
