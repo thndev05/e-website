@@ -408,7 +408,13 @@
             });
         }
     });
-    
+
+    // Change sort type
+    const orderBySelect = document.querySelector("select[name=sortBy]");
+    orderBySelect.addEventListener('change', function (event) {
+        params.set('sortBy', this.value);
+        window.location.href = `${window.location.pathname}?${params.toString()}`;
+    });
 </script>
 
 
