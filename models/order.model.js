@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
     userID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    transactionID: {
+        type: String,
+    },
     products: [
         {
             product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
@@ -35,7 +38,18 @@ const orderSchema = new mongoose.Schema({
         default: '',
         required: false,
     },
+    isPaid: {
+        type: Boolean,
+        default: false,
+    },
     createdAt: { type: Date, default: Date.now }
+});
+
+orderSchema.pre('save', function(next) {
+    if (!this.transactionID) {
+        this.transactionID = Date.now().toString(36).toUpperCase() + Math.random().toString(36).substring(2, 8).toUpperCase();
+    }
+    next();
 });
 
 module.exports = mongoose.model('Order', orderSchema, 'orders');

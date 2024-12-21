@@ -155,18 +155,18 @@ module.exports.process = async (req, res) => {
             cart.products = [];
             await Cart.updateOne({ _id: cart._id }, { $set: { products: [] } }, { session });
 
-            // Commit transaction and create order
-            await session.commitTransaction();
-            session.endSession();
-
             const order = await Order.create(orderData);
             console.log(order);
+
+            // Commit transaction and create order
+            await session.commitTransaction();
+            await session.endSession();
 
             res.redirect('/user/purchase?status=all');
         } catch (transactionError) {
             // Rollback transaction on error
             await session.abortTransaction();
-            session.endSession();
+            await session.endSession();
             throw transactionError;
         }
     } catch (error) {
