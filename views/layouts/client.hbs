@@ -51,5 +51,38 @@
         <script src="/client/js/wishlist.js"></script>
     {{/if}}
 
+    <script>
+        {{#if sweetAlert}}
+            Swal.fire({{{JSONstringify sweetAlert}}})
+                .then(data => {
+                    {{#if sweetAlert.confirmPage}}
+                        if (data.isConfirmed) {
+                            window.location.href = '{{sweetAlert.confirmPage}}';
+                        }
+                    {{/if}}
+
+                    {{#if sweetAlert.denyPage}}
+                        if (data.isDenied) {
+                            window.location.href = '{{sweetAlert.denyPage}}';
+                        }
+                    {{/if}}
+
+                    {{#if sweetAlert.timerDismissPage}}
+                        if (data.isDismissed && data.dismiss === 'timer') {
+                            window.location.href = '{{sweetAlert.timerDismissPage}}';
+                        }
+                    {{/if}}
+
+                    {{#if sweetAlert.redirectPage}}
+                        window.location.href = '{{sweetAlert.redirectPage}}';
+                    {{/if}}
+
+                    {{#if sweetAlert.reloadPage}}
+                        window.location.reload();
+                    {{/if}}
+                });
+        {{/if}}
+    </script>
+
 </body>
 </html>
