@@ -16,6 +16,8 @@ const bodyParser = require('body-parser');
 const adminRouter = require('./routes/admin/index.route');
 const clientRouter = require('./routes/client/index.route');
 
+const onlineBakingValidator = require('./jobs/transactionHistoryChecker.js')
+
 const app = express();
 database.connect();
 
@@ -85,5 +87,11 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
+
+// Register timer jobs
+setInterval(async () => {
+    await onlineBakingValidator.check();
+}, 20000);
+onlineBakingValidator.check();
 
 module.exports = app;

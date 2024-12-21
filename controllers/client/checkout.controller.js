@@ -1,7 +1,12 @@
-const Cart = require('../../models/cart.model');
 const Coupon = require('../../models/coupon.model');
-const CartHelper = require('../../helpers/cart')
 const User = require("../../models/user.model");
+const Order = require("../../models/order.model");
+const Product = require("../../models/product.model");
+const Cart = require("../../models/cart.model");
+
+const { startSession } = require('mongoose');
+
+const CartHelper = require('../../helpers/cart')
 
 module.exports.index = async (req, res, next) => {
     if (!res.locals.user) {
@@ -36,7 +41,6 @@ module.exports.index = async (req, res, next) => {
         alert = error.message;
         console.error(error);
     }
-    console.log(alert);
 
     res.render('client/checkout/index', {
         title: 'Checkout',
@@ -52,6 +56,130 @@ module.exports.index = async (req, res, next) => {
         alert: alert,
     });
 }
+
+module.exports.process = async (req, res) => {
+    const {
+        fullName, phone, province, district, ward, street,
+        notes, couponCode, paymentMethod
+    } = req.body;
+
+    const userId = res.locals.user.id;
+
+    try {
+        // Fetch cart and user details
+        const [cart, user] = await Promise.all([
+            CartHelper.getOrCreateCart(userId),
+            User.findById(userId).lean(),
+        ]);
+
+        // Process cart items
+        let cartSubTotal = 0;
+        for (const cartItem of cart.products) {
+            const variant = cartItem.variant;
+
+            cartItem.effectivePrice = getEffectivePrice(variant);
+            cartItem.variantDescription = getVariantDescription(variant);
+
+            const price = Number(cartItem.effectivePrice) * Number(cartItem.quantity);
+            cartItem.price = price;
+            cartSubTotal += price;
+        }
+        cart.cartSubTotal = cartSubTotal;
+
+        // Handle coupon discount
+        let discount = 0, coupon = null;
+        try {
+            discount = await getCouponDiscount(userId, cart, couponCode);
+            if (discount > 0) {
+                coupon = await Coupon.findOne({ code: couponCode });
+                if (!coupon) throw new Error('Coupon not found.');
+            }
+        } catch (error) {
+            console.error(error);
+            return res.render('client/checkout/index', {
+                title: 'Checkout',
+                isHome: false,
+                breadcrumbTitle: 'Checkout',
+                breadcrumb: 'Checkout',
+                alert: error.message,
+            });
+        }
+
+        // Prepare order data
+        const orderData = {
+            userID: userId,
+            products: cart.products,
+            shippingInfo: { name: fullName, phone, province, district, ward, street },
+            paymentMethod,
+            totalAmount: cartSubTotal - discount,
+            coupon: coupon ? coupon._id : null,
+            notes,
+        };
+
+        // Start transaction
+        const session = await startSession();
+        session.startTransaction();
+
+        try {
+            // Update coupon usage if applicable
+            if (coupon) {
+                coupon.timesUsed++;
+                const usageByUser = coupon.usageByUser.find(usage => usage.userId === userId);
+
+                if (usageByUser) {
+                    usageByUser.uses = (usageByUser.uses || 0) + 1;
+                } else {
+                    coupon.usageByUser.push({ userId, uses: 1 });
+                }
+                await Coupon.updateOne({ _id: coupon._id }, { $set: coupon }, { session });
+            }
+
+            // Update product stocks
+            for (const cartItem of cart.products) {
+                const product = await Product.findById(cartItem.product._id).session(session);
+                const variant = product.variants.find(v => v.sku === cartItem.variantSKU);
+
+                if (variant.stock < cartItem.quantity) {
+                    throw new Error(`Product ${product.name} (${variant.sku}) out of stock.`);
+                }
+
+                variant.stock -= cartItem.quantity;
+                await Product.updateOne(
+                    { _id: product._id, 'variants.sku': variant.sku },
+                    { $inc: { 'variants.$.stock': -cartItem.quantity } },
+                    { session }
+                );
+            }
+
+            // Clear cart
+            cart.products = [];
+            await Cart.updateOne({ _id: cart._id }, { $set: { products: [] } }, { session });
+
+            const order = await Order.create(orderData);
+            console.log(order);
+
+            // Commit transaction and create order
+            await session.commitTransaction();
+            await session.endSession();
+
+            res.redirect('/user/purchase?status=all');
+        } catch (transactionError) {
+            // Rollback transaction on error
+            await session.abortTransaction();
+            await session.endSession();
+            throw transactionError;
+        }
+    } catch (error) {
+        console.error(error);
+        res.render('client/checkout/index', {
+            title: 'Checkout',
+            isHome: false,
+            breadcrumbTitle: 'Checkout',
+            breadcrumb: 'Checkout',
+            alert: `Order creation failed!\nCause: ${error.message}`,
+        });
+    }
+};
 
 function getEffectivePrice(variant) {
     return variant.salePrice || variant.price;
