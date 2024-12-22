@@ -107,9 +107,11 @@
                                     <tr class="cart_item">
                                         <td class="product-name">
                                             <div class="product-info">
-                                                <span class="product-name">{{this.product.name}}</span>
-                                                <span class="product-variant">{{this.variantDescription}}</span>
-                                                <span class="amount"><strong class="product-quantity"> × {{this.quantity}}</strong></span>
+                                                <div class="product-name-wrapped">
+                                                    <span class="product-name">{{this.product.name}}</span>
+                                                    <span class="product-variant">{{this.variantDescription}}</span>
+                                                </div>
+                                                <span class="amount"><strong class="product-quantity"> ×{{this.quantity}}</strong></span>
                                             </div>
                                         </td>
                                         <td class="product-total">
