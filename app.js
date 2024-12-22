@@ -17,6 +17,7 @@ const adminRouter = require('./routes/admin/index.route');
 const clientRouter = require('./routes/client/index.route');
 
 const onlineBakingValidator = require('./jobs/transactionHistoryChecker.js')
+const FormError = require("./error/FormError");
 
 const app = express();
 database.connect();
@@ -80,8 +81,10 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+    if (!err instanceof FormError) {
+        res.locals.message = err.message;
+        res.locals.error = req.app.get('env') === 'development' ? err : {};
+    }
 
     // render the error page
     res.status(err.status || 500);
@@ -92,9 +95,9 @@ app.use(function(err, req, res, next) {
             title: 'Oops...',
             text: err.message,
             confirmButtonText: 'OK',
-            redirectPage: res.redirectPage,
+            redirectPage: (!err instanceof FormError && res.redirectPage ? res.redirectPage : 'back'),
             reloadPage: res.reloadPage,
-        }
+        },
     });
     delete res.locals.redirectPage;
 });

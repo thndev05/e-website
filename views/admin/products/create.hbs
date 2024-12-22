@@ -13,7 +13,7 @@
                                 <h3>Add Product</h3>
                             </div>
                             <div class="card-body">
-                                <form action="create/" method="POST" enctype="multipart/form-data">
+                                <form id="create-product-form" action="create/" method="POST" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label for="name">Product Name:</label>
                                         <input type="text" class="form-control" id="name" name="name"
@@ -42,6 +42,7 @@
                                                 <option value="{{this.name}}">{{this.name}}</option>
                                             {{/each}}
                                         </select>
+                                        <div class="invalid-feedback">Please select a category.</div>
                                     </div>
 
                                     <div class="form-group">
@@ -49,6 +50,7 @@
                                         <select class="form-select form-control" id="subcategory" name="subcategory">
                                             <option value="">Select Subcategory</option>
                                         </select>
+                                        <div class="invalid-feedback">Please select a subcategory.</div>
                                     </div>
 
                                     <div class="form-group">
@@ -72,7 +74,7 @@
                                     <div class="custom-file">
                                         <input type="file" accept="image/*" class="custom-file-input" id="product-images" name="productImages" multiple>
                                         <label id="product-images-label" class="custom-file-label" for="product-images">Choose files...</label>
-                                        <div class="invalid-feedback">File Format Not Supported</div>
+                                        <div class="invalid-feedback">Please select an image.</div>
                                     </div>
                                     <div id="product-image-preview-container" class="image-preview-container row mt-3">
                                     </div>
@@ -105,17 +107,20 @@
                                                         <input type="text" class="form-control" name="variants[0].size"
                                                                placeholder="Enter Size">
                                                     </div>
+                                                    <div class="invalid-feedback invalid-variant-sku" style="text-align: center">Please fill in at least one of the three fields above.</div>
                                                 </div>
                                                 <div class="form-row mt-2">
                                                     <div class="col">
                                                         <label for="variant-stock">Quantity</label>
                                                         <input type="number" class="form-control" name="variants[0].stock"
                                                                placeholder="Enter Quantity">
+                                                        <div class="invalid-feedback">Please enter a valid quantity</div>
                                                     </div>
                                                     <div class="col">
                                                         <label for="variant-cost-price">Cost Price</label>
                                                         <input type="number" class="form-control" name="variants[0].costPrice"
                                                                placeholder="Enter Cost Price">
+                                                        <div class="invalid-feedback">Please enter a valid cost price</div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row mt-2">
@@ -123,11 +128,13 @@
                                                         <label for="variant-price">Price</label>
                                                         <input type="number" class="form-control" name="variants[0].price"
                                                                placeholder="Enter Price">
+                                                        <div class="invalid-feedback">Please enter a valid price</div>
                                                     </div>
                                                     <div class="col">
                                                         <label for="variant-sale-price">Sale Price</label>
                                                         <input type="number" class="form-control" name="variants[0].salePrice"
                                                                placeholder="Enter Sale Price">
+                                                        <div class="invalid-feedback">Please enter a valid sale price</div>
                                                     </div>
                                                 </div>
                                                 <div class="form-row mt-2">

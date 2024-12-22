@@ -4,31 +4,38 @@ const ProductHelpers = require('../../helpers/product');
 const searchHelper = require('../../helpers/search');
 const {prefixAdmin} = require("../../config/system");
 const {generateSKU} = require("../../helpers/product");
+const FormError = require("../../error/FormError");
 
 
 // [GET] /admin/products
-module.exports.index = async (req, res) => {
-  const find = {
-    deleted: false
-  };
+module.exports.index = async (req, res, next) => {
+  try {
+    const find = {
+      deleted: false
+    };
 
-  const objectSearch = searchHelper(req.query);
-  if(objectSearch.regex) {
-    find.name = objectSearch.regex
+    const objectSearch = searchHelper(req.query);
+    if(objectSearch.regex) {
+      find.name = objectSearch.regex
+    }
+
+    const products = await Product.find(find).lean();
+    for (const product of products) {
+      product.minPrice = ProductHelpers.getMinPrice(product.variants);
+      product.maxPrice = ProductHelpers.getMaxPrice(product.variants);
+    }
+
+    res.render('admin/products/index', {
+      pageTitle: 'Quản lý sản phẩm',
+      currentPage: 'products',
+      products: products,
+      searchKeyword: objectSearch.keyword
+    });
+  } catch (error) {
+    console.error(error);
+    res.redirectPage = 'back';
+    next(error);
   }
-
-  const products = await Product.find(find).lean();
-  for (const product of products) {
-    product.minPrice = ProductHelpers.getMinPrice(product.variants);
-    product.maxPrice = ProductHelpers.getMaxPrice(product.variants);
-  }
-
-  res.render('admin/products/index', {
-    pageTitle: 'Quản lý sản phẩm',
-    currentPage: 'products',
-    products: products,
-    searchKeyword: objectSearch.keyword
-  });
 }
 
 // [DELETE] /admin/products/delete/:id
@@ -64,14 +71,23 @@ module.exports.create = async (req, res) => {
           currentPage: 'products',
           categories: categories,
         });
-      })
+      });
 }
 
 // [POST] /admin/products/create
-module.exports.createPost = async (req, res) => {
+module.exports.createPost = async (req, res, next) => {
+  const { name, description, category, status, brand, tags, gender, subcategory } = req.body;
+
   try {
-    const { name, description, category, status, brand, tags, gender, subcategory } = req.body;
     const data = { name, description, category, status, brand, gender, subcategory};
+
+    if (!name) {
+      throw new FormError("Product name is empty!");
+    }
+
+    if (!brand) {
+      throw new FormError("Product brand is empty!");
+    }
 
     const variants = [];
 
@@ -91,6 +107,9 @@ module.exports.createPost = async (req, res) => {
       }
     });
 
+    if (variants.length === 0) {
+      throw new FormError("Product variants is empty!")
+    }
 
     req.body.files.forEach(file => {
       const { fieldName, image } = file;
@@ -108,6 +127,11 @@ module.exports.createPost = async (req, res) => {
 
 
     const findCategory = await Category.findOne({ name: data.category });
+
+    if (!findCategory) {
+      throw new FormError("Please select category!")
+    }
+
     data.variants = variants;
     data.category = findCategory._id;
     data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
@@ -119,9 +143,10 @@ module.exports.createPost = async (req, res) => {
     await product.save();
 
     res.redirect(`${prefixAdmin}/products`);
-  } catch (e) {
-    console.log(e);
-    res.redirect(`${prefixAdmin}/products`);
+
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 }
 
