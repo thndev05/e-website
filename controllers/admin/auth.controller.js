@@ -5,42 +5,68 @@ const Account = require("../../models/account.model");
 
 
 //[GET] /admin/auth/login
-module.exports.login = async (req, res) => {
-  if(req.cookies.token) {
-    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
-  } else {
-    res.render('admin/auth/login', {
-      pageTitle: 'LOGIN SYSTEM'
-    });
+module.exports.login = async (req, res, next) => {
+  try {
+    if(req.cookies.token) {
+      res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+    } else {
+      res.render('admin/auth/login', {
+        pageTitle: 'LOGIN SYSTEM'
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    res.redirectPage = '/admin/auth/login';
+    next(error);
   }
 }
 
 //[POST] /admin/auth/login
-module.exports.loginPost = async (req, res) => {
+module.exports.loginPost = async (req, res, next) => {
+  const {email, password} = req.body;
 
-  const email = req.body.email;
-  const password = req.body.password;
+  try {
+    if (!email ) {
+      throw new Error("Email is empty.")
+    }
 
+    if (!password) {
+      throw new Error("Password is empty.");
+    }
 
-  const user = await Account.findOne({
-    email: email,
-    deleted: false
-  });
+    const user = await Account.findOne({
+      email: email,
+      deleted: false
+    });
 
-  if(!user) {
-    return res.redirect('back');
+    if(!user) {
+      throw new Error("No matching account was found.");
+    }
+
+    if(await bcrypt.compare(password, user.password) == false) {
+      throw new Error("Incorrect password. Please try again.");
+    }
+
+    if(user.status !== 'active') {
+      throw new Error("No matching account was found.");
+    }
+
+    res.cookie('token', user.token);
+    res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
+  } catch (error) {
+    console.error(error);
+    res.render('admin/auth/login', {
+      pageTitle: 'LOGIN SYSTEM',
+      email,
+      password,
+      sweetAlert: {
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message,
+        confirmButtonText: 'OK',
+      }
+    });
   }
-
-  if(await bcrypt.compare(password, user.password) == false) {
-    return res.redirect('back');
-  }
-
-  if(user.status !== 'active') {
-    return res.redirect('back');
-  }
-
-  res.cookie('token', user.token);
-  res.redirect(`${systemConfig.prefixAdmin}/dashboard`);
 }
 
 //[GET] /admin/auth/logout

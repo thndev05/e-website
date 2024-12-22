@@ -1,10 +1,21 @@
 if (document.getElementById("ordersChart")) {
 
+    const sales = document.getElementById('sales');
+    const profit = document.getElementById('profit');
+    const users = document.getElementById('users');
+    const orders = document.getElementById('orders');
+
     fetch("/admin/dashboard/analyticsData")
         .then(res => res.json())
         .then(data => {
 
-            const { labels, revenueData, profitData, ordersLabels, ordersData, topProductsLabels, topProductsData } = data;
+            const { labels, revenueData, profitData, ordersLabels, ordersData, topProductsLabels, topProductsData,
+                totalRevenue, totalProfit, totalUsers, totalOrders } = data;
+
+            sales.innerHTML = '$' + totalRevenue;
+            profit.innerHTML = '$' + totalProfit;
+            users.innerHTML = totalUsers;
+            orders.innerHTML = totalOrders;
 
             // Revenue Chart
             const revenueCtx = document.getElementById('revenueChart').getContext('2d');

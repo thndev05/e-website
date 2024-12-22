@@ -1,5 +1,6 @@
 const Order = require('../../models/order.model');
 const Product = require('../../models/product.model');
+const User = require('../../models/user.model');
 
 module.exports.dashboard = async (req, res) => {
   res.render('admin/dashboard/index', {
@@ -10,7 +11,6 @@ module.exports.dashboard = async (req, res) => {
 
 module.exports.analyticsData = async (req, res) => {
   const data = await generateAnalytics();
-  console.log(data);
   res.json(data);
 }
 
@@ -49,6 +49,7 @@ async function generateAnalytics() {
     const revenueData = new Array(12).fill(0);
     const ordersData = new Array(12).fill(0);
 
+
     last12Months.forEach((month, index) => {
       const order = orders.find(
           o => o._id.year === month.year && o._id.month === month.month
@@ -58,6 +59,64 @@ async function generateAnalytics() {
         ordersData[index] = order.totalOrders;
       }
     });
+
+    const costs = await Order.aggregate([
+      { $unwind: "$products" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      { $unwind: "$productDetails" },
+      {
+        $addFields: {
+          matchedVariant: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$productDetails.variants",
+                  as: "variant",
+                  cond: { $eq: ["$$variant.sku", "$products.variantSKU"] },
+                },
+              },
+              0,
+            ],
+          },
+        },
+      },
+      {
+        $addFields: {
+          productCost: {
+            $multiply: ["$matchedVariant.costPrice", "$products.quantity"],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+          },
+          totalCost: { $sum: "$productCost" },
+        },
+      },
+    ]);
+
+    const costData = new Array(12).fill(0);
+
+    last12Months.forEach((month, index) => {
+      const cost = costs.find(
+          c => c._id.year === month.year && c._id.month === month.month
+      );
+      if (cost) {
+        costData[index] = cost.totalCost;
+      }
+    });
+
+    const profitData = revenueData.map((revenue, index) => revenue - costData[index]);
 
     const topProducts = await Order.aggregate([
       { $unwind: "$products" },
@@ -82,7 +141,10 @@ async function generateAnalytics() {
       }
     }
 
-    const profitData = revenueData.map(revenue => revenue * 0.1);
+    const totalRevenue = await calculateTotalRevenue();
+    const totalProfit = totalRevenue - await calculateTotalCost();
+    const totalUsers = await User.countDocuments();
+    const totalOrders = await Order.countDocuments();
 
     return {
       labels,
@@ -90,11 +152,94 @@ async function generateAnalytics() {
       profitData,
       ordersLabels: labels,
       ordersData,
+      costData,
       topProductsLabels,
       topProductsData,
-    }
+      totalRevenue: totalRevenue,
+      totalProfit: totalProfit,
+      totalUsers: totalUsers,
+      totalOrders: totalOrders
+    };
 
   } catch (error) {
     console.error("Error generating analytics:", error);
+  }
+}
+
+async function calculateTotalRevenue() {
+  try {
+    const result = await Order.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalRevenue: { $sum: "$totalAmount" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalRevenue: 1
+        }
+      }
+    ]);
+
+    return result.length > 0 ? result[0].totalRevenue : 0;
+  } catch (error) {
+    console.error("Error calculating total revenue:", error);
+  }
+}
+
+async function calculateTotalCost() {
+  try {
+    const result = await Order.aggregate([
+      {
+        $unwind: "$products",
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "products.product",
+          foreignField: "_id",
+          as: "productDetails",
+        },
+      },
+      {
+        $unwind: "$productDetails",
+      },
+      {
+        $addFields: {
+          matchedVariant: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$productDetails.variants",
+                  as: "variant",
+                  cond: { $eq: ["$$variant.sku", "$products.variantSKU"] },
+                },
+              },
+              0,
+            ],
+          },
+        },
+      },
+      {
+        $addFields: {
+          productCost: {
+            $multiply: ["$matchedVariant.costPrice", "$products.quantity"],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalCost: { $sum: "$productCost" },
+        },
+      },
+    ]);
+
+    return result.length > 0 ? result[0].totalCost : 0;
+  } catch (err) {
+    console.error(err);
+    throw err;
   }
 }
