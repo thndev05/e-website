@@ -17,15 +17,15 @@ module.exports = (app) => {
 
     app.use('/auth', authRoutes);
 
-    app.use('/', authMiddleware.requireAuth, homeRoutes);
-    app.use('/shop', authMiddleware.requireAuth, shopRouter);
+    app.use('/', homeRoutes);
+    app.use('/shop', shopRouter);
     app.use('/user', authMiddleware.requireAuth, userRoutes);
-    app.use('/contact', authMiddleware.requireAuth, contactRoutes);
+    app.use('/contact', contactRoutes);
     app.use('/wishlist',
       authMiddleware.requireAuth,
       wishlistRoutes
     );
-    app.use('/product', authMiddleware.requireAuth, productRoutes);
+    app.use('/product', productRoutes);
     app.use('/cart', authMiddleware.requireAuth, cartRoutes);
     app.use('/checkout', authMiddleware.requireAuth, checkoutRoutes);
 }

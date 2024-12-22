@@ -225,9 +225,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="product-wishlist">
-                                                    <a href="javascript:void(0);" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
-                                                        <i class="far fa-heart"></i>
-                                                    </a>
+                                                    {{#if isAuthenticated}}
+                                                        <a href="javascript:void(0);" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
+                                                            <i class="far fa-heart"></i>
+                                                        </a>
+                                                    {{else}}
+                                                        <a href="/auth/login" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
+                                                            <i class="far fa-heart"></i>
+                                                        </a>
+                                                    {{/if}}
                                                 </div>
                                             </div>
                                         </div>
@@ -277,9 +283,15 @@
                                                     <i class="flaticon-shopping-cart"></i>
                                                 </a>
                                                 <div class="product-wishlist">
-                                                    <a href="javascript:void(0);" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
-                                                        <i class="far fa-heart"></i>
-                                                    </a>
+                                                    {{#if isAuthenticated}}
+                                                        <a href="javascript:void(0);" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
+                                                            <i class="far fa-heart"></i>
+                                                        </a>
+                                                    {{else}}
+                                                        <a href="/auth/login" class="wishlist-btn" data-product-id="{{this._id}}" data-action="add">
+                                                            <i class="far fa-heart"></i>
+                                                        </a>
+                                                    {{/if}}
                                                 </div>
                                             </div>
                                         </div>
@@ -317,7 +329,6 @@
     </section>
 </main>
 
-{{> client/footer}}
 
 <script>
     function setQueryParam(paramToChange, newValue) {
