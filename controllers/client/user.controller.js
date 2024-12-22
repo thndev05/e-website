@@ -168,7 +168,7 @@ module.exports.purchase = async (req, res) => {
         filter.status = status;
     }
 
-    const orders = await Order.find(filter).sort({ createdAt: "desc" }).lean();
+    const orders = await Order.find(filter).populate('coupon').sort({ createdAt: "desc" }).lean();
     for (const order of orders) {
         for (const p of order.products) {
             const findProduct = await Product.findById(p.product).lean();

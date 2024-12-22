@@ -109,10 +109,24 @@ function renderMiniCart(cart) {
     checkoutItem.innerHTML = `
         <div class="checkout-link">
             <a href="/cart">Shopping Cart</a>
-            <a class="red-color" href="/checkout">Checkout</a>
+            <a id="checkout-link" class="red-color" href="/checkout">Checkout</a>
         </div>
     `;
     minicart.appendChild(checkoutItem);
+
+    const checkoutLink = document.getElementById('checkout-link');
+    checkoutLink.addEventListener('click', (event) => {
+        if (!Array.isArray(cart.products) || cart.products.length === 0) {
+            event.preventDefault();
+
+            Swal.fire({
+                icon: 'warning',
+                title: 'Your cart is empty',
+                text: 'Please add some items to your cart.',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
 }
 
 function getVariantText(variant) {

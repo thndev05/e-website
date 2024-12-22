@@ -151,15 +151,15 @@
                                                         <a href="/product/{{this.slug}}" title="Quick View">
                                                             <i class="flaticon-eye"></i>
                                                         </a>
-                                                        <a class="add-to-cart-btn" href="#" title="Shopping Cart">
+                                                        <a class="add-to-cart-btn" href="/product/{{this.slug}}" title="Shopping Cart">
                                                             <i class="flaticon-shopping-cart"></i>
                                                         </a>
                                                     </div>
                                                 </div>
                                                 <div class="product-content">
                                                     <div class="pro-cat mb-10">
-                                                        <a href="#">{{this.brand}} - </a>
-                                                        <a href="#">{{this.subcategory}}</a>
+                                                        <a href='/shop?keyword={{this.brand}}'>{{this.brand}} - </a>
+                                                        <a href='/shop?keyword={{this.subcategory}}'>{{this.subcategory}}</a>
                                                     </div>
                                                     <h4>
                                                         <a href="/product/{{this.slug}}">{{this.name}}</a>
@@ -212,8 +212,8 @@
                                                     </div>
                                                     <div class="product-content">
                                                         <div class="pro-cat mb-10">
-                                                            <a href="#">{{this.brand}} - </a>
-                                                            <a href="#">{{this.subcategory}}</a>
+                                                            <a href='/shop?keyword={{this.brand}}'>{{this.brand}} - </a>
+                                                            <a href='/shop?keyword={{this.subcategory}}'>{{this.subcategory}}</a>
                                                         </div>
                                                         <h4>
                                                             <a href="#">{{this.name}}</a>

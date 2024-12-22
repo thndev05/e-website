@@ -61,84 +61,6 @@
                         </div>
 
                         <div class="shop-widget">
-                            <h3 class="shop-title">Recent Product</h3>
-                            <ul class="shop-sidebar-product">
-                                <li>
-                                    <div class="side-pro-img">
-                                        <a href="product-details.html"><img src="/client/img/product/latest/shop-rsp1.jpg" alt=""></a>
-                                    </div>
-                                    <div class="side-pro-content">
-                                        <div class="side-pro-rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <h5><a href="product-details.html">Raglan Baseball-Style</a></h5>
-                                        <div class="side-pro-price">
-                                            <span>$119.00 USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="side-pro-img">
-                                        <a href="product-details.html"><img src="/client/img/product/latest/shop-rsp3.jpg" alt=""></a>
-                                    </div>
-                                    <div class="side-pro-content">
-                                        <div class="side-pro-rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <h5><a href="product-details.html">Raglan Baseball-Style</a></h5>
-                                        <div class="side-pro-price">
-                                            <span>$119.00 USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="side-pro-img">
-                                        <a href="product-details.html"><img src="/client/img/product/latest/shop-rsp2.jpg" alt=""></a>
-                                    </div>
-                                    <div class="side-pro-content">
-                                        <div class="side-pro-rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <h5><a href="product-details.html">Raglan Baseball-Style</a></h5>
-                                        <div class="side-pro-price">
-                                            <span>$119.00 USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="side-pro-img">
-                                        <a href="product-details.html"><img src="/client/img/product/latest/shop-rsp4.jpg" alt=""></a>
-                                    </div>
-                                    <div class="side-pro-content">
-                                        <div class="side-pro-rating">
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                            <i class="fas fa-star"></i>
-                                        </div>
-                                        <h5><a href="product-details.html">Raglan Baseball-Style</a></h5>
-                                        <div class="side-pro-price">
-                                            <span>$119.00 USD</span>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="shop-widget">
                             <div class="shop-sidebar-banner">
                                 <a href="/shop"><img src="/client/img/banner/shop-banner.jpg" alt=""></a>
                             </div>
@@ -212,8 +134,8 @@
                                             </div>
                                             <div class="product-content">
                                                 <div class="pro-cat mb-10">
-                                                    <a href="#">{{this.brand}} - </a>
-                                                    <a href="#">{{this.subcategory}}</a>
+                                                    <a href='/shop?keyword={{this.brand}}'>{{this.brand}} - </a>
+                                                    <a href='/shop?keyword={{this.subcategory}}'>{{this.subcategory}}</a>
                                                 </div>
                                                 <h4>
                                                     <a href="/product/{{this.slug}}">{{this.name}}</a>
@@ -261,8 +183,8 @@
                                     <div class="col-xl-7">
                                         <div class="product-content pro-list-content pr-0 mb-50">
                                             <div class="pro-cat mb-10">
-                                                <a href="#">{{this.brand}} - </a>
-                                                <a href="#">{{this.subcategory}}</a>
+                                                <a href='/shop?keyword={{this.brand}}'>{{this.brand}} - </a>
+                                                <a href='/shop?keyword={{this.subcategory}}'>{{this.subcategory}}</a>
                                             </div>
                                             <h4>
                                                 <a href="#">{{this.name}}</a>
@@ -347,6 +269,7 @@
         event.preventDefault();
 
         params.set('keyword', keywordInput.value);
+        params.delete('page');
         window.location.href = `${window.location.pathname}?${params.toString()}`;
     });
 
@@ -367,11 +290,13 @@
 
             e.addEventListener('click', () => {
                 params.delete('size', size);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         } else {
             e.addEventListener('click', () => {
                 params.append('size', size);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         }
@@ -389,11 +314,13 @@
 
            e.addEventListener('click', () => {
                params.delete('category', category);
+               params.delete('page');
                window.location.href = `${window.location.pathname}?${params.toString()}`;
            });
        } else {
            e.addEventListener('click', () => {
                params.append('category', category);
+               params.delete('page');
                window.location.href = `${window.location.pathname}?${params.toString()}`;
            });
        }
@@ -410,11 +337,13 @@
 
             e.addEventListener('click', () => {
                 params.delete('color', color);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         } else {
             e.addEventListener('click', () => {
                 params.append('color', color);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         }

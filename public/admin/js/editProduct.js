@@ -126,17 +126,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         <label for="variantSize">Size</label>
                         <input type="text" class="form-control" name="variants[${variantIndex}].size" placeholder="Enter Size">
                     </div>
+                    <div class="invalid-feedback invalid-variant-sku" style="text-align: center">Please fill in at least one of the three fields above.</div>
                 </div>
                 <div class="form-row mt-2">
                     <div class="col">
                         <label for="variant-stock">Quantity</label>
                         <input type="number" class="form-control" name="variants[${variantIndex}].stock"
                                placeholder="Enter Quantity">
+                        <div class="invalid-feedback">Please enter a valid quantity</div>
                     </div>
                     <div class="col">
                         <label for="variant-cost-price">Cost Price</label>
                         <input type="number" class="form-control" name="variants[${variantIndex}].costPrice"
                                placeholder="Enter Cost Price">
+                        <div class="invalid-feedback">Please enter a valid cost price</div>
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -144,11 +147,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <label for="variant-price">Price</label>
                         <input type="number" class="form-control" name="variants[${variantIndex}].price"
                                placeholder="Enter Price">
+                        <div class="invalid-feedback">Please enter a valid price</div>       
                     </div>
                     <div class="col">
                         <label for="variant-sale-price">Sale Price</label>
                         <input type="number" class="form-control" name="variants[${variantIndex}].salePrice"
                                placeholder="Enter Sale Price">
+                        <div class="invalid-feedback">Please enter a valid sale price</div>       
                     </div>
                 </div>
                 <div class="form-row mt-2">
@@ -189,5 +194,63 @@ document.addEventListener('DOMContentLoaded', () => {
             enabled: 0
         }
     });
+
+    const validateField = (element, condition) => {
+        if (condition) {
+            element.classList.add('is-invalid');
+            return false;
+        } else {
+            element.classList.remove('is-invalid');
+            return true;
+        }
+    };
+
+    const editProductForm = document.getElementById('edit-product-form');
+
+    const category = document.getElementById('category');
+    const subcategory = document.getElementById('subcategory');
+    const imagesSelect = document.getElementById('product-images');
+    const isProductImagesChanged = document.getElementById('is-product-images-changed');
+
+    editProductForm.addEventListener('submit', (event) => {
+        let isValid = true;
+
+        isValid &= validateField(category, !category.value || category.value === 'no');
+
+        isValid &= validateField(subcategory, !subcategory.value || subcategory.value === 'no');
+
+        isValid &= validateField(imagesSelect, 'true' === isProductImagesChanged.value && !imagesSelect.files.length);
+
+        document.querySelectorAll('.variant-item').forEach(variantItem => {
+            const invalidVariantSku = variantItem.querySelector('.invalid-variant-sku');
+            const name = variantItem.querySelector('input[name*="name"]');
+            const color = variantItem.querySelector('input[name*="color"]');
+            const size = variantItem.querySelector('input[name*="size"]');
+            const stock = variantItem.querySelector('input[name*="stock"]');
+            const costPrice = variantItem.querySelector('input[name*="costPrice"]');
+            const price = variantItem.querySelector('input[name*="price"]');
+            const salePrice = variantItem.querySelector('input[name*="salePrice"]');
+
+            const variantFieldsEmpty = !name.value && !color.value && !size.value;
+            isValid &= validateField(name, variantFieldsEmpty);
+            isValid &= validateField(color, variantFieldsEmpty);
+            isValid &= validateField(size, variantFieldsEmpty);
+
+            if (variantFieldsEmpty) {
+                invalidVariantSku.style.display = 'block';
+            } else {
+                invalidVariantSku.style.display = 'none';
+            }
+
+            isValid &= validateField(stock, stock.value == null || stock.value === '' || Number(stock.value) < 0);
+            isValid &= validateField(costPrice, costPrice.value == null || costPrice.value === '' || Number(costPrice.value) < 0);
+            isValid &= validateField(price, price.value == null || price.value === '' || Number(price.value) < 0);
+            isValid &= validateField(salePrice, Number(salePrice.value) < 0);
+        });
+
+        if (!isValid) {
+            event.preventDefault();
+        }
+    })
 
 });
