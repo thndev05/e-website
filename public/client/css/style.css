@@ -2686,7 +2686,7 @@ img.secondary-img {
 
 	font-weight: 500;
 
-	padding: 18px 30px;
+	padding: 18px 20px;
 
 	border: 2px solid #ecedff;
 
@@ -5527,6 +5527,10 @@ table td.product-name {
 
 }
 
+.product-name-wrapped {
+	margin-right: 15px;
+}
+
 table.checkout-table td.product-name {
 	display: block;
 }
@@ -5556,18 +5560,16 @@ table.checkout-table td.product-name {
 
 .product-info {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	align-items: center;
 	font-size: 16px;
 	padding-left: 5px;
 }
 
 .product-info .amount{
-	position: absolute;
-	top: 50%;
-	right: 10px;
-	transform: translateY(-50%);
-	/*font-weight: bold;*/
-	/*color: #333;*/
+	padding-right: 20px;
+	font-weight: bold;
+	color: #333;
 }
 
 .product-info .product-name {
