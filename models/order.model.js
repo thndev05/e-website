@@ -10,7 +10,8 @@ const orderSchema = new mongoose.Schema({
             product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true },
             variantSKU: { type: String, required: true },
             quantity: { type: Number, required: true },
-            price: { type: Number, required: true }
+            unitPrice: { type: Number, required: true },
+            subtotal: { type: Number, required: true },
         }
     ],
     shippingInfo: {
@@ -22,6 +23,7 @@ const orderSchema = new mongoose.Schema({
         street: String
     },
     paymentMethod: { type: String, enum: ['online_banking', 'cash_on_delivery'], required: true },
+    subtotal: {type: Number, required: true},
     totalAmount: { type: Number, required: true },
     status: {
         type: String,

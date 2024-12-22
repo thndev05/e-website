@@ -9,54 +9,63 @@ const { startSession } = require('mongoose');
 const CartHelper = require('../../helpers/cart')
 
 module.exports.index = async (req, res, next) => {
-    if (!res.locals.user) {
-        const error = new Error('Not logged in');
-        next(error);
-        return;
-    }
-    const { couponCode } = req.query;
-
-    const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
-    const user = await User.findOne({ _id: res.locals.user.id }).lean();
-
-    let cartSubTotal = 0;
-    for (const cartItem of cart.products) {
-        const variant = cartItem.variant;
-
-        cartItem.effectivePrice = getEffectivePrice(variant);
-        cartItem.variantDescription = getVariantDescription(variant);
-
-        let price = Number(cartItem.effectivePrice) * Number(cartItem.quantity);
-        cartItem.totalPrice = price;
-        cartSubTotal += price;
-    }
-    cart.cartSubTotal = cartSubTotal;
-
-    let discount = 0;
-    let alert;
     try {
-        discount = await getCouponDiscount(res.locals.user.id, cart, couponCode);
-    } catch (error) {
-        alert = error.message;
-        console.error(error);
-    }
+        if (!res.locals.user) {
+            throw new Error('Not logged in');
+        }
+        const { couponCode } = req.query;
 
-    res.render('client/checkout/index', {
-        title: 'Checkout',
-        isHome: false,
-        breadcrumbTitle: 'Checkout',
-        breadcrumb: 'Checkout',
-        user: user,
-        cart: cart,
-        cartSubTotal: cartSubTotal,
-        discount: discount,
-        total: cartSubTotal - discount,
-        couponCode: couponCode,
-        alert: alert,
-    });
+        const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
+
+        if (!Array.isArray(cart.products) || cart.products.length === 0) {
+            throw new Error("Cart is empty");
+        }
+
+        const user = await User.findOne({ _id: res.locals.user.id }).lean();
+
+        let cartSubTotal = 0;
+        for (const cartItem of cart.products) {
+            const variant = cartItem.variant;
+
+            cartItem.effectivePrice = getEffectivePrice(variant);
+            cartItem.variantDescription = getVariantDescription(variant);
+
+            let price = Number(cartItem.effectivePrice) * Number(cartItem.quantity);
+            cartItem.totalPrice = price;
+            cartSubTotal += price;
+        }
+        cart.cartSubTotal = cartSubTotal;
+
+        let discount = 0;
+        let alert;
+        try {
+            discount = await getCouponDiscount(res.locals.user.id, cart, couponCode);
+        } catch (error) {
+            alert = error.message;
+            console.error(error);
+        }
+
+        res.render('client/checkout/index', {
+            title: 'Checkout',
+            isHome: false,
+            breadcrumbTitle: 'Checkout',
+            breadcrumb: 'Checkout',
+            user: user,
+            cart: cart,
+            cartSubTotal: cartSubTotal,
+            discount: discount,
+            total: cartSubTotal - discount,
+            couponCode: couponCode,
+            alert: alert,
+        });
+    } catch (error) {
+        console.error(error);
+        res.redirectPage = "/";
+        next(error);
+    }
 }
 
-module.exports.process = async (req, res) => {
+module.exports.process = async (req, res, next) => {
     const {
         fullName, phone, province, district, ward, street,
         notes, couponCode, paymentMethod
@@ -65,44 +74,31 @@ module.exports.process = async (req, res) => {
     const userId = res.locals.user.id;
 
     try {
-        // Fetch cart and user details
-        const [cart, user] = await Promise.all([
-            CartHelper.getOrCreateCart(userId),
-            User.findById(userId).lean(),
-        ]);
+        const cart = await CartHelper.getOrCreateCart(userId);
 
         // Process cart items
         let cartSubTotal = 0;
         for (const cartItem of cart.products) {
             const variant = cartItem.variant;
 
-            cartItem.effectivePrice = getEffectivePrice(variant);
+            cartItem.unitPrice = getEffectivePrice(variant);
             cartItem.variantDescription = getVariantDescription(variant);
 
-            const price = Number(cartItem.effectivePrice) * Number(cartItem.quantity);
-            cartItem.price = price;
-            cartSubTotal += price;
+            const subtotal = Number(cartItem.unitPrice) * Number(cartItem.quantity);
+
+            cartItem.subtotal = subtotal;
+
+            cartSubTotal += subtotal;
         }
-        cart.cartSubTotal = cartSubTotal;
 
         // Handle coupon discount
         let discount = 0, coupon = null;
-        try {
-            discount = await getCouponDiscount(userId, cart, couponCode);
-            if (discount > 0) {
-                coupon = await Coupon.findOne({ code: couponCode });
-                if (!coupon) throw new Error('Coupon not found.');
-            }
-        } catch (error) {
-            console.error(error);
-            return res.render('client/checkout/index', {
-                title: 'Checkout',
-                isHome: false,
-                breadcrumbTitle: 'Checkout',
-                breadcrumb: 'Checkout',
-                alert: error.message,
-            });
+        discount = await getCouponDiscount(userId, cart, couponCode);
+        if (discount > 0) {
+            coupon = await Coupon.findOne({ code: couponCode });
+            if (!coupon) throw new Error('Coupon not found.');
         }
+
 
         // Prepare order data
         const orderData = {
@@ -110,10 +106,12 @@ module.exports.process = async (req, res) => {
             products: cart.products,
             shippingInfo: { name: fullName, phone, province, district, ward, street },
             paymentMethod,
+            subtotal: cartSubTotal,
             totalAmount: cartSubTotal - discount,
             coupon: coupon ? coupon._id : null,
             notes,
         };
+        console.log(orderData.totalAmount);
 
         // Start transaction
         const session = await startSession();
@@ -154,17 +152,24 @@ module.exports.process = async (req, res) => {
             cart.products = [];
             await Cart.updateOne({ _id: cart._id }, { $set: { products: [] } }, { session });
 
-            await Order.create(orderData);
+            const order = await Order.create(orderData);
 
             // Commit transaction and create order
             await session.commitTransaction();
             await session.endSession();
 
-            res.redirect('/user/purchase?status=all');
+            if ('online_banking' === paymentMethod) {
+                res.redirect('/checkout/qr?transactionID=' + order.transactionID);
+
+                cancelOrderIfNotPaidAfterTimeout(order._id);
+            } else {
+                res.redirect('/user/purchase?status=all');
+            }
         } catch (transactionError) {
             // Rollback transaction on error
             await session.abortTransaction();
             await session.endSession();
+
             throw transactionError;
         }
     } catch (error) {
@@ -174,7 +179,13 @@ module.exports.process = async (req, res) => {
             isHome: false,
             breadcrumbTitle: 'Checkout',
             breadcrumb: 'Checkout',
-            alert: `Order creation failed!\nCause: ${error.message}`,
+            sweetAlert: {
+                icon: 'error',
+                title: 'Order Creation Failed',
+                text: error.message,
+                confirmButtonText: 'OK',
+                redirectPage: "back"
+            }
         });
     }
 };
@@ -216,10 +227,10 @@ async function getCouponDiscount(userId, cart, couponCode) {
         throw new Error('You have reached the usage limit for this coupon.')
     }
 
-    const { cartSubTotal } = cart;
+    const { subtotal } = cart;
     const { discountType, discountValue } = coupon;
 
-    return Math.min(cartSubTotal, discountType === 'percentage' ? cartSubTotal * discountValue / 100 : discountValue);
+    return Math.min(subtotal, discountType === 'percentage' ? subtotal * discountValue / 100 : discountValue);
 }
 
 
@@ -240,6 +251,10 @@ module.exports.getQR = async (req, res, next) => {
             throw new Error('Your order has already been paid.')
         }
 
+        if (order.status !== 'pending') {
+            throw new Error('Your order must be in "pending" state.');
+        }
+
         const qrUrl = `https://img.vietqr.io/image/tpbank-khanh1402-compact2.jpg?amount=${order.totalAmount}&addInfo=${transactionID}&accountName=HUYNH%20QUOC%20KHANH`;
 
 
@@ -251,6 +266,23 @@ module.exports.getQR = async (req, res, next) => {
             qrUrl,
         });
     } catch (error) {
+        console.error(error);
+        res.redirectPage = "/user/purchase?status=all";
         next(error);
+    }
+}
+
+async function cancelOrderIfNotPaidAfterTimeout(orderId, timeout = 10 * 60 * 1000) {
+    try {
+        setTimeout(async () => {
+            const order = await Order.findById(orderId);
+            if (order && !order.isPaid && order.status === 'pending') {
+                order.status = 'cancelled';
+                await order.save();
+                console.log(`Order ${orderId} has been cancelled due to non-payment.`);
+            }
+        }, timeout);
+    } catch (error) {
+        console.error(`Error cancelling order ${orderId}:`, error);
     }
 }

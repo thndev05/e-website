@@ -5,7 +5,7 @@
 <!-- checkout-area start -->
 <section class="checkout-area pb-70">
     <div class="container">
-        <form id="checkout-form" action="checkout/process/" method="post">
+        <form id="checkout-form" action="/checkout/process/" method="post">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="checkbox-form">
@@ -41,7 +41,8 @@
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label for="phone">Phone <span class="required">*</span></label>
-                                        <input type="text" id="phone" name="phone" class="phone" placeholder="Phone"/>
+                                        <input type="text" id="phone" name="phone" class="phone form-control" placeholder="Phone"/>
+                                        <div class="invalid-feedback">Please input a valid phone number.</div>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
@@ -50,6 +51,7 @@
                                         <select class="form-control" id="province" name="province">
                                             <option value="">Select Province/City</option>
                                         </select>
+                                        <div class="invalid-feedback">Please select province/city.</div>
                                     </div>
                                 </div>
 
@@ -59,6 +61,7 @@
                                         <select class="form-control" id="district" name="district">
                                             <option value="">Select District</option>
                                         </select>
+                                        <div class="invalid-feedback">Please select district.</div>
                                     </div>
                                 </div>
 
@@ -68,13 +71,14 @@
                                         <select class="form-control" id="ward" name="ward">
                                             <option value="">Select Ward</option>
                                         </select>
+                                        <div class="invalid-feedback">Please select ward.</div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label for="street">Street<span class="required">*</span></label>
-                                        <input type="text" id="street" name="street" placeholder="Street address" />
+                                        <input type="text" id="street" name="street" placeholder="Street address" required/>
                                     </div>
                                 </div>
                             </div>
@@ -282,7 +286,9 @@
         }
 
         const shippingAddressDiv = document.querySelector('.shipping-address');
-        document.querySelectorAll('.address-card').forEach(card => {
+        const addressCards = document.querySelectorAll('.address-card');
+
+        addressCards.forEach(card => {
             card.addEventListener('click', function () {
                 document.querySelectorAll('.address-card').forEach(c => c.classList.remove('active'));
                 card.classList.add('active');
@@ -317,6 +323,8 @@
             });
         });
 
+        addressCards[0].dispatchEvent(new Event('click'));
+
         document.querySelectorAll('.payment-method-radio-input').forEach(input => {
             input.addEventListener('change', function () {
                 document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
@@ -329,6 +337,39 @@
         });
 
         // Validate checkout form
+        const checkoutForm = document.getElementById("checkout-form");
+
+        checkoutForm.addEventListener('submit', function (event) {
+            const phoneRegex = /^(0|\+84)(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])\d{7}$/;
+            console.log(phoneInput.value + ", " + phoneRegex.test(phoneInput.value));
+            if (!phoneInput.value || !phoneRegex.test(phoneInput.value)) {
+                event.preventDefault();
+                phoneInput.classList.add('is-invalid');
+            } else {
+                phoneInput.classList.remove('is-invalid');
+            }
+
+            if (!provinceSelect.value) {
+                event.preventDefault();
+                provinceSelect.classList.add('is-invalid');
+            } else {
+                provinceSelect.classList.remove('is-invalid');
+            }
+
+            if (!districtSelect.value) {
+                event.preventDefault();
+                districtSelect.classList.add('is-invalid');
+            } else {
+                districtSelect.classList.remove('is-invalid');
+            }
+
+            if (!wardSelect.value) {
+                event.preventDefault();
+                wardSelect.classList.add('is-invalid');
+            } else {
+                wardSelect.classList.remove('is-invalid');
+            }
+        });
 
 
         {{#if alert}}

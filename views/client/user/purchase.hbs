@@ -47,8 +47,22 @@
                                 </div>
                                 <div class="card-body">
                                     <p><strong>Date:</strong> {{parseDateTime this.createdAt}}</p>
-                                    <p><strong>Payment method:</strong> {{this.paymentMethod}}</p>
-                                    <p><strong>Total:</strong> {{this.totalAmount}} USD</p>
+                                    {{#ifEqual this.paymentMethod 'online_banking'}}
+                                        <p><strong>Payment Method:</strong> Online Banking</p>
+                                    {{else}}
+                                        {{#ifEqual this.paymentMethod 'cash_on_delivery'}}
+                                            <p><strong>Payment Method:</strong> Cash on Delivery</p>
+                                        {{else}}
+                                            <p><strong>Payment Method:</strong> {{this.paymentMethod}}</p>
+                                        {{/ifEqual}}
+                                    {{/ifEqual}}
+                                    <p><strong>Subtotal:</strong> {{#currencyUSD this.subtotal}}{{/currencyUSD}}</p>
+                                    {{#if this.coupon}}
+                                        <p><strong>Discounted:</strong> - {{#currencyUSD (subtract this.subtotal this.totalAmount)}}{{/currencyUSD}} ({{this.coupon.code}})</p>
+                                    {{else}}
+                                        <p><strong>Discounted:</strong> - {{#currencyUSD (subtract this.subtotal this.totalAmount)}}{{/currencyUSD}}</p>
+                                    {{/if}}
+                                    <p><strong>Total:</strong> {{#currencyUSD this.totalAmount}}{{/currencyUSD}}</p>
 
                                     <!-- Products Table -->
                                     <table class="table table-borderless">
@@ -64,9 +78,9 @@
                                         {{#each this.products}}
                                             <tr>
                                                 <td>{{this.name}}</td>
-                                                <td>{{this.price}} USD</td>
+                                                <td>{{this.price}} {{currencyUSD this.unitPrice}}</td>
                                                 <td>{{this.quantity}}</td>
-                                                <td>{{multiplier this.price this.quantity}} USD</td>
+                                                <td>{{currencyUSD this.subtotal}}</td>
                                             </tr>
                                         {{/each}}
                                         </tbody>
