@@ -5,7 +5,7 @@
 <!-- checkout-area start -->
 <section class="checkout-area pb-70">
     <div class="container">
-        <form action="checkout/process/" method="post">
+        <form id="checkout-form" action="checkout/process/" method="post">
             <div class="row">
                 <div class="col-lg-6">
                     <div class="checkbox-form">
@@ -125,7 +125,7 @@
                                     </tr>
                                     <tr class="shipping">
                                         <th>Shipping Fee</th>
-                                        <td>$0</td>
+                                        <td>$0.00</td>
                                     </tr>
                                     <tr class="order-total">
                                         <th>Order Total</th>
@@ -327,6 +327,8 @@
                 }
             });
         });
+
+        // Validate checkout form
 
 
         {{#if alert}}

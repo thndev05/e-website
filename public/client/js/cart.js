@@ -73,6 +73,8 @@ function renderCartItems(cart) {
         const productId = product._id;
         const variantSKU = variant.sku;
 
+        const formattedUnitPrice = currencyUSD(getEffectivePrice(variant));
+
         const cartRow = document.createElement('tr');
         cartRow.innerHTML = `
             <td class="product-thumbnail">
@@ -85,15 +87,17 @@ function renderCartItems(cart) {
             </td>
             <td class="product-variant-description">${getVariantDescription(variant)}</td>
             <td class="product-price">
-                <span class="amount">$${getEffectivePrice(variant)}</span>
+                <span class="amount">${formattedUnitPrice}</span>
             </td>
         `;
 
         createQuantitySelectorCell(cartRow, cartItem.quantity, productId, variantSKU);
 
+        const formattedTotalPrice = currencyUSD(getEffectivePrice(variant) * cartItem.quantity);
+
         const subTotalCell = document.createElement('td');
         subTotalCell.classList.add('product-subtotal');
-        subTotalCell.innerHTML = `<span class="amount">$${(getEffectivePrice(variant) * cartItem.quantity).toFixed(2)}</span>`;
+        subTotalCell.innerHTML = `<span class="amount">${formattedTotalPrice}</span>`;
         cartRow.append(subTotalCell);
 
         const removeCell = document.createElement('td');
@@ -136,9 +140,9 @@ function setCheckoutPrice(subtotal, discount) {
     const discountSpan = document.getElementById('discount-price');
     const totalSpan = document.getElementById('total-price');
 
-    subTotalSpan.textContent = "$" + subtotal;
-    discountSpan.textContent = "- $" + discount;
-    totalSpan.textContent = "$" + (subtotal - discount);
+    subTotalSpan.textContent = currencyUSD(subtotal);
+    discountSpan.textContent = currencyUSD(- discount);
+    totalSpan.textContent = currencyUSD(subtotal - discount);
 }
 
 function applyCoupon(couponCode) {
@@ -223,3 +227,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+function currencyUSD(value) {
+    if (typeof value !== 'number') {
+        value = parseFloat(value) || 0;
+    }
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
+}

@@ -32,6 +32,8 @@ function renderMiniCart(cart) {
 
         const listItem = document.createElement('li');
 
+        const price = currencyUSD(p.variant.salePrice ? p.variant.salePrice : p.variant.price);
+
         listItem.innerHTML = `
             <div class="cart-img">
                 <a href="product-details.html">
@@ -47,7 +49,7 @@ function renderMiniCart(cart) {
                 </div>
                 <div class="cart-price">
                     <span class="quantity">${p.quantity} x </span>
-                    <span class="new">$${p.variant.salePrice ? p.variant.salePrice : p.variant.price}</span>
+                    <span class="new">${price}</span>
                 </div>
             </div>
         `;
@@ -93,10 +95,12 @@ function renderMiniCart(cart) {
     }
 
     const totalPriceItem = document.createElement('li');
+
+    const formattedTotal = currencyUSD(total);
     totalPriceItem.innerHTML = `
         <div class="total-price">
             <span class="f-left">Total:</span>
-            <span class="f-right">$${total}</span>
+            <span class="f-right">${formattedTotal}</span>
         </div>
     `;
     minicart.appendChild(totalPriceItem);
@@ -116,4 +120,11 @@ function getVariantText(variant) {
         .filter(Boolean)
         .join(" ")
         .trim();
+}
+
+function currencyUSD(value) {
+    if (typeof value !== 'number') {
+        value = parseFloat(value) || 0;
+    }
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 }
