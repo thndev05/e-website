@@ -79,7 +79,11 @@
                     {{/if}}
 
                     {{#if sweetAlert.redirectPage}}
-                        window.location.href = '{{sweetAlert.redirectPage}}';
+                        if ('back' === '{{sweetAlert.redirectPage}}') {
+                            window.history.back();
+                        } else {
+                            window.location.href = '{{sweetAlert.redirectPage}}';
+                        }
                     {{/if}}
                 });
         {{/if}}

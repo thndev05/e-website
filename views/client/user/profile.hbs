@@ -22,11 +22,11 @@
                 <div class="col-lg-6">
                     <div class="card p-4 mb-4">
                         <h3 class="mb-4">Account Information</h3>
-                        <form action="/user/updateProfile/{{user.id}}?_method=PATCH" method="POST">
+                        <form id="accountInfoForm" action="/user/updateProfile/{{user.id}}?_method=PATCH" method="POST">
                             <div class="form-group">
                                 <label for="fullName">Full Name</label>
                                 <input type="text" class="form-control" id="fullName" name="fullName"
-                                       value="{{user.fullName}}" placeholder="Enter your fullname">
+                                       value="{{user.fullName}}" placeholder="Enter your fullname" required>
                             </div>
 
                             <div class="form-group">
@@ -39,6 +39,9 @@
                                 <label for="birthdate">Birthdate</label>
                                 <input type="date" class="form-control" id="birthdate" name="birthdate"
                                        value="{{parseDate user.birthdate 'YYYY-MM-DD'}}">
+                                <div class="invalid-feedback">
+                                    The birthdate year cannot be greater than or equals the current year.
+                                </div>
                             </div>
 
                             <button type="submit" class="btn theme-btn w-100 mt-3">Save info</button>
@@ -102,7 +105,8 @@
                 <form action="/user/updateAddress/{{user.id}}?_method=PATCH" method="POST" id="addressForm" style="display: none;">
                     <div class="form-group mb-3">
                         <label for="phoneNumber">Phone Number:</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phone" placeholder="Enter your phone number">
+                        <input type="text" class="form-control" id="phoneNumber" name="phone" placeholder="Enter your phone number" required>
+                        <div class="invalid-feedback">Please input a valid phone number.</div>
                     </div>
 
                     <div class="form-group mb-3">
@@ -111,18 +115,23 @@
                             <select class="form-control" id="province" name="province">
                                 <option value="">Province/City</option>
                             </select>
+                            <div class="invalid-feedback">Please select province/city.</div>
+
                             <select class="form-control mx-3" id="district" name="district">
                                 <option value="">District</option>
                             </select>
+
+                            <div class="invalid-feedback">Please select district.</div>
                             <select class="form-control" id="ward" name="ward">
                                 <option value="">Ward</option>
                             </select>
+                            <div class="invalid-feedback">Please select ward.</div>
                         </div>
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="street">Street/House Number:</label>
-                        <input type="text" class="form-control" id="street" name="street" placeholder="Enter detailed address">
+                        <input type="text" class="form-control" id="street" name="street" placeholder="Enter detailed address" required>
                     </div>
 
                     <div class="d-flex justify-content-end gap-2">
@@ -136,3 +145,62 @@
 </main>
 
 {{> client/footer}}
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const accountInfoForm = document.getElementById('accountInfoForm');
+        accountInfoForm.addEventListener("submit", function (event) {
+            const birthdateInput = this.querySelector("input[type=date]");
+            const selectedDate = new Date(birthdateInput.value);
+            const currentYear = new Date().getFullYear();
+
+            if (selectedDate.getFullYear() >= currentYear) {
+                event.preventDefault();
+                birthdateInput.classList.add('is-invalid');
+            } else {
+                birthdateInput.classList.remove('is-invalid');
+            }
+        });
+
+        const addressForm = document.getElementById('addressForm');
+
+        const phoneInput = document.getElementById('phoneNumber');
+        const provinceSelect = document.getElementById('province');
+        const districtSelect = document.getElementById('district');
+        const wardSelect = document.getElementById('ward');
+
+        addressForm.addEventListener('submit', function (event) {
+            const phoneRegex = /^(0|\+84)(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])\d{7}$/;
+            if (phoneInput.value && !phoneRegex.test(phoneInput.value)) {
+                event.preventDefault();
+                phoneInput.classList.add('is-invalid');
+            } else {
+                phoneInput.classList.remove('is-invalid');
+            }
+
+            if (!provinceSelect.value) {
+                event.preventDefault();
+                provinceSelect.classList.add('is-invalid');
+            } else {
+                provinceSelect.classList.remove('is-invalid');
+            }
+
+            if (!districtSelect.value) {
+                event.preventDefault();
+                districtSelect.classList.add('is-invalid');
+            } else {
+                districtSelect.classList.remove('is-invalid');
+            }
+
+            if (!wardSelect.value) {
+                event.preventDefault();
+                wardSelect.classList.add('is-invalid');
+            } else {
+                wardSelect.classList.remove('is-invalid');
+            }
+
+            if (!)
+        });
+    });
+</script>

@@ -21,26 +21,35 @@ module.exports.profile = async (req, res) => {
 }
 
 //[PATCH] /user/updateProfile/:id
-module.exports.updateProfile = async (req, res) => {
+module.exports.updateProfile = async (req, res, next) => {
     try {
         const id = req.params.id;
+        const {fullName, birthdate} = req.body;
+
+        if (!fullName || fullName.length < 0) {
+            throw new Error("Full name is empty!");
+        }
+
+        const selectedDate = new Date(birthdate);
+        const currentYear = new Date().getFullYear();
+        if (selectedDate.getFullYear() >= currentYear) {
+            throw Error("The birthdate year cannot be greater than or equals the current year.");
+        }
+
         await User.updateOne({ _id: id }, req.body);
 
         await updateSessionUser(req, id);
 
         res.redirect('back');
     } catch (e) {
-        console.log(e);
-        res.render('client/user/profile', {
-            pageTitle: 'Profile',
-            breadcrumbTitle: 'Profile',
-            breadcrumb: 'Profile'
-        });
+        console.error(e);
+        res.redirectPage = "back";
+        next(e);
     }
 };
 
 //[PATCH] /user/changePassword/:id
-module.exports.changePassword = async (req, res) => {
+module.exports.changePassword = async (req, res, next) => {
     try {
         const id = req.params.id;
         const { currentPassword, newPassword, confirmNewPassword } = req.body;
@@ -87,27 +96,51 @@ module.exports.changePassword = async (req, res) => {
         await User.updateOne({ _id: id }, { password: changedPassword });
         res.redirect('/auth/logout');
     } catch (e) {
-        console.log(e);
-        res.redirect('back');
+        console.error(e);
+        res.redirectPage = "back";
+        next(e);
     }
 }
 
 //[PATCH] /user/updateAddress/:id
-module.exports.updateAddress = async (req, res) => {
+module.exports.updateAddress = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const newAddress = req.body;
-        await User.updateOne({ _id: id }, { $push: { address: newAddress } });
+        const {phone, province, district, ward, street} = req.body;
+
+        const phoneRegex = /^(0|\+84)(3[2-9]|5[2-9]|7[0|6-9]|8[1-9]|9[0-9])\d{7}$/;
+        if (!phone || !phoneRegex.test(phone)) {
+            throw new Error("Invalid phone number");
+        }
+
+        if (!province) {
+            throw new Error("No province selected.");
+        }
+
+        if (!district) {
+            throw new Error("No district selected.");
+        }
+
+        if (!ward) {
+            throw new Error("No ward selected.");
+        }
+
+        if (!street || street.length === 0) {
+            throw new Error("Street is empty");
+        }
+
+        await User.updateOne({ _id: id }, { $push: { address: {phone, province, district, ward, street} } });
         await updateSessionUser(req, id);
         res.redirect('back');
     } catch (e) {
         console.error(e);
-        res.redirect('back');
+        res.redirectPage = "back";
+        next(e);
     }
 };
 
 //[DELETE] /deleteAddress/:id/:index
-module.exports.deleteAddress = async (req, res) => {
+module.exports.deleteAddress = async (req, res, next) => {
     try {
         const { id, index } = req.params;
         await User.updateOne({ _id: id }, { $unset: { [`address.${index}`]: 1 } });
@@ -117,7 +150,8 @@ module.exports.deleteAddress = async (req, res) => {
         res.redirect('back');
     } catch (e) {
         console.error(e);
-        res.redirect('back');
+        res.redirectPage = "back";
+        next(e);
     }
 };
 
@@ -153,9 +187,8 @@ module.exports.purchase = async (req, res) => {
 }
 
 //[PATCH] /user/purchase/cancel/:orderId
-module.exports.cancelOrder = async (req, res) => {
-    const { orderId } = req.body; // Lấy orderId từ req.body
-    console.log('Order ID:', orderId);
+module.exports.cancelOrder = async (req, res, next) => {
+    const { orderId } = req.body;
 
     try {
         const order = await Order.findByIdAndUpdate(orderId, { status: 'cancelled' });
@@ -169,8 +202,9 @@ module.exports.cancelOrder = async (req, res) => {
             return res.json({ success: false, message: 'Order not found or cannot be cancelled!' });
         }
     } catch (error) {
-        console.error('Error:', error);
-        return res.status(500).json({ success: false, message: 'An error occurred while cancelling the order!' });
+        console.error(error);
+        res.redirectPage = "back";
+        next(error);
     }
 };
 
