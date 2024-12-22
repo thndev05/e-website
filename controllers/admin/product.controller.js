@@ -177,60 +177,61 @@ module.exports.editPatch = async (req, res) => {
   try {
     const id = req.params.id;
     const oldProduct = await Product.findById(id).lean();
-
-    const { name, description, category, status, isProductImagesChanged, brand, tags, gender, subcategory} = req.body;
+    const { name, description, category, status, isProductImagesChanged, brand, tags, gender, subcategory } = req.body;
     const data = { name, description, category, status, brand, gender, subcategory };
 
     const variants = ProductHelpers.extractVariantsFromReqBody(req.body);
+    const validVariants = variants.filter(
+      variant => variant && variant.name && variant.color && variant.size
+    );
 
-    console.log("Origin variants: " + JSON.stringify(oldProduct.variants));
-    console.log("Received variants: " + JSON.stringify(variants));
+    validVariants.forEach(variant => {
+      const oldVariant = oldProduct.variants.find(v => v.sku === variant.originalSKU);
 
-    for (let oldVariant of oldProduct.variants) {
-      for (let newVariant of variants) {
-        if (!newVariant) {
-          continue;
+      if (oldVariant) {
+        if (variant.isImageChanged === 'false') {
+          variant.image = oldVariant.image;
         }
 
-        if (newVariant.originalSKU === oldVariant.sku) {
-          if (newVariant.isImageChanged === 'false') {
-            newVariant.image = oldVariant.image;
-          }
-
-          const {oldName, oldColor, oldSize} = oldVariant;
-          const {newName, newColor, newSize} = newVariant;
-
-          if (oldName === newName && oldColor === newColor && oldSize === newSize) {
-            newVariant.sku = oldVariant.sku;
-          } else {
-            newVariant.sku = ProductHelpers.generateSKU(newName, newColor, newSize);
-          }
+        if (
+          oldVariant.name === variant.name &&
+          oldVariant.color === variant.color &&
+          oldVariant.size === variant.size
+        ) {
+          variant.sku = oldVariant.sku;
+        } else {
+          variant.sku = ProductHelpers.generateSKU(variant.name, variant.color, variant.size);
+        }
+      } else {
+        if (!variant.sku) {
+          variant.sku = ProductHelpers.generateSKU(variant.name, variant.color, variant.size);
         }
       }
-    }
+    });
 
     const findCategory = await Category.findOne({ name: data.category });
+    if (!findCategory) {
+      throw new FormError("Danh mục không hợp lệ!");
+    }
     data.category = findCategory._id;
 
     if (isProductImagesChanged === 'true') {
-      data.images = req.body.files.filter(obj => obj.fieldName === 'productImages').map(obj => obj.image);
+      data.images = req.body.files
+        .filter(obj => obj.fieldName === 'productImages')
+        .map(obj => obj.image);
     } else {
       data.images = oldProduct.images;
     }
 
-    data.variants = variants;
-
     data.thumbnail = data.images[0];
-
     data.tags = tags ? JSON.parse(tags).map(item => item.value) : [];
+    data.variants = validVariants;
 
     await Product.updateOne({ _id: id }, data);
 
-    console.log("Result variants: " + JSON.stringify(data.variants));
-
     res.redirect(`${prefixAdmin}/products`);
-  } catch(e) {
-    console.log(e);
+  } catch (e) {
+    console.error(e);
     res.redirect(`${prefixAdmin}/products`);
   }
-}
+};
