@@ -111,7 +111,6 @@ module.exports.process = async (req, res, next) => {
             coupon: coupon ? coupon._id : null,
             notes,
         };
-        console.log(orderData.totalAmount);
 
         // Start transaction
         const session = await startSession();
@@ -121,7 +120,9 @@ module.exports.process = async (req, res, next) => {
             // Update coupon usage if applicable
             if (coupon) {
                 coupon.timesUsed++;
-                const usageByUser = coupon.usageByUser.find(usage => usage.userId === userId);
+                const usageByUser = coupon.usageByUser.find(usage => {
+                    return usage.userId.toString() === userId.toString();
+                });
 
                 if (usageByUser) {
                     usageByUser.uses = (usageByUser.uses || 0) + 1;
