@@ -1,103 +1,108 @@
 {{> admin/sidebar}}
 {{> admin/header}}
 
-<section>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-10 col-md-8 ml-auto">
-                <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
-                    <div class="col-5 mb-4 mb-xl-0"></div>
-                    <div class="col-5 mb-4 mb-xl-0">
-                        <form id="form-search" class="form-inline d-none d-lg-block">
-                            <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
-                                   name="keyword" value="{{searchKeyword}}">
-                            <button class="btn btn-light btn-outline-secondary" type="submit">
-                                <i class="fa fa-search" aria-hidden="true"></i>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="col-12 mb-4 mb-xl-0 mt-5">
-                        <h4 class="text-muted text-center mb-3">Orders</h4>
-                        <table class="table bg-light table-striped  text-center" id="categories">
-                            <thead>
-                            <tr class="text-muted">
-                                <th>#ID</th>
-                                <th>Created</th>
-                                <th>Customer</th>
-                                <th>Total</th>
-                                <th>Profit</th>
-                                <th>Status</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {{#each orders}}
-                                <tr>
-                                    <td class="align-middle">{{this.transactionID}}</td>
-                                    <td class="align-middle">{{parseDateTime this.createdAt}}</td>
-                                    <td class="align-middle">{{this.customerName}}</td>
-                                    <td class="align-middle">${{this.totalAmount}}</td>
-                                    <td class="align-middle">$...</td>
-                                    <td class="align-middle">
-                                        <select name="status" class="form-select form-select-sm" id="{{this._id}}" value="{{this.status}}">
-                                            <option value="pending" {{#ifEqual this.status "pending"}}selected{{/ifEqual}}>Pending</option>
-                                            <option value="confirmed" {{#ifEqual this.status "confirmed"}}selected{{/ifEqual}}>Confirmed</option>
-                                            <option value="delivering" {{#ifEqual this.status "delivering"}}selected{{/ifEqual}}>Delivering</option>
-                                            <option value="completed" {{#ifEqual this.status "completed"}}selected{{/ifEqual}}>Completed</option>
-                                            <option value="cancelled" {{#ifEqual this.status "cancelled"}}selected{{/ifEqual}}>Cancelled</option>
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <button class="btn btn-light toggle-details" data-order-id="{{this._id}}">
-                                            <i class="fa fa-chevron-down"></i>
-                                        </button>
-                                    </td>
+{{#if (includes role.permissions 'order_view')}}
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-10 col-md-8 ml-auto">
+                    <div class="row align-items-center pt-md-5 mt-md-5 mb-5">
+                        <div class="col-5 mb-4 mb-xl-0"></div>
+                        <div class="col-5 mb-4 mb-xl-0">
+                            <form id="form-search" class="form-inline d-none d-lg-block">
+                                <input class="form-control mx-2 my-2" type="text" placeholder="Keyword"
+                                       name="keyword" value="{{searchKeyword}}">
+                                <button class="btn btn-light btn-outline-secondary" type="submit">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-12 mb-4 mb-xl-0 mt-5">
+                            <h4 class="text-muted text-center mb-3">Orders</h4>
+                            <table class="table bg-light table-striped  text-center" id="categories">
+                                <thead>
+                                <tr class="text-muted">
+                                    <th>#ID</th>
+                                    <th>Created</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Profit</th>
+                                    <th>Status</th>
+                                    <th></th>
                                 </tr>
-                                <tr class="details-row d-none" id="details-{{this._id}}">
-                                    <td colspan="7">
-                                        <table class="table bg-light table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>SKU</th>
-                                                    <th>Name</th>
-                                                    <th>Price</th>
-                                                    <th>Quantity</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <hr>
-                                                {{#each this.products}}
+                                </thead>
+                                <tbody>
+                                {{#each orders}}
+                                    <tr>
+                                        <td class="align-middle">{{this.transactionID}}</td>
+                                        <td class="align-middle">{{parseDateTime this.createdAt}}</td>
+                                        <td class="align-middle">{{this.customerName}}</td>
+                                        <td class="align-middle">${{this.totalAmount}}</td>
+                                        <td class="align-middle">$...</td>
+                                        {{#if (includes ../role.permissions 'order_edit')}}
+                                            <td class="align-middle">
+                                                <select name="status" class="form-select form-select-sm" id="{{this._id}}" value="{{this.status}}">
+                                                    <option value="pending" {{#ifEqual this.status "pending"}}selected{{/ifEqual}}>Pending</option>
+                                                    <option value="confirmed" {{#ifEqual this.status "confirmed"}}selected{{/ifEqual}}>Confirmed</option>
+                                                    <option value="delivering" {{#ifEqual this.status "delivering"}}selected{{/ifEqual}}>Delivering</option>
+                                                    <option value="completed" {{#ifEqual this.status "completed"}}selected{{/ifEqual}}>Completed</option>
+                                                    <option value="cancelled" {{#ifEqual this.status "cancelled"}}selected{{/ifEqual}}>Cancelled</option>
+                                                </select>
+                                            </td>
+                                        {{/if}}
+                                        <td>
+                                            <button class="btn btn-light toggle-details" data-order-id="{{this._id}}">
+                                                <i class="fa fa-chevron-down"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <tr class="details-row d-none" id="details-{{this._id}}">
+                                        <td colspan="7">
+                                            <table class="table bg-light table-bordered">
+                                                <thead>
                                                     <tr>
-                                                        <td>
-                                                            <img width="70px" src="{{this.image}}" alt="img">
-                                                        </td>
-                                                        <td>{{this.sku}}</td>
-                                                        <td>{{this.name}}</td>
-                                                        <td>${{this.price}}</td>
-                                                        <td>{{this.quantity}}</td>
-                                                        <td>${{this.total}}</td>
+                                                        <th>#</th>
+                                                        <th>SKU</th>
+                                                        <th>Name</th>
+                                                        <th>Price</th>
+                                                        <th>Quantity</th>
+                                                        <th>Total</th>
                                                     </tr>
-                                                {{/each}}
-                                            </tbody>
-                                        </table>
-                                        <hr>
-                                        <div class="text-right mt-3 mr-5 pr-5">
-                                            <p><strong>Discount:</strong> -${{this.discount}}</p>
-                                            <p><strong>Total:</strong> ${{this.totalAmount}}</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            {{/each}}
-                            </tbody>
-                        </table>
+                                                </thead>
+                                                <tbody>
+                                                    <hr>
+                                                    {{#each this.products}}
+                                                        <tr>
+                                                            <td>
+                                                                <img width="70px" src="{{this.image}}" alt="img">
+                                                            </td>
+                                                            <td>{{this.variantSKU}}</td>
+                                                            <td>{{this.name}}</td>
+                                                            <td>${{this.price}}</td>
+                                                            <td>{{this.quantity}}</td>
+                                                            <td>${{multiplier this.price this.quantity}}</td>
+                                                        </tr>
+                                                    {{/each}}
+                                                </tbody>
+                                            </table>
+                                            <hr>
+                                            <div class="text-right mt-3 mr-5 pr-5">
+                                                <p><strong>Discount:</strong> -${{this.discount}}</p>
+                                                <p><strong>Total:</strong> ${{this.totalAmount}}</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+{{/if}}
+
 
 <form action="" method="POST" id="form-change-status" data-path="{{prefixAdmin}}/orders/change-status">
 </form>

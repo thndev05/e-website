@@ -111,6 +111,27 @@
                                 {{/each}}
                             </tr>
 
+                            <!-- Order Permissions -->
+                            <tr>
+                                <td colspan="4"><b>Order</b></td>
+                            </tr>
+                            <tr data-name="order_view">
+                                <td>View</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+                            <tr data-name="order_edit">
+                                <td>Edit</td>
+                                {{#each documents}}
+                                    <td class="text-center">
+                                        <input type="checkbox">
+                                    </td>
+                                {{/each}}
+                            </tr>
+
                             <!-- Coupon Permissions -->
                             <tr>
                                 <td colspan="4"><b>Coupon</b></td>

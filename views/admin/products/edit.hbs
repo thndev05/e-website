@@ -30,13 +30,13 @@
                                     <div class="form-group">
                                         <label for="brand">Product Brand:</label>
                                         <input type="text" class="form-control" id="brand" name="brand"
-                                               placeholder="Enter Product Brand" value="{{product.brand}}">
+                                               placeholder="Enter Product Brand" value="{{product.brand}}" required>
                                         <div class="invalid-feedback">Product Brand Can't Be Empty</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="category">Product Category:</label>
-                                        <select class="form-select form-control" id="category" name="category">
+                                        <select class="form-select form-control" id="category" name="category" required>
                                             {{#each categories}}
                                                 <option value="{{this.name}}" {{#ifEqual this.name ../productCategory.name}}selected{{/ifEqual}}>{{this.name}}</option>
                                             {{/each}}
@@ -46,7 +46,7 @@
 
                                     <div class="form-group">
                                         <label for="subcategory">Product Subcategory:</label>
-                                        <select class="form-select form-control" id="subcategory" name="subcategory">
+                                        <select class="form-select form-control" id="subcategory" name="subcategory" required>
                                             <option value="{{product.subcategory}}">{{product.subcategory}}</option>
                                             {{#each productCategory.subcategories}}
                                                 <option value="{{this}}">{{this}}</option>
@@ -56,7 +56,7 @@
 
                                     <div class="form-group">
                                         <label for="gender">Product Gender:</label>
-                                        <select class="form-select form-control" id="gender" name="gender">
+                                        <select class="form-select form-control" id="gender" name="gender" required>
                                             <option value="unisex" {{#ifEqual product.gender 'unisex'}}selected{{/ifEqual}}>Unisex</option>
                                             <option value="male"   {{#ifEqual product.gender 'male'}}selected{{/ifEqual}}>Male</option>
                                             <option value="female" {{#ifEqual product.gender 'female'}}selected{{/ifEqual}}>Female</option>
@@ -107,17 +107,17 @@
                                                         <div class="col">
                                                             <label for="variant-name">Variant Name</label>
                                                             <input type="text" class="form-control" name="variants[{{@index}}].name"
-                                                                   placeholder="Enter Product Variant Name" value="{{this.name}}">
+                                                                   placeholder="Enter Product Variant Name" value="{{this.name}}" required>
                                                         </div>
                                                         <div class="col">
                                                             <label for="variant-color">Color</label>
                                                             <input type="text" class="form-control" name="variants[{{@index}}].color"
-                                                                   placeholder="Enter Color" value="{{this.color}}">
+                                                                   placeholder="Enter Color" value="{{this.color}}" required>
                                                         </div>
                                                         <div class="col">
                                                             <label for="variant-size">Size</label>
                                                             <input type="text" class="form-control" name="variants[{{@index}}].size"
-                                                                   placeholder="Enter Size" value="{{this.size}}">
+                                                                   placeholder="Enter Size" value="{{this.size}}" required>
                                                         </div>
                                                     </div>
                                                     <div class="form-row mt-2">

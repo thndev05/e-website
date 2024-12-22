@@ -7,28 +7,28 @@ const { prefixAdmin } = require("../../config/system");
 
 // [GET] /admin/orders
 module.exports.index = async (req, res) => {
-  const orders = await Order.find({}).sort({ createdAt: "desc" }).lean();
+    const orders = await Order.find({}).sort({ createdAt: "desc" }).lean();
 
-  for (const order of orders) {
-      const userID = order.userID;
-      const user = await User.findById(userID).lean();
+    for (const order of orders) {
+        const userID = order.userID;
+        const user = await User.findById(userID).lean();
 
-    for (const item of order.products) {
-        const product = await Product.findById({ _id: item.product });
+        for (const item of order.products) {
+            const product = await Product.findById({ _id: item.product });
 
-        item.image = product.thumbnail;
+            item.name = product.name;
+            item.image = product.thumbnail;
+        }
 
+          order.customerName = user.fullName;
     }
-      
-      order.customerName = user.fullName;
-  }
 
 
-  res.render('admin/orders/index', {
-    pageTitle: 'Orders Management',
-    currentPage: 'orders',
-    orders: orders
-  });
+    res.render('admin/orders/index', {
+        pageTitle: 'Orders Management',
+        currentPage: 'orders',
+        orders: orders
+    });
 }
 
 // [PATCH] /admin/orders/change-status/:id/:status

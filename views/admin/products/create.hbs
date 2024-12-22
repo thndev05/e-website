@@ -30,13 +30,13 @@
                                     <div class="form-group">
                                         <label for="brand">Product Brand:</label>
                                         <input type="text" class="form-control" id="brand" name="brand"
-                                               placeholder="Enter Product Brand">
+                                               placeholder="Enter Product Brand" required>
                                         <div class="invalid-feedback">Product Brand Can't Be Empty</div>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="category">Product Category:</label>
-                                        <select class="form-select form-control" id="category" name="category">
+                                        <select class="form-select form-control" id="category" name="category" required>
                                             <option value="no">No Category</option>
                                             {{#each categories}}
                                                 <option value="{{this.name}}">{{this.name}}</option>
@@ -46,14 +46,14 @@
 
                                     <div class="form-group">
                                         <label for="subcategory">Product Subcategory:</label>
-                                        <select class="form-select form-control" id="subcategory" name="subcategory">
+                                        <select class="form-select form-control" id="subcategory" name="subcategory" required>
                                             <option value="">Select Subcategory</option>
                                         </select>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="gender">Product Gender:</label>
-                                        <select class="form-select form-control" name="gender" id="gender">
+                                        <select class="form-select form-control" name="gender" id="gender" required>
                                             <option value="unisex">Unisex</option>
                                             <option value="male">Male</option>
                                             <option value="female">Female</option>
@@ -93,24 +93,24 @@
                                                     <div class="col">
                                                         <label for="variant-name">Variant Name</label>
                                                         <input type="text" class="form-control" name="variants[0].name"
-                                                               placeholder="Enter Product Variant Name">
+                                                               placeholder="Enter Product Variant Name" required>
                                                     </div>
                                                     <div class="col">
                                                         <label for="variant-color">Color</label>
                                                         <input type="text" class="form-control" name="variants[0].color"
-                                                               placeholder="Enter Color">
+                                                               placeholder="Enter Color" required>
                                                     </div>
                                                     <div class="col">
                                                         <label for="variant-size">Size</label>
                                                         <input type="text" class="form-control" name="variants[0].size"
-                                                               placeholder="Enter Size">
+                                                               placeholder="Enter Size" required>
                                                     </div>
                                                 </div>
                                                 <div class="form-row mt-2">
                                                     <div class="col">
                                                         <label for="variant-stock">Quantity</label>
                                                         <input type="number" class="form-control" name="variants[0].stock"
-                                                               placeholder="Enter Quantity">
+                                                               placeholder="Enter Quantity" required>
                                                     </div>
                                                     <div class="col">
                                                         <label for="variant-cost-price">Cost Price</label>

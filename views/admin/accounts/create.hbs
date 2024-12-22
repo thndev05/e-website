@@ -34,7 +34,7 @@
 
                                     <div class="form-group">
                                         <label for="category">Role:</label>
-                                        <select class="form-select form-control" id="role" name="role">
+                                        <select class="form-select form-control" id="role" name="role" required>
                                             <option value="no">No Role</option>
                                             {{#each roles}}
                                                 <option value="{{this._id}}">{{this.name}}</option>
