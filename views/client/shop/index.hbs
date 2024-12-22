@@ -269,6 +269,7 @@
         event.preventDefault();
 
         params.set('keyword', keywordInput.value);
+        params.delete('page');
         window.location.href = `${window.location.pathname}?${params.toString()}`;
     });
 
@@ -289,11 +290,13 @@
 
             e.addEventListener('click', () => {
                 params.delete('size', size);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         } else {
             e.addEventListener('click', () => {
                 params.append('size', size);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         }
@@ -311,11 +314,13 @@
 
            e.addEventListener('click', () => {
                params.delete('category', category);
+               params.delete('page');
                window.location.href = `${window.location.pathname}?${params.toString()}`;
            });
        } else {
            e.addEventListener('click', () => {
                params.append('category', category);
+               params.delete('page');
                window.location.href = `${window.location.pathname}?${params.toString()}`;
            });
        }
@@ -332,11 +337,13 @@
 
             e.addEventListener('click', () => {
                 params.delete('color', color);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         } else {
             e.addEventListener('click', () => {
                 params.append('color', color);
+                params.delete('page');
                 window.location.href = `${window.location.pathname}?${params.toString()}`;
             });
         }

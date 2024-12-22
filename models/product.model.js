@@ -26,6 +26,7 @@ variantSchema.pre('save', function (next) {
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
     description: String,
+    shortDescription: String,
     brand: String,
     category: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
     subcategory: String,
