@@ -26,7 +26,8 @@ module.exports.index = async (req, res, next) => {
         $match: {
           $or: [
             { name: { $regex: regex } },
-            { description: { $regex: regex } }
+            { description: { $regex: regex } },
+            { subcategory: { $regex: regex } },
           ]
         }
       });
@@ -83,6 +84,21 @@ module.exports.index = async (req, res, next) => {
       $addFields: {
         minPrice: {
           $min: {
+            $map: {
+              input: "$variants",
+              as: "variant",
+              in: {
+                $cond: {
+                  if: { $ifNull: ["$$variant.salePrice", false] },
+                  then: "$$variant.salePrice",
+                  else: "$$variant.price"
+                }
+              }
+            }
+          }
+        },
+        maxPrice: {
+          $max: {
             $map: {
               input: "$variants",
               as: "variant",
