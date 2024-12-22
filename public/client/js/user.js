@@ -76,7 +76,7 @@ const btnToPurchase = document.querySelector('.btn-to-purchase');
 if (btnToPurchase) {
     btnToPurchase.addEventListener('click', (e) => {
         e.preventDefault();
-        const timer = 5000;
+        const timer = 3000;
 
         Swal.fire({
             icon: 'info',

@@ -135,7 +135,7 @@ module.exports.applyCoupon = async (req, res) => {
         const { subtotal } = cart;
         const { discountType, discountValue } = coupon;
 
-        const discount = Math.min(subtotal, discountType === 'percentage' ? subtotal * discountValue / 100 : discountValue);
+        const discount = Math.min(subtotal, discountType === 'percentage' ? Math.ceil(subtotal * discountValue / 100) : discountValue);
 
         res.status(200).json({success: true, subtotal, discount, total: subtotal - discount});
     } catch (err) {

@@ -107,7 +107,7 @@ module.exports.process = async (req, res, next) => {
             shippingInfo: { name: fullName, phone, province, district, ward, street },
             paymentMethod,
             subtotal: cartSubTotal,
-            totalAmount: cartSubTotal - discount,
+            totalAmount: Math.ceil(cartSubTotal - discount),
             coupon: coupon ? coupon._id : null,
             notes,
         };
@@ -230,7 +230,7 @@ async function getCouponDiscount(userId, cart, couponCode) {
     const { subtotal } = cart;
     const { discountType, discountValue } = coupon;
 
-    return Math.min(subtotal, discountType === 'percentage' ? subtotal * discountValue / 100 : discountValue);
+    return Math.min(subtotal, discountType === 'percentage' ? Math.ceil(subtotal * discountValue / 100) : discountValue);
 }
 
 
