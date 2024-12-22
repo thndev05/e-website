@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 
 //[GET] /auth/login
 module.exports.login = async (req, res) => {
+    if (req.query.returnTo) {
+        req.session.returnTo = req.query.returnTo;
+    }
+
     if(req.session.user) {
       res.redirect('/user/profile');
     } else {

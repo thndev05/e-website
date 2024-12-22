@@ -21,6 +21,10 @@ module.exports.requireAuth = (req, res, next) => {
             req.session.returnTo = req.originalUrl;
         }
 
+        if (req.query.returnTo) {
+            req.session.returnTo = req.query.returnTo;
+        }
+
         res.redirect('/auth/login');
     }
 };
