@@ -26,7 +26,6 @@
                                     <th>Created</th>
                                     <th>Customer</th>
                                     <th>Total</th>
-                                    <th>Profit</th>
                                     <th>Status</th>
                                     <th></th>
                                 </tr>
@@ -37,8 +36,7 @@
                                         <td class="align-middle">{{this.transactionID}}</td>
                                         <td class="align-middle">{{parseDateTime this.createdAt}}</td>
                                         <td class="align-middle">{{this.customerName}}</td>
-                                        <td class="align-middle">${{this.totalAmount}}</td>
-                                        <td class="align-middle">$...</td>
+                                        <td class="align-middle">{{#currencyUSD this.totalAmount}}{{/currencyUSD}}</td>
                                         {{#if (includes ../role.permissions 'order_edit')}}
                                             <td class="align-middle">
                                                 <select name="status" class="form-select form-select-sm" id="{{this._id}}" value="{{this.status}}">
@@ -78,17 +76,17 @@
                                                             </td>
                                                             <td>{{this.variantSKU}}</td>
                                                             <td>{{this.name}}</td>
-                                                            <td>${{this.price}}</td>
+                                                            <td>{{#currencyUSD this.unitPrice}}{{/currencyUSD}}</td>
                                                             <td>{{this.quantity}}</td>
-                                                            <td>${{multiplier this.price this.quantity}}</td>
+                                                            <td>{{#currencyUSD (multiplier this.unitPrice this.quantity)}}{{/currencyUSD}}</td>
                                                         </tr>
                                                     {{/each}}
                                                 </tbody>
                                             </table>
                                             <hr>
                                             <div class="text-right mt-3 mr-5 pr-5">
-                                                <p><strong>Discount:</strong> -${{this.discount}}</p>
-                                                <p><strong>Total:</strong> ${{this.totalAmount}}</p>
+                                                <p><strong>Discount:</strong> - {{#currencyUSD (subtract this.subtotal this.totalAmount)}}{{/currencyUSD}}</p>
+                                                <p><strong>Total:</strong> {{#currencyUSD this.totalAmount}}{{/currencyUSD}}</p>
                                             </div>
                                         </td>
                                     </tr>

@@ -42,9 +42,6 @@ module.exports.check = async function () {
             const totalAmount = order.totalAmount;
 
             for (const transactionInfo of histories.transactionInfos) {
-                if (transactionID) {
-                    console.log(`${transactionID}, ${totalAmount}, ${transactionInfo.description}, ${Number(transactionInfo.amount)}`)
-                }
                 if (transactionInfo.description && transactionID && transactionInfo.description.includes(transactionID) && totalAmount === Number(transactionInfo.amount)) {
                     order.status = "confirmed"
                     order.isPaid = true;
