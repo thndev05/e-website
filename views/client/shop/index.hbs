@@ -354,6 +354,15 @@
         params.set('sortBy', this.value);
         window.location.href = `${window.location.pathname}?${params.toString()}`;
     });
+    const selectedOrderBy = params.get('sortBy');
+    if (selectedOrderBy) {
+        orderBySelect.value = selectedOrderBy;
+        // orderBySelect.childNodes.forEach(e => {
+        //     if (e.value === selectedOrderBy) {
+        //         e.selected = true;
+        //     }
+        // });
+    }
 </script>
 
 
