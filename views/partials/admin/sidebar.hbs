@@ -16,7 +16,7 @@
         <ul class="navbar-nav flex-column mt-5">
             <li class="nav-item">
                 <a href="{{prefixAdmin}}/dashboard"
-                   class="nav-link text-light p-3 mb-2 sidebar-link
+                   class="nav-link text-light p-2 mb-2 sidebar-link
                 {{#ifEqual currentPage "dashboard"}}current{{/ifEqual}}">
                     <i class="fa fa-home text-light fa-lg mr-3"></i>Dashboard
                 </a>
@@ -24,7 +24,7 @@
             {{#if (includes role.permissions 'product_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/products"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                     {{#ifEqual currentPage "products"}}current{{/ifEqual}}">
                         <i class="fa fa-database text-light fa-lg mr-3"></i>Product
                     </a>
@@ -33,7 +33,7 @@
             {{#if (includes role.permissions 'category_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/categories"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                     {{#ifEqual currentPage "categories"}}current{{/ifEqual}}">
                         <i class="fa fa-folder-open text-light fa-lg mr-3"></i>Category
                     </a>
@@ -42,7 +42,7 @@
             {{#if (includes role.permissions 'coupon_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/coupons"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                     {{#ifEqual currentPage "coupons"}}current{{/ifEqual}}">
                         <i class="fa fa-tags text-light fa-lg mr-3"></i>Coupon
                     </a>
@@ -51,7 +51,7 @@
             {{#if (includes role.permissions 'role_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/roles"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                     {{#ifEqual currentPage "roles"}}current{{/ifEqual}}">
                         <i class="fa fa-gear text-light fa-lg mr-3"></i>Role
                     </a>
@@ -60,7 +60,7 @@
             {{#if (includes role.permissions 'account_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/accounts"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                     {{#ifEqual currentPage "accounts"}}current{{/ifEqual}}">
                         <i class="fa fa-user-circle text-light fa-lg mr-3"></i>Account
                     </a>
@@ -69,7 +69,7 @@
             {{#if (includes role.permissions 'user_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/users"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                         {{#ifEqual currentPage "users"}}current{{/ifEqual}}">
                         <i class="fa fa-users text-light fa-lg mr-3"></i>User
                     </a>
@@ -78,7 +78,7 @@
             {{#if (includes role.permissions 'order_view')}}
                 <li class="nav-item">
                     <a href="{{prefixAdmin}}/orders"
-                       class="nav-link text-light p-3 mb-2 sidebar-link
+                       class="nav-link text-light p-2 mb-2 sidebar-link
                         {{#ifEqual currentPage "orders"}}current{{/ifEqual}}">
                         <i class="fa fa-shopping-basket text-light fa-lg mr-3"></i>Order
                     </a>
