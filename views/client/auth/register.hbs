@@ -9,15 +9,22 @@
                 <div class="col-lg-8 offset-lg-2">
                     <div class="basic-login">
                         <h3 class="text-center mb-60">Signup From Here</h3>
-                        <form action="/auth/register" method="POST">
-                            <label for="fullName">Full Name <span>**</span></label>
-                            <input id="fullName" type="text" placeholder="Enter your full name..." name="fullName"/>
-                            <label for="birthdate">Birthdate <span>**</span></label>
-                            <input id="birthdate" type="date" name="birthdate"/>
-                            <label for="email-id">Email Address <span>**</span></label>
-                            <input id="email-id" type="text" placeholder="Enter your email address..." name="email"/>
-                            <label for="password">Password <span>**</span></label>
-                            <input id="password" type="password" placeholder="Enter password..." name="password"/>
+                        {{#if error}}
+                            <div class="alert alert-danger text-center">
+                                {{error}}
+                            </div>
+                        {{/if}}
+                        <form action="/auth/register" method="POST" id="register-form">
+                            <label for="fullName">Full Name <span>*</span></label>
+                            <input id="fullName" class="form-control" type="text" placeholder="Enter your full name..." name="fullName" required/>
+                            <label for="birthdate">Birthdate <span>*</span></label>
+                            <input id="birthdate" class="form-control" type="date" name="birthdate" required/>
+                            <div class="invalid-feedback" id="invalid-birthdate"></div>
+                            <label for="email-id">Email Address <span>*</span></label>
+                            <input id="email-id" class="form-control" type="email" placeholder="Enter your email address..." name="email" required/>
+                            <label for="password">Password <span>*</span></label>
+                            <input id="password" class="form-control" type="password" placeholder="Enter password..." name="password" required/>
+                            <div class="invalid-feedback">The password must be at least 8 characters long</div>
                             <div class="mt-10"></div>
                             <button type="submit" class="btn theme-btn-2 w-100">Register Now</button>
                             <div class="or-divide"><span>or</span></div>
@@ -31,3 +38,41 @@
 </main>
 
 {{> client/footer}}
+
+<script>
+    const registerForm = document.getElementById('register-form');
+    registerForm.addEventListener('submit', (event) => {
+        const birthdate = document.getElementById('birthdate');
+        const enteredDate = new Date(birthdate.value);
+        const today = new Date();
+        const invalidBirthdate = document.getElementById('invalid-birthdate')
+
+        const password = document.getElementById('password');
+
+        if (isNaN(enteredDate.getTime())) {
+            event.preventDefault();
+
+            invalidBirthdate.innerHTML = 'Invalid birthdate.';
+            birthdate.classList.add('is-invalid');
+        } else {
+            birthdate.classList.remove('is-invalid');
+        }
+
+        if (enteredDate > today) {
+            event.preventDefault();
+
+            invalidBirthdate.innerHTML = 'The entered birthdate cannot be in the future.';
+            birthdate.classList.add('is-invalid');
+        } else {
+            birthdate.classList.remove('is-invalid');
+        }
+
+        if (!password.value || password.value.length < 8) {
+            event.preventDefault();
+
+            password.classList.add('is-invalid');
+        } else {
+            password.classList.remove('is-invalid');
+        }
+    });
+</script>

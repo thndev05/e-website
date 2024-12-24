@@ -51,6 +51,10 @@ module.exports.registerPost = async (req, res, next) => {
               pageTitle: 'Register',
               breadcrumbTitle: 'Register',
               breadcrumb: 'Register',
+              fullName: fullName,
+              birthdate: birthdate,
+              email: email,
+              password: password,
               error: 'Email already exist. Please try another email!'
             });
         }
@@ -60,6 +64,10 @@ module.exports.registerPost = async (req, res, next) => {
               pageTitle: 'Register',
               breadcrumbTitle: 'Register',
               breadcrumb: 'Register',
+              fullName: fullName,
+              birthdate: birthdate,
+              email: email,
+              password: password,
               error: 'Please enter a password of at least 8 characters!'
             });
         }
