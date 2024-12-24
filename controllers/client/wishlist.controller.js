@@ -5,7 +5,7 @@ const productHelper = require('../../helpers/product');
 module.exports.wishlist = async (req, res) => {
     let wishlists = [];
     if (res.locals.user) {
-        const id = res.locals.user.id;
+        const id = res.locals.user._id;
         const user = await User.findOne({ _id: id }).populate('wishlist').lean();
         wishlists = user.wishlist;
     }
@@ -25,7 +25,7 @@ module.exports.wishlist = async (req, res) => {
 // [POST] /wishlist/add
 module.exports.addToWishlist = async (req, res) => {
     try {
-        const userId = res.locals.user.id;
+        const userId = res.locals.user._id;
         const { productId } = req.body;
 
         const user = await User.findById(userId);
@@ -49,7 +49,7 @@ module.exports.addToWishlist = async (req, res) => {
 // [DELETE] /wishlist/delete
 module.exports.removeFromWishlist = async (req, res) => {
     try {
-        const userId = res.locals.user.id;
+        const userId = res.locals.user._id;
         const { productId } = req.body;
 
         await User.updateOne(
@@ -71,7 +71,7 @@ module.exports.getWishlistData = async (req, res) => {
             return res.json([]);
         }
 
-        const userId = res.locals.user.id;
+        const userId = res.locals.user._id;
         const user = await User.findOne({ _id: userId }).populate('wishlist').lean();
 
         const wishlist = user.wishlist.map((item) => item._id.toString());

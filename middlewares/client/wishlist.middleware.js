@@ -2,7 +2,7 @@ const User = require('../../models/user.model');
 
 module.exports.getWishlist = async (req, res, next) => {
   try {
-    const userId = res.locals.user.id;
+    const userId = res.locals.user._id;
     let wishlistIds = [];
 
     if (userId) {

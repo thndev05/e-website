@@ -4,25 +4,31 @@ const systemConfig = require("../../config/system");
 const bcrypt = require('bcrypt');
 
 //[GET] /auth/login
-module.exports.login = async (req, res) => {
-    if (req.query.returnTo) {
-        req.session.returnTo = req.query.returnTo;
-    }
+module.exports.login = async (req, res, next) => {
+    try {
+        if (req.query.returnTo) {
+            req.session.returnTo = req.query.returnTo;
+        }
 
-    if(req.session.user) {
-      res.redirect('/user/profile');
-    } else {
-        res.render('client/auth/login', {
-          pageTitle: 'Login',
-          breadcrumbTitle: 'Login',
-          breadcrumb: 'Login'
-        });
+        if (req.cookies.authToken) {
+            res.redirect('/user/profile');
+        } else {
+            res.render('client/auth/login', {
+                pageTitle: 'Login',
+                breadcrumbTitle: 'Login',
+                breadcrumb: 'Login'
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.redirectPage = 'back';
+        next(error);
     }
 }
 
 //[GET] /auth/register
 module.exports.register = async (req, res) => {
-    if(req.session.user) {
+    if(req.cookies.authToken) {
        res.redirect('/user/profile');
     } else {
         res.render('client/auth/register', {
@@ -34,7 +40,7 @@ module.exports.register = async (req, res) => {
 }
 
 //[POST] /auth/register
-module.exports.registerPost = async (req, res) => {
+module.exports.registerPost = async (req, res, next) => {
     try {
         const { fullName, birthdate, email, password } = req.body;
         const data = { fullName, birthdate, email, password };
@@ -61,9 +67,16 @@ module.exports.registerPost = async (req, res) => {
         const newUser = new User(data);
         await newUser.save();
 
-        res.redirect('/auth/login');
+        res.cookie('authToken', newUser.token);
+
+        const redirectTo = req.session.returnTo || '/';
+        delete req.session.returnTo;
+
+        res.redirect(redirectTo);
     } catch (e) {
-        console.log(e);
+        console.error(e);
+        res.redirectPage = 'back';
+        next(e);
     }
 }
 
@@ -92,13 +105,7 @@ module.exports.loginPost = async (req, res) => {
             });
         }
 
-        req.session.user = {
-            id: user._id,
-            birthdate: user.birthdate,
-            fullName: user.fullName,
-            email: user.email,
-            address: user.address
-        };
+        res.cookie('authToken', user.token);
 
         const redirectTo = req.session.returnTo || '/';
         delete req.session.returnTo;
@@ -114,14 +121,14 @@ module.exports.loginPost = async (req, res) => {
     }
 };
 
-module.exports.logout = (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error('Error destroying session:', err);
-            return res.redirect('/');
-        }
-
-        res.clearCookie('connect.sid');
+module.exports.logout = (req, res, next) => {
+    try {
+        req.session.destroy();
+        res.clearCookie('authToken');
         res.redirect('/auth/login');
-    });
+    } catch (error) {
+        console.error(error);
+        res.redirectPage = '/auth/login';
+        next(error);
+    }
 };

@@ -9,13 +9,15 @@ const {log} = require("debug");
 
 //[GET] /user/profile
 module.exports.profile = async (req, res) => {
-    if(!req.session.user) {
+    if(!req.cookies.authToken) {
        res.redirect('/auth/login');
     } else {
+        const user = await User.findById(res.locals.user._id).lean();
         res.render('client/user/profile', {
           pageTitle: 'Profile',
           breadcrumbTitle: 'Profile',
-          breadcrumb: 'Profile'
+          breadcrumb: 'Profile',
+          user: user,
         })
     }
 }
@@ -38,9 +40,9 @@ module.exports.updateProfile = async (req, res, next) => {
 
         await User.updateOne({ _id: id }, req.body);
 
-        await updateSessionUser(req, id);
+        // await updateSessionUser(req, id);
 
-        res.redirect('back');
+        res.redirect('/user/profile');
     } catch (e) {
         console.error(e);
         res.redirectPage = "back";
@@ -157,7 +159,7 @@ module.exports.deleteAddress = async (req, res, next) => {
 
 //[GET] /user/purchase
 module.exports.purchase = async (req, res) => {
-    const userID = res.locals.user.id;
+    const userID = res.locals.user._id;
     const status = req.query.status || 'all';
 
     let filter = {
@@ -193,7 +195,7 @@ module.exports.cancelOrder = async (req, res, next) => {
     try {
         const order = await Order.findByIdAndUpdate(orderId, { status: 'cancelled' });
 
-        await revertCouponUsage(order, res.locals.user.id);
+        await revertCouponUsage(order, res.locals.user._id);
         await restoreProductStock(order);
 
         if (order) {

@@ -22,7 +22,7 @@
                 <div class="col-lg-6">
                     <div class="card p-4 mb-4">
                         <h3 class="mb-4">Account Information</h3>
-                        <form id="accountInfoForm" action="/user/updateProfile/{{user.id}}?_method=PATCH" method="POST">
+                        <form id="accountInfoForm" action="/user/updateProfile/{{user._id}}?_method=PATCH" method="POST">
                             <div class="form-group">
                                 <label for="fullName">Full Name</label>
                                 <input type="text" class="form-control" id="fullName" name="fullName"
@@ -59,7 +59,7 @@
                             </div>
                         {{/if}}
 
-                        <form action="/user/changePassword/{{user.id}}?_method=PATCH" method="POST">
+                        <form action="/user/changePassword/{{user._id}}?_method=PATCH" method="POST">
                             <div class="form-group">
                                 <label for="currentPassword">Current password</label>
                                 <input type="password" class="form-control" id="currentPassword" name="currentPassword"
@@ -92,7 +92,7 @@
                                     <p><strong>Phone:</strong> {{this.phone}}</p>
                                     <p><strong>Address:</strong> {{this.street}}, {{this.ward}}, {{this.district}}, {{this.province}}</p>
                                 </div>
-                                <form action="/user/deleteAddress/{{@root.user.id}}/{{@index}}?_method=DELETE" method="POST">
+                                <form action="/user/deleteAddress/{{@root.user._id}}/{{@index}}?_method=DELETE" method="POST">
                                     <button type="submit" class="btn btn-danger"><i class="fa fa-trash mr-1"></i>Delete</button>
                                 </form>
                             </li>
@@ -102,7 +102,7 @@
 
                 <button type="button" class="btn theme-btn w-100 mb-3" id="addNewAddress">Add New Address</button>
 
-                <form action="/user/updateAddress/{{user.id}}?_method=PATCH" method="POST" id="addressForm" style="display: none;">
+                <form action="/user/updateAddress/{{user._id}}?_method=PATCH" method="POST" id="addressForm" style="display: none;">
                     <div class="form-group mb-3">
                         <label for="phoneNumber">Phone Number:</label>
                         <input type="text" class="form-control" id="phoneNumber" name="phone" placeholder="Enter your phone number" required>
@@ -199,8 +199,6 @@
             } else {
                 wardSelect.classList.remove('is-invalid');
             }
-
-            if (!)
         });
     });
 </script>

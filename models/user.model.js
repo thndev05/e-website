@@ -1,10 +1,17 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const generate = require("../helpers/generate");
 
 const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
+    token: {
+        type: String,
+        default: (function() {
+            return generate.generateRandomString(20);
+        }),
+    },
     birthdate: Date,
     address: [
         {

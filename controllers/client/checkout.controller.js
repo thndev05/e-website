@@ -15,13 +15,13 @@ module.exports.index = async (req, res, next) => {
         }
         const { couponCode } = req.query;
 
-        const cart = await CartHelper.getOrCreateCart(res.locals.user.id);
+        const cart = await CartHelper.getOrCreateCart(res.locals.user._id);
 
         if (!Array.isArray(cart.products) || cart.products.length === 0) {
             throw new Error("Cart is empty");
         }
 
-        const user = await User.findOne({ _id: res.locals.user.id }).lean();
+        const user = await User.findOne({ _id: res.locals.user._id }).lean();
 
         let cartSubTotal = 0;
         for (const cartItem of cart.products) {
@@ -39,7 +39,7 @@ module.exports.index = async (req, res, next) => {
         let discount = 0;
         let alert;
         try {
-            discount = await getCouponDiscount(res.locals.user.id, cart, couponCode);
+            discount = await getCouponDiscount(res.locals.user._id, cart, couponCode);
         } catch (error) {
             alert = error.message;
             console.error(error);
@@ -71,7 +71,7 @@ module.exports.process = async (req, res, next) => {
         notes, couponCode, paymentMethod
     } = req.body;
 
-    const userId = res.locals.user.id;
+    const userId = res.locals.user._id;
 
     try {
         const cart = await CartHelper.getOrCreateCart(userId);
