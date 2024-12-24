@@ -1,0 +1,19 @@
+{{> client/preloader}}
+{{> client/header}}
+
+<main>
+    <div class="container d-flex align-items-center justify-content-center vh-100 reset-password">
+        <div class="card text-center">
+            <i class="far fa-envelope"></i>
+            <h3 class="card-title mb-3">Reset your password</h3>
+            <p class="card-text">
+                The verification code has been sent to the email address <br>
+                <strong>{{email}}</strong>. <br>
+                Please verify.
+            </p>
+            <button onclick="window.location.href='/auth/login'" class="btn btn-custom btn-block">OK</button>
+        </div>
+    </div>
+</main>
+
+{{> client/footer}}

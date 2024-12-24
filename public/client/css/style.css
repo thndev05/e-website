@@ -9423,3 +9423,31 @@ main.purchase-page {
 	font-size: 14px;
 	color: #666;
 }
+
+
+.reset-password .card {
+	max-width: 400px;
+	margin: auto;
+	padding: 20px;
+	border: none;
+}
+
+.reset-password .card>i {
+	font-size: 100px;
+	color: #000;
+	margin-bottom: 20px;
+}
+
+.reset-password .card p {
+	font-size: 16px;
+}
+
+.reset-password .btn-custom {
+	background-color: #ff5722;
+	color: white;
+	border: none;
+}
+
+.reset-password .btn-custom:hover {
+	background-color: #e64a19;
+}
