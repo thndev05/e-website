@@ -13,14 +13,16 @@ module.exports.index = async (req, res) => {
         const userID = order.userID;
         const user = await User.findById(userID).lean();
 
-        for (const item of order.products) {
-            const product = await Product.findById({ _id: item.product });
+        if(user) {
+            for (const item of order.products) {
+                const product = await Product.findById({ _id: item.product });
 
-            item.name = product.name;
-            item.image = product.thumbnail;
+                item.name = product.name;
+                item.image = product.thumbnail;
+            }
+
+            order.customerName = user.fullName;
         }
-
-          order.customerName = user.fullName;
     }
 
 
