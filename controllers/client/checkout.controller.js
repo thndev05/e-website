@@ -192,6 +192,14 @@ module.exports.process = async (req, res, next) => {
       await session.commitTransaction();
       await session.endSession();
 
+      // Chỉ đặt timeout tự động huỷ đơn nếu là thanh toán banking (online_banking) và đơn pending, chưa thanh toán
+      if (
+        paymentMethod === 'online_banking' &&
+        order && order.status === 'pending' && order.isPaid === false
+      ) {
+        cancelOrderIfNotPaidAfterTimeout(order._id);
+      }
+
       // After commit, redirect to QR or other page
       if ('online_banking' === paymentMethod) {
         // Redirect to your QR display route — that route will re-query order and render QR
@@ -431,7 +439,7 @@ module.exports.sepayWebhook = async (req, res) => {
   }
 };
 
-async function cancelOrderIfNotPaidAfterTimeout(orderId, timeout = 10 * 60 * 1000) {
+async function cancelOrderIfNotPaidAfterTimeout(orderId, timeout = 5 * 60 * 1000) {
   try {
     setTimeout(async () => {
       const order = await Order.findById(orderId);
